@@ -1,0 +1,2 @@
+# Optional offline character-asset authoring; not required to open index.html.
+Pillow==12.2.0

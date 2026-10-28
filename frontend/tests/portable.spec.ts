@@ -1,0 +1,69 @@
+import {test,expect} from '@playwright/test';
+import {copyFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+
+test('a copied index.html alone runs offline with real GLB characters, walking and the full saved-letter journey',async({page})=>{
+  test.setTimeout(180_000);
+  const directory=resolve('..','artifacts',process.env.MEMORYBOX_PORTABLE_EVIDENCE||'offline-only');
+  await mkdir(directory,{recursive:true});
+  const html=resolve(directory,'index.html');
+  await copyFile(resolve(process.env.MEMORYBOX_PORTABLE_HTML||resolve('..','index.html')),html);
+  const httpRequests:string[]=[];const otherFiles:string[]=[];const errors:string[]=[];
+  page.on('request',request=>{const url=request.url();if(/^https?:/.test(url))httpRequests.push(url);if(url.startsWith('file:')&&url!==pathToFileURL(html).href)otherFiles.push(url);});
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.route(/^https?:\/\//,route=>route.abort());
+  await page.goto(pathToFileURL(html).href);
+  await expect(page.getByRole('button',{name:'打开记忆',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'打开记忆',exact:true}).click();
+  await page.getByRole('button',{name:'挑选一段记忆',exact:true}).click();
+  await page.getByRole('button',{name:'选好了，继续',exact:true}).click();
+  await page.getByRole('button',{name:'整理这段记忆',exact:true}).click();
+  await page.getByRole('button',{name:'走进那一天',exact:true}).click();
+  const canvas=page.locator('canvas');
+  await expect(canvas).toHaveAttribute('data-world','memory');
+  await expect(canvas).toHaveAttribute('data-navigation-mode','walk');
+  await expect(canvas).toHaveAttribute('data-loaded-characters',/elder-woman/);
+  await expect(page.locator('.connection')).toContainText('离线演示模式');
+  const position=()=>canvas.getAttribute('data-player-position');
+  const start=(await position())!.split(',').map(Number);
+  await page.keyboard.down('a');
+  try{await expect.poll(async()=>Number((await position())!.split(',')[0])).toBeLessThan(start[0]-.3);}finally{await page.keyboard.up('a');}
+  await page.screenshot({path:resolve(directory,'offline-walking.png'),animations:'disabled'});
+  for(const person of [{id:'young-man',label:'青年男性'},{id:'elder-man',label:'长者男性'},{id:'young-woman',label:'青年女性'},{id:'elder-woman',label:'长者女性'}]){
+    await page.getByRole('button',{name:'切换人物',exact:true}).click();
+    await page.getByRole('button',{name:new RegExp(person.label)}).click();
+    await page.getByRole('button',{name:'让这位陪伴我',exact:true}).click();
+    await expect(canvas).toHaveAttribute('data-loaded-characters',new RegExp(person.id));
+  }
+  await page.getByRole('button',{name:'房间总览',exact:true}).click();
+  for(const id of ['tv','doll','photo']){
+    await page.getByTestId(`anchor-${id}`).click();
+    await expect(page.locator('.anchor-story')).toBeVisible();
+    await page.getByRole('button',{name:'继续探索',exact:true}).click();
+  }
+  await page.getByRole('button',{name:'走到那扇门前',exact:true}).click();
+  await page.getByRole('button',{name:/多留一个下午/}).click();
+  await expect(page.locator('.branch-label')).toContainText('AI 想象 · 并非真实历史');
+  await page.getByRole('button',{name:'写一封信',exact:true}).click();
+  const letter='只复制这一个 index.html，断网后也能走进房间、看见四个人物，并完整珍藏这封信。';
+  await page.getByLabel('信的内容',{exact:true}).fill(letter);
+  await page.getByRole('button',{name:'封好信，回到现在',exact:true}).click();
+  await expect(page.locator('main')).toHaveAttribute('data-phase','return-room');
+  await page.getByRole('button',{name:'打开我的收藏',exact:true}).click();
+  await expect(page.locator('.collection-entry')).toHaveCount(1);
+  await page.getByRole('button',{name:'打开信件',exact:true}).click();
+  await expect(page.locator('.saved-letter')).toHaveText(letter);
+  await page.reload();
+  await page.getByRole('button',{name:'打开信件',exact:true}).click();
+  await expect(page.locator('.saved-letter')).toHaveText(letter);
+  await page.screenshot({path:resolve(directory,'offline-saved-letter.png'),animations:'disabled'});
+  await expect(page.getByRole('button',{name:'同步到本机数据库',exact:true})).toHaveCount(0);
+  page.once('dialog',dialog=>dialog.accept());
+  await page.getByRole('button',{name:/^删除回忆 /}).click();
+  await expect(page.locator('.collection-entry')).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator('.collection-entry')).toHaveCount(0);
+  expect(httpRequests).toEqual([]);expect(otherFiles).toEqual([]);expect(errors).toEqual([]);
+  expect(await page.evaluate(()=>window.__MEMORYBOX_PORTABLE__?.assetCount)).toBeGreaterThanOrEqual(23);
+});

@@ -1,0 +1,76 @@
+import {Suspense,useEffect,useRef,useState} from 'react';
+import {Canvas,useFrame,useThree} from '@react-three/fiber';
+import {Environment,Lightformer} from '@react-three/drei';
+import * as THREE from 'three';
+import type {AnchorId,SceneProps} from '../types';
+import {anchorLabels} from '../data';
+import LegacyScene from './LegacyScene';
+import Room,{ANCHOR_POSITIONS,WALK_COLLIDERS} from './Room';
+import WalkController from './WalkController';
+
+function IndoorLighting({branch}:{branch:SceneProps['branch']}){
+  const sun=useRef<THREE.DirectionalLight>(null);
+  useFrame((_,dt)=>{if(sun.current){const color=new THREE.Color(branch==='real'?'#e2e7eb':branch==='imagined'?'#ffe1b0':'#fff0d4');sun.current.color.lerp(color,1-Math.exp(-dt*2));sun.current.intensity=THREE.MathUtils.damp(sun.current.intensity,branch==='real'?2.5:4.0,2,dt);}});
+  return <>
+    <ambientLight intensity={.65} color="#eee8d9"/>
+    <hemisphereLight args={['#e7edf0','#9c8c71',1.1]}/>
+    <directionalLight ref={sun} position={[8,6,2]} intensity={4} color="#fff0d4" castShadow shadow-mapSize={[2048,2048]} shadow-camera-left={-9} shadow-camera-right={9} shadow-camera-top={9} shadow-camera-bottom={-9} shadow-camera-near={.5} shadow-camera-far={30} shadow-bias={-.00015} shadow-normalBias={.018}/>
+    <directionalLight position={[-3.5,2.6,1.5]} intensity={.65} color="#e9edf2"/>
+    <Environment resolution={128} frames={1}>
+      <Lightformer form="rect" color="#fff3de" intensity={1.5} position={[6,3,0]} rotation={[0,-Math.PI/2,0]} scale={[6,5,1]}/>
+      <Lightformer form="rect" color="#e6eef4" intensity={.7} position={[-5,3,-2]} rotation={[0,Math.PI/2,0]} scale={[6,4,1]}/>
+      <Lightformer form="rect" color="#f6f4ec" intensity={.4} position={[0,5,0]} rotation={[Math.PI/2,0,0]} scale={[10,10,1]}/>
+    </Environment>
+  </>;
+}
+
+interface Marker {id:AnchorId;x:number;y:number;visible:boolean}
+function Diagnostics({props,onProjection}:{props:SceneProps;onProjection:(markers:Marker[])=>void}){
+  const {camera,gl,scene,size}=useThree();const elapsed=useRef(-1);
+  const raycaster=useRef(new THREE.Raycaster());
+  const previousShadow=useRef('');
+  useFrame(({clock})=>{
+    if(clock.elapsedTime-elapsed.current<.25)return;elapsed.current=clock.elapsedTime;
+    let meshes=0;scene.traverse(o=>{if(o instanceof THREE.Mesh)meshes++;});
+    const shadowVersion=`${props.branch}:${props.companion}:${meshes}`;
+    if(previousShadow.current!==shadowVersion){previousShadow.current=shadowVersion;gl.shadowMap.needsUpdate=true;}
+    const rect=gl.domElement.getBoundingClientRect();const projected:Record<string,{x:number;y:number;visible:boolean}>={};const markers:Marker[]=[];
+    for(const[id,p]of Object.entries(ANCHOR_POSITIONS)){
+      const v=new THREE.Vector3(...p).project(camera);projected[id]={x:rect.left+(v.x+1)*size.width/2,y:rect.top+(1-v.y)*size.height/2,visible:v.z>=-1&&v.z<=1&&Math.abs(v.x)<=1&&Math.abs(v.y)<=1};
+      const marker=new THREE.Vector3(...p);marker.y+=id==='doll'?.4:.6;
+      const distance=marker.distanceTo(camera.position);const screen=marker.clone().project(camera);
+      let visible=props.phase==='exploration'&&screen.z>=-1&&screen.z<=1&&Math.abs(screen.x)<.98&&Math.abs(screen.y)<.98&&(props.viewMode==='overview'||distance<5.7);
+      const shell=scene.getObjectByName('full-scale-interior-shell');
+      if(visible&&shell&&props.viewMode!=='overview'){
+        raycaster.current.set(camera.position,marker.clone().sub(camera.position).normalize());raycaster.current.far=Math.max(.01,distance-.1);
+        const walls=raycaster.current.intersectObject(shell,true);
+        visible=!walls.some(hit=>{const material=(hit.object as THREE.Mesh).material;if(!material)return false;const m=Array.isArray(material)?material[0]:material;return !m.transparent&&m.opacity>.8;});
+      }
+      markers.push({id:id as AnchorId,x:(screen.x+1)*size.width/2,y:(1-screen.y)*size.height/2,visible});
+    }
+    const loadedCharacters:string[]=[];scene.traverse(o=>{if(o.name.startsWith('glb-character-'))loadedCharacters.push(o.name.slice(14));});
+    const canvas=gl.domElement;canvas.dataset.loadedCharacters=loadedCharacters.join(',');canvas.dataset.world='memory';canvas.dataset.anchorScreen=JSON.stringify(projected);canvas.dataset.meshCount=String(meshes);canvas.dataset.triangles=String(gl.info.render.triangles);canvas.dataset.sceneRevision='immersive-v2';canvas.dataset.companion=props.companion||'elder-woman';
+    onProjection(markers);
+  });
+  return null;
+}
+
+function ImmersiveWorld(props:SceneProps&{onProjection:(markers:Marker[])=>void}){
+  const dragging=useRef({active:false,ended:0});
+  useEffect(()=>{props.onReady?.();},[]);
+  const onDragging=(active:boolean)=>{if(dragging.current.active&&!active)dragging.current.ended=performance.now();dragging.current.active=active;};
+  const onAnchor:SceneProps['onAnchor']=id=>{if(dragging.current.active||performance.now()-dragging.current.ended<180)return;props.onAnchor(id);};
+  return <>
+    <color attach="background" args={['#c5d3cf']}/><fog attach="fog" args={['#c5d3cf',34,90]}/>
+    <IndoorLighting branch={props.branch}/>
+    <Room phase={props.phase} branch={props.branch} visited={props.visited} selected={props.selected} hint={props.hint} viewMode={props.viewMode||'walk'} companion={props.companion||'elder-woman'} realDeparture={props.realDeparture} onAnchor={onAnchor}/>
+    <WalkController {...props} colliders={WALK_COLLIDERS} anchorPositions={ANCHOR_POSITIONS} onDragging={onDragging}/>
+    <Diagnostics props={props} onProjection={props.onProjection}/>
+  </>;
+}
+
+export default function Scene(props:SceneProps){
+  const [markers,setMarkers]=useState<Marker[]>([]);
+  if(props.world==='present')return <LegacyScene {...props}/>;
+  return <div className="immersive-canvas-root" style={{position:'relative',height:'100%',width:'100%'}}><Canvas shadows dpr={[1,1.5]} camera={{position:[0,1.64,2.5],fov:66,near:.07,far:100}} gl={{antialias:true,powerPreference:'high-performance',alpha:false}} fallback={null} onCreated={({gl})=>{gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.05;gl.outputColorSpace=THREE.SRGBColorSpace;gl.shadowMap.type=THREE.PCFSoftShadowMap;gl.shadowMap.autoUpdate=false;gl.shadowMap.needsUpdate=true;}}><Suspense fallback={null}><ImmersiveWorld {...props} onProjection={setMarkers}/></Suspense></Canvas><div style={{position:'absolute',inset:0,pointerEvents:'none'}}>{props.phase==='exploration'&&markers.filter(marker=>marker.visible).map(marker=><button key={marker.id} className={`anchor-hotspot ${props.visited.includes(marker.id)?'visited':''}`} data-testid={`anchor-${marker.id}`} aria-label={`触摸${anchorLabels[marker.id]}`} style={{position:'absolute',left:marker.x,top:marker.y,transform:'translate(-50%,-50%)',pointerEvents:'auto',display:'flex',alignItems:'center',gap:7,padding:'8px 11px',fontSize:12,border:'1px solid #dfd6c2',borderRadius:22,background:props.visited.includes(marker.id)?'#65795eeb':'#faf7edea',color:props.visited.includes(marker.id)?'#fffaf0':'#625642',whiteSpace:'nowrap',boxShadow:'0 3px 15px #16140f1a'}} onClick={event=>{event.stopPropagation();const canvas=event.currentTarget.closest('.immersive-canvas-root')?.querySelector('canvas');if(canvas)canvas.dataset.lastAnchorSource=`hotspot:${marker.id}`;props.onAnchor(marker.id);}}><span>{props.visited.includes(marker.id)?'✓':'+'}</span>{anchorLabels[marker.id]}</button>)}</div></div>;
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "preset": "young-man",
+    "source": "source/young-man-skin-original.png",
+    "sourceSha256": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5",
+    "runtime": "skins/young-man.webp",
+    "runtimeSha256": "113f30c8eeb390ebc45f5d7ac666426760135756eedd9ec0463a1ffbdf55ddf5",
+    "bytes": 52788,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "preset": "elder-man",
+    "source": "source/elder-man-skin-original.png",
+    "sourceSha256": "8b3232676c5b271b4f44ead68845155d93f15de641b6819561781e16701a6c59",
+    "runtime": "skins/elder-man.webp",
+    "runtimeSha256": "530db160e0c22bd5de58e1fdb34c02ced15bf942abd526adfd10a457532b9cc2",
+    "bytes": 80226,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "preset": "young-woman",
+    "source": "source/young-woman-skin-original.png",
+    "sourceSha256": "1d82f782b7d2da732229633bd2d14754d873fff53cdb1d088977bcf67ae19dde",
+    "runtime": "skins/young-woman.webp",
+    "runtimeSha256": "5a8fae226e0764752c4f38da05a5bf7857ba165141257db993ba82a94a705df0",
+    "bytes": 52994,
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "preset": "elder-woman",
+    "source": "source/elder-woman-skin-original.png",
+    "sourceSha256": "e0c6317c2354ee54c16ad5f871293121e4eee697d16423536bb1db3641d56bc9",
+    "runtime": "skins/elder-woman.webp",
+    "runtimeSha256": "bb43cc10148b0be273fc601287e01dd8616f5503855daf03922d326f1defa498",
+    "bytes": 79690,
+    "size": [
+      1024,
+      1024
+    ]
+  }
+]

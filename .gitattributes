@@ -1,0 +1,11 @@
+* text=auto
+*.mjs text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.glb binary
+*.jpg binary
+*.png binary
+*.webp binary
+/index.html -text -diff linguist-generated=true

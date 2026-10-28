@@ -1,0 +1,102 @@
+{
+  "builtAt": "2026-10-28T08:55:13.661Z",
+  "source": "MakeHuman hm08 CC0 official mesh + official Asian male/female young/old targets",
+  "variants": [
+    {
+      "filename": "young-man.glb",
+      "bytes": 1198400,
+      "meshes": 63,
+      "triangles": 47290,
+      "height": 1.7819999198913574,
+      "width": 0.5386608106672737,
+      "depth": 0.5259157322645187,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "young-man-seated.glb",
+      "bytes": 1247724,
+      "meshes": 69,
+      "triangles": 48880,
+      "height": 1.33526167678833,
+      "width": 0.5368808537916995,
+      "depth": 0.7637326004747593,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "elder-man.glb",
+      "bytes": 1184560,
+      "meshes": 60,
+      "triangles": 46870,
+      "height": 1.7219999771118164,
+      "width": 0.5201527108016388,
+      "depth": 0.4618902916014195,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "elder-man-seated.glb",
+      "bytes": 1234012,
+      "meshes": 66,
+      "triangles": 48466,
+      "height": 1.2869173030853271,
+      "width": 0.517874600464671,
+      "depth": 0.7080071111372802,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "young-woman.glb",
+      "bytes": 1227284,
+      "meshes": 64,
+      "triangles": 48476,
+      "height": 1.6721200198136446,
+      "width": 0.48659074306488037,
+      "depth": 0.4619678770303726,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "young-woman-seated.glb",
+      "bytes": 1276640,
+      "meshes": 70,
+      "triangles": 50050,
+      "height": 1.3028240066402486,
+      "width": 0.44616562128067017,
+      "depth": 0.7393094307222745,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "elder-woman.glb",
+      "bytes": 1262256,
+      "meshes": 67,
+      "triangles": 49766,
+      "height": 1.6419999341964722,
+      "width": 0.4881342947483063,
+      "depth": 0.5349967271387577,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    },
+    {
+      "filename": "elder-woman-seated.glb",
+      "bytes": 1310504,
+      "meshes": 73,
+      "triangles": 51292,
+      "height": 1.245930884361267,
+      "width": 0.4789260923862457,
+      "depth": 0.7585654547763189,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true
+    }
+  ]
+}
