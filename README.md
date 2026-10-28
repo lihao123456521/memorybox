@@ -4,7 +4,7 @@
 
 ## 直接体验：双击 index.html
 
-1. 从 [公开仓库](https://github.com/lihao123456521/memorybox) 选择 **Code → Download ZIP**，或[下载源码 ZIP](https://github.com/lihao123456521/memorybox/archive/refs/heads/main.zip)。
+1. [下载离线体验包](https://github.com/lihao123456521/memorybox/releases/download/v0.2.0/MemoryBox-offline-v0.2.0.zip)。要和队友修改源码，可从[公开仓库](https://github.com/lihao123456521/memorybox)选择 **Code → Download ZIP**，或[下载源码 ZIP](https://github.com/lihao123456521/memorybox/archive/refs/heads/main.zip)。两种包都带可直接打开的根目录 `index.html`。
 2. 解压后，用 Chrome 或 Edge 打开根目录的 **`index.html`**。
 3. 不需要安装 Node.js、Python、数据库或任何 API Key，也不需要启动本地服务。
 

@@ -22,7 +22,16 @@
 | 窄屏操作 | 1366×768、1920×1080、390×844、319×873 无横向溢出；390px 完成探索、分支、写信和收藏，触屏方向按钮实际移动 |
 | 纹理失败与偏好 | 阻断可选合影仍能完成；声音、大字、减少动态开关通过状态检查，未据此宣称已试听实体扬声器 |
 
-全量回归后，独立连续衣袖与离线模式提示变更再次运行 `--grep 'four adult|a copied index'`，2 项通过；其中离线用例增加了保存后的删除与刷新检查。最终打包与公开下载副本另做相同流程复验，结果随发布补充。
+全量回归后，独立连续衣袖与离线模式提示变更再次运行 `--grep 'four adult|a copied index'`，2 项通过；其中离线用例增加了保存后的删除与刷新检查。最终衣物腰臀拟合与圆肩模型重建后，同样两项使用本机 Edge 再次通过，2.2 分钟。
+
+## GitHub 下载副本
+
+- 仓库为公开的 [lihao123456521/memorybox](https://github.com/lihao123456521/memorybox)，`main` 已推送，源码下载无需登录。
+- 使用无凭据的 HTTP 请求下载 GitHub 源码 ZIP，解压后仅取其中的 `index.html` 放到空目录，阻断 HTTP、重新执行完整便携用例：**1 项通过，1.2 分钟**，包含行走、四人物、探索、分支、精确信件、刷新和删除。
+- 下载的 HTML 与本机逐字节哈希一致：`d811dffa4790b6b14aa1f6724bec85c03f208ac47b596c891591dc2f00f68f0a`；26.4MiB，23 项内嵌资产。
+- [GitHub Actions 首次验证](https://github.com/lihao123456521/memorybox/actions/runs/40660733171)成功；Ubuntu / Node 24 / Python 3.12 执行类型、普通构建、单文件打包和后端接口测试。
+- [v0.2.0 离线包](https://github.com/lihao123456521/memorybox/releases/tag/v0.2.0)仅含 `index.html` 和打开说明，提供 SHA256SUMS。个人内容、数据库、密钥和浏览器状态不在下载包中。
+- Release ZIP 也已匿名下载，压缩包及解压的 HTML 均与本机一致；ZIP SHA-256 为 `cbe4bb27795036bf94270b52af2cbd33c055fe2633f7dd15c482dddcfda0d11b`。
 
 ## 画面证据
 
