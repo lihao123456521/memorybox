@@ -34,7 +34,12 @@
 
 ## GitHub 下载验证
 
-公开仓库：[lihao123456521/memorybox](https://github.com/lihao123456521/memorybox)。v0.3公开发布与匿名下载验证将在推送后补记；本地测试不能替代下载副本检查。
+公开仓库：[lihao123456521/memorybox](https://github.com/lihao123456521/memorybox)，权限为PUBLIC；v0.3代码提交为 `dccb394`，后续仅补充验证文档。
+
+- 用不带认证头的HTTP请求下载源码ZIP，提取唯一的根index.html，SHA-256与本机完全一致。把这份下载HTML复制到空目录、阻断全部HTTP，用Edge重新执行行走、四人物、剧情、精确信件、刷新和删除：**1项通过，2.9分钟**；报告 `artifacts/playwright-v3-github-download-results.json`。
+- [v0.3.0离线包](https://github.com/lihao123456521/memorybox/releases/tag/v0.3.0)已公开发布，包含ZIP与SHA256SUMS。ZIP也已匿名下载，压缩包与解压HTML均和本机逐字节哈希一致，校验文件也一致。核验记录 `artifacts/github-v3-release/download-verification.json`。没有把相同字节的release HTML再计作一次独立浏览器复验。
+- [代码提交的GitHub Actions](https://github.com/lihao123456521/memorybox/actions/runs/40821046733)成功；Ubuntu、Node24、Python3.12完成类型检查、普通构建、单文件打包与19项后端测试。
+- 第一次附件上传因GitHub返回408超时失败；重试后成功，最终附件状态为uploaded，发布状态非draft。
 
 离线ZIP仅含index.html与打开说明，软件许可已在HTML内嵌。ZIP SHA-256：`5f2baec588731544d39d21326f26877be6c0cf816aa8d35b7c71088ad312c949`。
 
