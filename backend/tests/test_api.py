@@ -37,7 +37,8 @@ def test_health_and_templates(api):
     assert health["lux3dEnabled"] is False
     templates = client.get("/api/templates").json()
     assert {t["id"] for t in templates} == {"old-home", "station", "classroom"}
-    assert client.get("/api/templates/station").json()["sceneStatus"] == "shared-scene"
+    assert {t["scenePreset"] for t in templates} == {"old-home-summer", "railway-station", "sunlit-classroom"}
+    assert all(t["sceneStatus"] == "fully-playable" for t in templates)
     assert client.get("/api/templates/missing").status_code == 404
 
 

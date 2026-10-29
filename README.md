@@ -1,32 +1,40 @@
 # MemoryBox · 记忆盒子
 
-让回忆有一个可以回去的地方。一段可行走的 3D 回忆之旅：现实木盒 → 讲述记忆 → 探索老屋 → 真实 / 想象分支 → 写信 → 带着收藏回到现在。
+让回忆有一个可以回去的地方。一段可行走的 3D 回忆之旅：机械八音盒 → 讲述记忆 → 开盖穿越 → 老屋 / 火车站 / 教室 → 真实 / 想象分支 → 写信 → 带着收藏回到现在。
 
 ## 直接体验：双击 index.html
 
-1. [下载离线体验包](https://github.com/lihao123456521/memorybox/releases/download/v0.2.0/MemoryBox-offline-v0.2.0.zip)。要和队友修改源码，可从[公开仓库](https://github.com/lihao123456521/memorybox)选择 **Code → Download ZIP**，或[下载源码 ZIP](https://github.com/lihao123456521/memorybox/archive/refs/heads/main.zip)。两种包都带可直接打开的根目录 `index.html`。
+1. [下载离线体验包](https://github.com/lihao123456521/memorybox/releases/download/v0.3.0/MemoryBox-offline-v0.3.0.zip)。要和队友修改源码，可从[公开仓库](https://github.com/lihao123456521/memorybox)选择 **Code → Download ZIP**，或[下载源码 ZIP](https://github.com/lihao123456521/memorybox/archive/refs/heads/main.zip)。两种包都带可直接打开的根目录 `index.html`。
 2. 解压后，用 Chrome 或 Edge 打开根目录的 **`index.html`**。
 3. 不需要安装 Node.js、Python、数据库或任何 API Key，也不需要启动本地服务。
 
-根目录 `index.html` 是约 26 MiB 的完整离线成品，内嵌代码、样式、GLB 人物、PBR 贴图与合影。它可以单独复制到其他文件夹或电脑，不依赖旁边的 `frontend` 文件夹。`frontend/index.html` 是开发入口，不是离线成品。
+根目录 `index.html` 是完整离线成品，内嵌代码、样式、精细 GLB 人物与家具、PBR 贴图、HDR照明与合影。它可以单独复制到其他文件夹或电脑，不依赖旁边的 `frontend` 文件夹。`frontend/index.html` 是开发入口，不是离线成品。
 
 离线模式中的草稿、信件和人物选择保存在各自浏览器里。它们不会自动上传 GitHub，也不会随源码下载共享给别人。叙事使用明确标记的本地模板，不假称实时大模型生成。
 
 下面是本版单文件实际运行画面，场景可进入和行走：
 
+![机械八音盒开场](docs/screenshots/musicbox.png)
+
 ![MemoryBox 室内漫游](docs/screenshots/room.png)
+
+![可步入的绿皮车厢](docs/screenshots/carriage.png)
+
+更多实测画面：[车站总览](docs/screenshots/station.png)、[卧室](docs/screenshots/bedroom.png)、[教室](docs/screenshots/classroom.png)、[四类人物](docs/screenshots/characters.png)。
 
 ## 场景与操作
 
-- 真实尺度的客厅、厨房与阳台，通过实际门洞通行；窗外街道、树木、住宅与车辆均为三维几何。
+- 开场为可打开的深胡桃木机械八音盒，含立体黄铜花饰、钥匙、铰链、销钉圆筒、梳齿、齿轮和镜面盒盖；开始回忆后镜头推进，渐进虚化穿越。
+- 真实尺度的五个连通空间：客厅、厨房、阳台、卧室与书房。细化软垫缝线、床褥垂坠、窗帘褶皱、门窗五金、灯具与书脊；电视与中式扶手椅采用精细CC0模型。
+- 独立火车站：候车大厅、站台与可步入的绿皮车厢；独立教室：课桌、黑板、纸条与阳光走廊，各自有三件不同剧情物品。
 - 默认 **室内漫游**：WASD / 方向键移动，鼠标或手指拖动环顾。无需 Pointer Lock。触屏也可以按住画面方向按钮移动。
 - 墙壁、家具与人物占位有碰撞限制，不能直接穿过茶几或墙。右下平面图显示当前所在区域。
 - **房间总览** 可旋转观察，切回漫游保留之前的位置；点击旧电视、布娃娃和相框，依次发现三件不同的记忆。
-- **切换人物** 提供青年男性、长者男性、青年女性、长者女性四种独立外观。人物采用真实人体拓扑与本地皮肤纹理，保持完整衣着。
+- **切换人物** 提供青年男性、长者男性、青年女性、长者女性。采用完整衣物、发型、鞋与五官模型，本地织物法线与皮肤贴图，修复UV接缝并平滑面部形体。
 - 三件物品解锁两种路线。想象分支持续标记 **AI 想象 · 并非真实历史**；写信后回到同一个现实木盒并查看收藏。
 - 支持退出继续、刷新恢复、重玩保留收藏、删除、音效开关、大字和减少动态效果。
 
-「家的模样」是完整空间旅程；车站与教室目前是明确标注的叙事预览，共用老屋场景。
+三种模板使用各自独立的三维空间。它们是承载讲述的艺术化场景，不表示对真实历史地点的精确重建。
 
 ## 一起修改
 
@@ -43,7 +51,9 @@ git switch -c feature/your-change
 | 内容 | 源码 |
 |---|---|
 | 故事流程、界面、人物设置 | `frontend/src/App.tsx` |
-| 标准房间、家具与三个区域 | `frontend/src/scenes/Room.tsx` |
+| 标准房间、家具与五个区域 | `frontend/src/scenes/Room.tsx`、`interior/Details.tsx` |
+| 独立车站和教室 | `frontend/src/scenes/Station.tsx`、`Classroom.tsx` |
+| 机械八音盒与开场 | `frontend/src/scenes/MusicBox.tsx`、`PresentScene.tsx` |
 | 移动、镜头与碰撞 | `frontend/src/scenes/WalkController.tsx`、`navigation.ts` |
 | 人物加载与可复建模型 | `frontend/src/scenes/Characters.tsx`、`frontend/public/assets/models/build-characters.mjs` |
 | 本地故事模板与状态恢复 | `frontend/src/data.ts`、`store.ts` |
@@ -100,7 +110,7 @@ npm.cmd run test:e2e
 
 ## 资源与边界
 
-房间和家具是原创程序网格；PBR 纹理来自 Poly Haven，人物基础拓扑、形态与皮肤来自 MakeHuman 的 CC0 图形资产，衣着和转换逻辑由本项目生成。虚构合影由内置 image_gen 生成，只用于相框纹理。来源与许可见 [素材说明](THIRD_PARTY_NOTICES.md)、[人物记录](docs/character-assets.md)、[房间记录](docs/room-assets.md)。
+主要建筑与机械结构为原创程序网格；精细家具、PBR与HDR来自 Poly Haven CC0，人物、衣着、发型及皮肤来自 MakeHuman CC0 图形资产，拟合与转换逻辑由本项目实现。虚构合影由内置 image_gen 生成，只用于相框纹理。来源与许可见 [素材说明](THIRD_PARTY_NOTICES.md)、[人物升级](docs/character-assets-v3.md)、[房间升级](docs/interiors-v3.md)。
 
 人物目前提供自然比例的静态站姿 / 坐姿与轻微呼吸，尚未实现完整骨骼表演。Lux3D **未接入、未消费额度**；本版不宣称已经满足最终参赛版的 Lux3D 门槛。
 

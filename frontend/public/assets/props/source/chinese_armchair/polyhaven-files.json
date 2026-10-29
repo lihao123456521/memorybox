@@ -1,0 +1,904 @@
+{
+  "Diffuse": {
+    "8k": {
+      "jpg": {
+        "size": 30842995,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_diff_8k.jpg",
+        "md5": "22b382a68bb45a915cfa8a1f01f2cb79"
+      },
+      "png": {
+        "size": 160043071,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_diff_8k.png",
+        "md5": "cbe35362d26e41014a67efbf6f6b24b0"
+      },
+      "exr": {
+        "size": 81391994,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_diff_8k.exr",
+        "md5": "965f9814fccd5ffebbecea8eea18e7e5"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 7336422,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_diff_4k.jpg",
+        "md5": "f697cc0db5f32c8a96460cf5c34467eb"
+      },
+      "png": {
+        "size": 49318981,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_diff_4k.png",
+        "md5": "c7510c594dd68b032744b1d090f99f74"
+      },
+      "exr": {
+        "size": 18273238,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_diff_4k.exr",
+        "md5": "e4a66b096f93fe1df22dd26988afa648"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 1854860,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_diff_2k.jpg",
+        "md5": "44d4cb5ff2f2bbc4b5fd773cff3adc02"
+      },
+      "png": {
+        "size": 13913342,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_diff_2k.png",
+        "md5": "871c58e81622a3b112b9a3406c3b3765"
+      },
+      "exr": {
+        "size": 4028935,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_diff_2k.exr",
+        "md5": "07a6b6bf807746ed991620ac9214f744"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 516908,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_diff_1k.jpg",
+        "md5": "5ae99f09fe8a767d4ecd49c86539d46d"
+      },
+      "png": {
+        "size": 3904995,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_diff_1k.png",
+        "md5": "43d7a8c97a88d63f15bbcc5f727fa6d5"
+      },
+      "exr": {
+        "size": 1086856,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_diff_1k.exr",
+        "md5": "45a12229a1ca149f7a36255fcaf0f20c"
+      }
+    }
+  },
+  "nor_dx": {
+    "8k": {
+      "jpg": {
+        "size": 24908983,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_nor_dx_8k.jpg",
+        "md5": "b4dc5d7d1cc9f564a1775dce4868b4a3"
+      },
+      "png": {
+        "size": 143557324,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_nor_dx_8k.png",
+        "md5": "a819423c6cb440891f20660248e8a5eb"
+      },
+      "exr": {
+        "size": 48479170,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_nor_dx_8k.exr",
+        "md5": "09ac4ba709221b34363ba5c47dea2866"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 6854480,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_nor_dx_4k.jpg",
+        "md5": "e43825d91afdd62a86b899a3b2f4ce05"
+      },
+      "png": {
+        "size": 48187179,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_nor_dx_4k.png",
+        "md5": "40b89fa691faea01701a970a96771af0"
+      },
+      "exr": {
+        "size": 14575396,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_nor_dx_4k.exr",
+        "md5": "b2c7bb0853a282d8668ad1dfd04700b9"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 1737006,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_nor_dx_2k.jpg",
+        "md5": "27c079187ee1056bf2c633d9399a7429"
+      },
+      "png": {
+        "size": 13460676,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_nor_dx_2k.png",
+        "md5": "0092fe7ed4d9d3bf1605d291da09f813"
+      },
+      "exr": {
+        "size": 3483280,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_nor_dx_2k.exr",
+        "md5": "98b7ae7a6e9ae2d820ca1c2e6777c81d"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 482384,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_nor_dx_1k.jpg",
+        "md5": "fc54a4f45faf0059c1cb6b4b883c37d9"
+      },
+      "png": {
+        "size": 3741160,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_nor_dx_1k.png",
+        "md5": "7dff73d47f4b093b52223a3130bf34a0"
+      },
+      "exr": {
+        "size": 951218,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_nor_dx_1k.exr",
+        "md5": "14bda5e82b5536debf10e4ebac23d4cb"
+      }
+    }
+  },
+  "nor_gl": {
+    "8k": {
+      "jpg": {
+        "size": 24936649,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_nor_gl_8k.jpg",
+        "md5": "53c809abce03ae16198a01122aa73127"
+      },
+      "png": {
+        "size": 143542880,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_nor_gl_8k.png",
+        "md5": "a4fed679a626c1f7f0a1091a4afa7f78"
+      },
+      "exr": {
+        "size": 48495294,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_nor_gl_8k.exr",
+        "md5": "5b6854e547d702dd8ea2029955bd399f"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 6869816,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_nor_gl_4k.jpg",
+        "md5": "ef9849933409015af7f85926f6c8dace"
+      },
+      "png": {
+        "size": 48195176,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_nor_gl_4k.png",
+        "md5": "b3fa3cd9be4dc29dedde159139d7a9c7"
+      },
+      "exr": {
+        "size": 14577670,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_nor_gl_4k.exr",
+        "md5": "407e2c6d71a5675fe9c35d4d05453ae8"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 1742166,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_nor_gl_2k.jpg",
+        "md5": "bd25ad94c868ded712fc093324b8b7f7"
+      },
+      "png": {
+        "size": 13460474,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_nor_gl_2k.png",
+        "md5": "f2e155d2153326cdcfe7858c7c295987"
+      },
+      "exr": {
+        "size": 3468929,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_nor_gl_2k.exr",
+        "md5": "57791b69bb4772fe030b330d2a09ea09"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 483304,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_nor_gl_1k.jpg",
+        "md5": "ba905cf32062cf2869ec39f7adbb95b8"
+      },
+      "png": {
+        "size": 3741269,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_nor_gl_1k.png",
+        "md5": "64fe4bd96e87fec5c3c49990fb8341f9"
+      },
+      "exr": {
+        "size": 944719,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_nor_gl_1k.exr",
+        "md5": "84b6566c4261270fd16f34f52366fb0f"
+      }
+    }
+  },
+  "blend": {
+    "8k": {
+      "blend": {
+        "include": {
+          "textures/chinese_armchair_nor_gl_8k.exr": {
+            "size": 48495294,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_nor_gl_8k.exr",
+            "md5": "5b6854e547d702dd8ea2029955bd399f"
+          },
+          "textures/chinese_armchair_diff_8k.jpg": {
+            "size": 30842995,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_diff_8k.jpg",
+            "md5": "22b382a68bb45a915cfa8a1f01f2cb79"
+          },
+          "textures/chinese_armchair_rough_8k.exr": {
+            "size": 34183565,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_rough_8k.exr",
+            "md5": "16b2816892898dde42399d94bdd815b1"
+          }
+        },
+        "size": 170917,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/8k/chinese_armchair/chinese_armchair_8k.blend",
+        "md5": "4fe31414709065d6fe80209c85c1eb43"
+      }
+    },
+    "4k": {
+      "blend": {
+        "include": {
+          "textures/chinese_armchair_diff_4k.jpg": {
+            "size": 7336422,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_diff_4k.jpg",
+            "md5": "f697cc0db5f32c8a96460cf5c34467eb"
+          },
+          "textures/chinese_armchair_rough_4k.exr": {
+            "size": 8258793,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_rough_4k.exr",
+            "md5": "17c46f39d75ce95e6e7d9b30c85b9797"
+          },
+          "textures/chinese_armchair_nor_gl_4k.exr": {
+            "size": 14577670,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_nor_gl_4k.exr",
+            "md5": "407e2c6d71a5675fe9c35d4d05453ae8"
+          }
+        },
+        "size": 170938,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/4k/chinese_armchair/chinese_armchair_4k.blend",
+        "md5": "355ea512e6b63f557abd2caeff1069b4"
+      }
+    },
+    "2k": {
+      "blend": {
+        "include": {
+          "textures/chinese_armchair_diff_2k.jpg": {
+            "size": 1854860,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_diff_2k.jpg",
+            "md5": "44d4cb5ff2f2bbc4b5fd773cff3adc02"
+          },
+          "textures/chinese_armchair_nor_gl_2k.exr": {
+            "size": 3468929,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_nor_gl_2k.exr",
+            "md5": "57791b69bb4772fe030b330d2a09ea09"
+          },
+          "textures/chinese_armchair_rough_2k.exr": {
+            "size": 2129021,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_rough_2k.exr",
+            "md5": "a10b260bd8f6a4f870f4213367ae800f"
+          }
+        },
+        "size": 170900,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/2k/chinese_armchair/chinese_armchair_2k.blend",
+        "md5": "d56428aa838989f0587a3fcc80a4e0d4"
+      }
+    },
+    "1k": {
+      "blend": {
+        "include": {
+          "textures/chinese_armchair_rough_1k.exr": {
+            "size": 597499,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_rough_1k.exr",
+            "md5": "f96a82b3de94d36f6f1922afb1e4eeb0"
+          },
+          "textures/chinese_armchair_nor_gl_1k.exr": {
+            "size": 944719,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_nor_gl_1k.exr",
+            "md5": "84b6566c4261270fd16f34f52366fb0f"
+          },
+          "textures/chinese_armchair_diff_1k.jpg": {
+            "size": 516908,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_diff_1k.jpg",
+            "md5": "5ae99f09fe8a767d4ecd49c86539d46d"
+          }
+        },
+        "size": 171003,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/chinese_armchair/chinese_armchair_1k.blend",
+        "md5": "efb2bcc9ebd0e0f2bd9fdbc2418c17c1"
+      }
+    }
+  },
+  "gltf": {
+    "8k": {
+      "gltf": {
+        "include": {
+          "textures/chinese_armchair_nor_gl_8k.jpg": {
+            "size": 24936649,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_nor_gl_8k.jpg",
+            "md5": "53c809abce03ae16198a01122aa73127"
+          },
+          "chinese_armchair.bin": {
+            "size": 81428,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/chinese_armchair/chinese_armchair.bin",
+            "md5": "7575b1f0e7de094e7c1cbebf610e5da0"
+          },
+          "textures/chinese_armchair_diff_8k.jpg": {
+            "size": 30842995,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_diff_8k.jpg",
+            "md5": "22b382a68bb45a915cfa8a1f01f2cb79"
+          },
+          "textures/chinese_armchair_arm_8k.jpg": {
+            "size": 36182240,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_arm_8k.jpg",
+            "md5": "d82774b7e0ccd28015e9709d1a593d8c"
+          }
+        },
+        "size": 2816,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/chinese_armchair/chinese_armchair_8k.gltf",
+        "md5": "15e64b95b76df8d8fe6f73f0a582adb9"
+      }
+    },
+    "4k": {
+      "gltf": {
+        "include": {
+          "textures/chinese_armchair_nor_gl_4k.jpg": {
+            "size": 6869816,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_nor_gl_4k.jpg",
+            "md5": "ef9849933409015af7f85926f6c8dace"
+          },
+          "chinese_armchair.bin": {
+            "size": 81428,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/chinese_armchair/chinese_armchair.bin",
+            "md5": "7575b1f0e7de094e7c1cbebf610e5da0"
+          },
+          "textures/chinese_armchair_diff_4k.jpg": {
+            "size": 7336422,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_diff_4k.jpg",
+            "md5": "f697cc0db5f32c8a96460cf5c34467eb"
+          },
+          "textures/chinese_armchair_arm_4k.jpg": {
+            "size": 8701982,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_arm_4k.jpg",
+            "md5": "bfa83ae025d6d8dc36ff9bf52a942db5"
+          }
+        },
+        "size": 2816,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/chinese_armchair/chinese_armchair_4k.gltf",
+        "md5": "98d2243f8866928ff6ce199bdf822f7b"
+      }
+    },
+    "2k": {
+      "gltf": {
+        "include": {
+          "textures/chinese_armchair_diff_2k.jpg": {
+            "size": 1854860,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_diff_2k.jpg",
+            "md5": "44d4cb5ff2f2bbc4b5fd773cff3adc02"
+          },
+          "chinese_armchair.bin": {
+            "size": 81428,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/chinese_armchair/chinese_armchair.bin",
+            "md5": "7575b1f0e7de094e7c1cbebf610e5da0"
+          },
+          "textures/chinese_armchair_nor_gl_2k.jpg": {
+            "size": 1742166,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_nor_gl_2k.jpg",
+            "md5": "bd25ad94c868ded712fc093324b8b7f7"
+          },
+          "textures/chinese_armchair_arm_2k.jpg": {
+            "size": 2223029,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_arm_2k.jpg",
+            "md5": "a6fa9bf7abd8a5d1977bdbbf5e43ae17"
+          }
+        },
+        "size": 2816,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/chinese_armchair/chinese_armchair_2k.gltf",
+        "md5": "d592d7794954cb692ef53f362794340a"
+      }
+    },
+    "1k": {
+      "gltf": {
+        "include": {
+          "textures/chinese_armchair_arm_1k.jpg": {
+            "size": 618850,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_arm_1k.jpg",
+            "md5": "ed3bece412754abf3aa2c5f6bc6aa9de"
+          },
+          "textures/chinese_armchair_nor_gl_1k.jpg": {
+            "size": 483304,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_nor_gl_1k.jpg",
+            "md5": "ba905cf32062cf2869ec39f7adbb95b8"
+          },
+          "chinese_armchair.bin": {
+            "size": 81428,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/chinese_armchair/chinese_armchair.bin",
+            "md5": "7575b1f0e7de094e7c1cbebf610e5da0"
+          },
+          "textures/chinese_armchair_diff_1k.jpg": {
+            "size": 516908,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_diff_1k.jpg",
+            "md5": "5ae99f09fe8a767d4ecd49c86539d46d"
+          }
+        },
+        "size": 2816,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/chinese_armchair/chinese_armchair_1k.gltf",
+        "md5": "ecad26c95dbf2c7e631f848711700678"
+      }
+    }
+  },
+  "usd": {
+    "8k": {
+      "usd": {
+        "include": {
+          "textures/chinese_armchair_nor_gl_8k.exr": {
+            "size": 48495294,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_nor_gl_8k.exr",
+            "md5": "5b6854e547d702dd8ea2029955bd399f"
+          },
+          "textures/chinese_armchair_diff_8k.jpg": {
+            "size": 30842995,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_diff_8k.jpg",
+            "md5": "22b382a68bb45a915cfa8a1f01f2cb79"
+          },
+          "textures/chinese_armchair_rough_8k.exr": {
+            "size": 34183565,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_rough_8k.exr",
+            "md5": "16b2816892898dde42399d94bdd815b1"
+          }
+        },
+        "size": 142675,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/8k/chinese_armchair/chinese_armchair_8k.usdc",
+        "md5": "fa8bd3d7ecaababa88f900b7d292d3af"
+      }
+    },
+    "4k": {
+      "usd": {
+        "include": {
+          "textures/chinese_armchair_diff_4k.jpg": {
+            "size": 7336422,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_diff_4k.jpg",
+            "md5": "f697cc0db5f32c8a96460cf5c34467eb"
+          },
+          "textures/chinese_armchair_rough_4k.exr": {
+            "size": 8258793,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_rough_4k.exr",
+            "md5": "17c46f39d75ce95e6e7d9b30c85b9797"
+          },
+          "textures/chinese_armchair_nor_gl_4k.exr": {
+            "size": 14577670,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_nor_gl_4k.exr",
+            "md5": "407e2c6d71a5675fe9c35d4d05453ae8"
+          }
+        },
+        "size": 142675,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/4k/chinese_armchair/chinese_armchair_4k.usdc",
+        "md5": "5b0977989b4bcfdae36fe95fe5f59324"
+      }
+    },
+    "2k": {
+      "usd": {
+        "include": {
+          "textures/chinese_armchair_diff_2k.jpg": {
+            "size": 1854860,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_diff_2k.jpg",
+            "md5": "44d4cb5ff2f2bbc4b5fd773cff3adc02"
+          },
+          "textures/chinese_armchair_nor_gl_2k.exr": {
+            "size": 3468929,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_nor_gl_2k.exr",
+            "md5": "57791b69bb4772fe030b330d2a09ea09"
+          },
+          "textures/chinese_armchair_rough_2k.exr": {
+            "size": 2129021,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_rough_2k.exr",
+            "md5": "a10b260bd8f6a4f870f4213367ae800f"
+          }
+        },
+        "size": 142675,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/2k/chinese_armchair/chinese_armchair_2k.usdc",
+        "md5": "e8237791b4a4db151df80eb4d81dbc6e"
+      }
+    },
+    "1k": {
+      "usd": {
+        "include": {
+          "textures/chinese_armchair_rough_1k.exr": {
+            "size": 597499,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_rough_1k.exr",
+            "md5": "f96a82b3de94d36f6f1922afb1e4eeb0"
+          },
+          "textures/chinese_armchair_nor_gl_1k.exr": {
+            "size": 944719,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_nor_gl_1k.exr",
+            "md5": "84b6566c4261270fd16f34f52366fb0f"
+          },
+          "textures/chinese_armchair_diff_1k.jpg": {
+            "size": 516908,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_diff_1k.jpg",
+            "md5": "5ae99f09fe8a767d4ecd49c86539d46d"
+          }
+        },
+        "size": 142675,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/1k/chinese_armchair/chinese_armchair_1k.usdc",
+        "md5": "ba3c7d4d963f33be67d01d4dba5c94ea"
+      }
+    }
+  },
+  "arm": {
+    "8k": {
+      "jpg": {
+        "size": 36182240,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_arm_8k.jpg",
+        "md5": "d82774b7e0ccd28015e9709d1a593d8c"
+      },
+      "png": {
+        "size": 73558804,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_arm_8k.png",
+        "md5": "440f9fd22c26f6c17962d6e6c8aa776d"
+      },
+      "exr": {
+        "size": 83209582,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_arm_8k.exr",
+        "md5": "2862c6b6415876d60c22a67715d09a8d"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 8701982,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_arm_4k.jpg",
+        "md5": "bfa83ae025d6d8dc36ff9bf52a942db5"
+      },
+      "png": {
+        "size": 36358902,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_arm_4k.png",
+        "md5": "ae483f1b012e09d2e2e2ad29cfe7507d"
+      },
+      "exr": {
+        "size": 19960527,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_arm_4k.exr",
+        "md5": "a8087ab4b7be50dd694238a969552419"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 2223029,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_arm_2k.jpg",
+        "md5": "a6fa9bf7abd8a5d1977bdbbf5e43ae17"
+      },
+      "png": {
+        "size": 10864303,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_arm_2k.png",
+        "md5": "8a8b052905cbf0f9c419add9b7a34aca"
+      },
+      "exr": {
+        "size": 5014488,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_arm_2k.exr",
+        "md5": "69c359cc61c3ef9db1f63990037d1aaa"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 618850,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_arm_1k.jpg",
+        "md5": "ed3bece412754abf3aa2c5f6bc6aa9de"
+      },
+      "png": {
+        "size": 3148309,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_arm_1k.png",
+        "md5": "e5fc1e493ef244a83eb518c4f8987260"
+      },
+      "exr": {
+        "size": 1381852,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_arm_1k.exr",
+        "md5": "11d2b317b930616cb97b32306dca3cb2"
+      }
+    }
+  },
+  "fbx": {
+    "8k": {
+      "fbx": {
+        "include": {
+          "textures/chinese_armchair_nor_gl_8k.exr": {
+            "size": 48495294,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_nor_gl_8k.exr",
+            "md5": "5b6854e547d702dd8ea2029955bd399f"
+          },
+          "textures/chinese_armchair_diff_8k.jpg": {
+            "size": 30842995,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_diff_8k.jpg",
+            "md5": "22b382a68bb45a915cfa8a1f01f2cb79"
+          },
+          "textures/chinese_armchair_rough_8k.exr": {
+            "size": 34183565,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_rough_8k.exr",
+            "md5": "16b2816892898dde42399d94bdd815b1"
+          }
+        },
+        "size": 109468,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/8k/chinese_armchair/chinese_armchair_8k.fbx",
+        "md5": "da15658f3c0c5af6ccece75857ed181e"
+      }
+    },
+    "4k": {
+      "fbx": {
+        "include": {
+          "textures/chinese_armchair_diff_4k.jpg": {
+            "size": 7336422,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_diff_4k.jpg",
+            "md5": "f697cc0db5f32c8a96460cf5c34467eb"
+          },
+          "textures/chinese_armchair_rough_4k.exr": {
+            "size": 8258793,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_rough_4k.exr",
+            "md5": "17c46f39d75ce95e6e7d9b30c85b9797"
+          },
+          "textures/chinese_armchair_nor_gl_4k.exr": {
+            "size": 14577670,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_nor_gl_4k.exr",
+            "md5": "407e2c6d71a5675fe9c35d4d05453ae8"
+          }
+        },
+        "size": 109468,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/4k/chinese_armchair/chinese_armchair_4k.fbx",
+        "md5": "13cae85979abdaae6cd476e7931c77c3"
+      }
+    },
+    "2k": {
+      "fbx": {
+        "include": {
+          "textures/chinese_armchair_diff_2k.jpg": {
+            "size": 1854860,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_diff_2k.jpg",
+            "md5": "44d4cb5ff2f2bbc4b5fd773cff3adc02"
+          },
+          "textures/chinese_armchair_nor_gl_2k.exr": {
+            "size": 3468929,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_nor_gl_2k.exr",
+            "md5": "57791b69bb4772fe030b330d2a09ea09"
+          },
+          "textures/chinese_armchair_rough_2k.exr": {
+            "size": 2129021,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_rough_2k.exr",
+            "md5": "a10b260bd8f6a4f870f4213367ae800f"
+          }
+        },
+        "size": 109468,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/2k/chinese_armchair/chinese_armchair_2k.fbx",
+        "md5": "06760c6c6876d5dd67a4b70bafc5833a"
+      }
+    },
+    "1k": {
+      "fbx": {
+        "include": {
+          "textures/chinese_armchair_rough_1k.exr": {
+            "size": 597499,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_rough_1k.exr",
+            "md5": "f96a82b3de94d36f6f1922afb1e4eeb0"
+          },
+          "textures/chinese_armchair_nor_gl_1k.exr": {
+            "size": 944719,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_nor_gl_1k.exr",
+            "md5": "84b6566c4261270fd16f34f52366fb0f"
+          },
+          "textures/chinese_armchair_diff_1k.jpg": {
+            "size": 516908,
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_diff_1k.jpg",
+            "md5": "5ae99f09fe8a767d4ecd49c86539d46d"
+          }
+        },
+        "size": 109468,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/1k/chinese_armchair/chinese_armchair_1k.fbx",
+        "md5": "b2e01f02372f7d92bc82e134c78bceb9"
+      }
+    }
+  },
+  "AO": {
+    "8k": {
+      "jpg": {
+        "size": 21764637,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_ao_8k.jpg",
+        "md5": "27d832f2b370a573c9f63314c65cb53d"
+      },
+      "png": {
+        "size": 24411748,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_ao_8k.png",
+        "md5": "130292681b475f252005b1867cd100e2"
+      },
+      "exr": {
+        "size": 21157016,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_ao_8k.exr",
+        "md5": "86c4f1c75b3c7bc284aca578052e79bb"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 6256011,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_ao_4k.jpg",
+        "md5": "e8c152d571918fb2ec2d8f5b742190d3"
+      },
+      "png": {
+        "size": 14653677,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_ao_4k.png",
+        "md5": "ad231afc3811206465fc3861ba3fffa7"
+      },
+      "exr": {
+        "size": 6510461,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_ao_4k.exr",
+        "md5": "226ddf77e72788ad73f313bc612e9f36"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 1525671,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_ao_2k.jpg",
+        "md5": "191e62c2a73fb5208930137abae7690d"
+      },
+      "png": {
+        "size": 4600926,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_ao_2k.png",
+        "md5": "c9cbe720dceea47bad40dac3f959e533"
+      },
+      "exr": {
+        "size": 1602490,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_ao_2k.exr",
+        "md5": "815d74d798078e989f7f1b5d6ad1c868"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 406591,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_ao_1k.jpg",
+        "md5": "d1a2e2f6f7ff93b6e223e811b6b89042"
+      },
+      "png": {
+        "size": 1331329,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_ao_1k.png",
+        "md5": "bd150e97965a552be30fb2a98acd1f67"
+      },
+      "exr": {
+        "size": 438924,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_ao_1k.exr",
+        "md5": "8fe093a049e8fa9d3851970da39742b2"
+      }
+    }
+  },
+  "Displacement": {
+    "8k": {
+      "jpg": {
+        "size": 7892179,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_disp_8k.jpg",
+        "md5": "060ac83e684a9dd21510722f22bb2335"
+      },
+      "png": {
+        "size": 12470412,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_disp_8k.png",
+        "md5": "91f90c0c8d827d79226452b782aa8766"
+      },
+      "exr": {
+        "size": 6822302,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_disp_8k.exr",
+        "md5": "5a3ed471f81ed188098ca831f7edf411"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 1442182,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_disp_4k.jpg",
+        "md5": "d2911129e094be4c0adae51e117909bc"
+      },
+      "png": {
+        "size": 6517094,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_disp_4k.png",
+        "md5": "b722f5e131cf37a013d908ea3c039b48"
+      },
+      "exr": {
+        "size": 981398,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_disp_4k.exr",
+        "md5": "04a945e87e47a77d53324b846a74899f"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 275156,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_disp_2k.jpg",
+        "md5": "7eb4ca0b631e77f66f175ebb085715fc"
+      },
+      "png": {
+        "size": 2494130,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_disp_2k.png",
+        "md5": "1b396be0a27a58603334061cdcf9c43a"
+      },
+      "exr": {
+        "size": 239511,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_disp_2k.exr",
+        "md5": "26fd5bf07bab8203eef51e6818c9d4d1"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 68934,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_disp_1k.jpg",
+        "md5": "afab04e37c236d0f6e0a5619a71c1da4"
+      },
+      "png": {
+        "size": 819996,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_disp_1k.png",
+        "md5": "afa1e6b69e8ff9fcb5ffac2488760bb2"
+      },
+      "exr": {
+        "size": 75742,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_disp_1k.exr",
+        "md5": "f9083f901d0e749118bcb77f2f54df33"
+      }
+    }
+  },
+  "Rough": {
+    "8k": {
+      "jpg": {
+        "size": 30799790,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/chinese_armchair/chinese_armchair_rough_8k.jpg",
+        "md5": "6e2fe4dd165005d7bbc94383e56ef881"
+      },
+      "png": {
+        "size": 43692090,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/chinese_armchair/chinese_armchair_rough_8k.png",
+        "md5": "da40341cfaeceaf0146d7580f2c29086"
+      },
+      "exr": {
+        "size": 34183565,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/chinese_armchair/chinese_armchair_rough_8k.exr",
+        "md5": "16b2816892898dde42399d94bdd815b1"
+      }
+    },
+    "4k": {
+      "jpg": {
+        "size": 7250563,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/chinese_armchair/chinese_armchair_rough_4k.jpg",
+        "md5": "460ed073d154e0f26a2c779c39137f35"
+      },
+      "png": {
+        "size": 16545530,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/chinese_armchair/chinese_armchair_rough_4k.png",
+        "md5": "d913c5aeca67565f006aa5653ac36be9"
+      },
+      "exr": {
+        "size": 8258793,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/chinese_armchair/chinese_armchair_rough_4k.exr",
+        "md5": "17c46f39d75ce95e6e7d9b30c85b9797"
+      }
+    },
+    "2k": {
+      "jpg": {
+        "size": 1817893,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/chinese_armchair/chinese_armchair_rough_2k.jpg",
+        "md5": "9ae197b7939d4d0760735c3f2e56b5a1"
+      },
+      "png": {
+        "size": 4975793,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/chinese_armchair/chinese_armchair_rough_2k.png",
+        "md5": "0ff70e0ff6aab7d408876627af41d0ca"
+      },
+      "exr": {
+        "size": 2129021,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/chinese_armchair/chinese_armchair_rough_2k.exr",
+        "md5": "a10b260bd8f6a4f870f4213367ae800f"
+      }
+    },
+    "1k": {
+      "jpg": {
+        "size": 492778,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_rough_1k.jpg",
+        "md5": "a1f377b3271e9d4c0b2f5dde67607273"
+      },
+      "png": {
+        "size": 1425809,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/chinese_armchair/chinese_armchair_rough_1k.png",
+        "md5": "612ec288621aa621676f352374485f33"
+      },
+      "exr": {
+        "size": 597499,
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/chinese_armchair/chinese_armchair_rough_1k.exr",
+        "md5": "f96a82b3de94d36f6f1922afb1e4eeb0"
+      }
+    }
+  }
+}

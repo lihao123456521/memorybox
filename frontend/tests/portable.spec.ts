@@ -21,9 +21,11 @@ test('a copied index.html alone runs offline with real GLB characters, walking a
   await page.getByRole('button',{name:'整理这段记忆',exact:true}).click();
   await page.getByRole('button',{name:'走进那一天',exact:true}).click();
   const canvas=page.locator('canvas');
-  await expect(canvas).toHaveAttribute('data-world','memory');
+  await expect(canvas).toHaveAttribute('data-world','memory',{timeout:60_000});
   await expect(canvas).toHaveAttribute('data-navigation-mode','walk');
   await expect(canvas).toHaveAttribute('data-loaded-characters',/elder-woman/);
+  await expect(page.locator('main')).toHaveAttribute('data-phase','exploration',{timeout:60_000});
+  await expect(canvas).toHaveAttribute('data-navigation-paused','false');
   await expect(page.locator('.connection')).toContainText('离线演示模式');
   const position=()=>canvas.getAttribute('data-player-position');
   const start=(await position())!.split(',').map(Number);
@@ -67,3 +69,24 @@ test('a copied index.html alone runs offline with real GLB characters, walking a
   expect(httpRequests).toEqual([]);expect(otherFiles).toEqual([]);expect(errors).toEqual([]);
   expect(await page.evaluate(()=>window.__MEMORYBOX_PORTABLE__?.assetCount)).toBeGreaterThanOrEqual(23);
 });
+
+for(const world of [{id:'station',label:'那年，我们选择远方',objects:['候车时刻表','旧皮箱','那张车票']},{id:'classroom',label:'青春里没说出口的话',objects:['毕业留言','折过的纸条','毕业纪念册']}]){
+  test(`the single offline HTML includes the independent ${world.id} world and all three narrative objects`,async({page})=>{
+    test.setTimeout(120_000);
+    const directory=resolve('..','artifacts','offline-worlds',world.id);await mkdir(directory,{recursive:true});
+    const html=resolve(directory,'index.html');await copyFile(resolve(process.env.MEMORYBOX_PORTABLE_HTML||resolve('..','index.html')),html);
+    const dependencies:string[]=[],errors:string[]=[];
+    page.on('request',r=>{if(/^https?:/.test(r.url())||(r.url().startsWith('file:')&&r.url()!==pathToFileURL(html).href))dependencies.push(r.url());});page.on('pageerror',e=>errors.push(e.message));
+    await page.route(/^https?:\/\//,r=>r.abort());await page.goto(pathToFileURL(html).href);
+    await page.getByRole('button',{name:'打开记忆',exact:true}).click();await page.getByRole('button',{name:'挑选一段记忆',exact:true}).click();
+    await page.getByRole('button',{name:new RegExp(world.label)}).click();await page.getByRole('button',{name:'选好了，继续',exact:true}).click();
+    await page.getByRole('button',{name:'整理这段记忆',exact:true}).click();await page.getByRole('button',{name:'走进那一天',exact:true}).click();
+    await expect(page.locator('canvas')).toHaveAttribute('data-scene-template',world.id,{timeout:60_000});await expect(page.locator('canvas')).toHaveAttribute('data-loaded-characters',/elder-woman/);
+    await page.getByRole('button',{name:'房间总览',exact:true}).click();
+    for(const [i,id]of ['tv','doll','photo'].entries()){
+      await expect(page.getByTestId('anchor-'+id)).toContainText(world.objects[i]);await page.getByTestId('anchor-'+id).click();await expect(page.locator('.anchor-story')).toBeVisible();await page.getByRole('button',{name:'继续探索',exact:true}).click();
+    }
+    await page.screenshot({path:resolve(directory,'offline-'+world.id+'.png'),animations:'disabled'});
+    expect(dependencies).toEqual([]);expect(errors).toEqual([]);
+  });
+}

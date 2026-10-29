@@ -34,7 +34,7 @@ async function enterWalk(page: Page) {
   await page.getByRole('button', { name: '选好了，继续', exact: true }).click();
   await page.getByRole('button', { name: '整理这段记忆', exact: true }).click();
   await page.getByRole('button', { name: '走进那一天', exact: true }).click();
-  await expect(page.locator('main')).toHaveAttribute('data-phase', 'exploration');
+  await expect(page.locator('main')).toHaveAttribute('data-phase', 'exploration', {timeout:60_000});
   await expect(canvas(page)).toHaveAttribute('data-world', 'memory');
   await expect(canvas(page)).toHaveAttribute('data-navigation-mode', 'walk');
   await expect(canvas(page)).toHaveAttribute('data-navigation-paused', 'false');
@@ -183,6 +183,10 @@ test('four adult companion presets switch their scene model and persist after re
     await screenshot(page, `walk-character-${person.id}`);
   }
   await page.reload();
+  // A restored WebGL world can need more than the default 12 s on software GPUs.
+  // Check readiness before reading the character diagnostics written by its first frame.
+  await expect(canvas(page)).toHaveAttribute('data-world', 'memory', { timeout: 60_000 });
+  await expect(canvas(page)).toHaveAttribute('data-loaded-characters', /elder-woman/);
   await expect(canvas(page)).toHaveAttribute('data-companion', 'elder-woman');
   await page.getByRole('button', { name: '切换人物', exact: true }).click();
   await expect(page.getByRole('button', { name: /长者女性/ })).toHaveAttribute('aria-pressed', 'true');

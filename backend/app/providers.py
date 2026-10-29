@@ -16,14 +16,14 @@ TEMPLATES = [
     },
     {
         "id": "station", "title": "那年，我们选择远方", "subtitle": "站台上的一次告别",
-        "description": "讲述离开或留下的那一天。初版使用共享的旧家记忆场景承载叙事。",
-        "scenePreset": "old-home-shared", "sceneStatus": "shared-scene",
+        "description": "穿过候车大厅与站台，登上那节承载告别的绿皮车。",
+        "scenePreset": "railway-station", "sceneStatus": "fully-playable",
         "duration": "约 5 分钟", "anchors": ["tv", "doll", "photo"],
     },
     {
         "id": "classroom", "title": "青春里没说出口的话", "subtitle": "写给青春的一封信",
-        "description": "想起一位朋友与还没说出口的话。初版使用共享的旧家记忆场景。",
-        "scenePreset": "old-home-shared", "sceneStatus": "shared-scene",
+        "description": "走过教室与阳光走廊，找回课桌上没递出的纸条。",
+        "scenePreset": "sunlit-classroom", "sceneStatus": "fully-playable",
         "duration": "约 5 分钟", "anchors": ["tv", "doll", "photo"],
     },
 ]
@@ -57,6 +57,18 @@ class DemoStoryProvider:
                 {"id": "tv", "assetId": "old-tv", "narration": f"你讲述的那一天：\n“{d.storyText}”\n\n屏幕的微光只是这间模板房间的布景。真实的声音，留给你自己的记忆。"},
                 {"id": "doll", "assetId": "red-doll", "narration": f"你想珍藏的物件是：{d.importantObject}。\n\n这里的红色布娃娃是它的象征替身，不是原物的真实复原。你与{d.importantPerson}的细节，以你讲述的内容为准。"},
                 {"id": "photo", "assetId": "family-frame", "narration": f"{d.year}，{d.place}。\n\n你记得的重要的人是{d.importantPerson}。相框中的插画是模板画面，不是你的家庭照片。没有讲过的事情，我们不替你补写。"},
+            ]
+        if d.templateId == "station":
+            anchors = [
+                {"id": "tv", "assetId": "departure-board", "narration": f"时刻表还亮着。等待的时间，往往比行程本身更让人记得。\n\n你讲述的那一天：“{d.storyText}”\n\n这是一处艺术化车站，真正的声音与细节，以你确认的记忆为准。"},
+                {"id": "doll", "assetId": "leather-suitcase", "narration": f"你想珍藏的是“{d.importantObject}”。行囊可以承载对远方的期待，也可以成为你与{d.importantPerson}之间牵挂的象征。\n\n这件模型是记忆的象征，细节由你的讲述决定。"},
+                {"id": "photo", "assetId": "paper-ticket", "narration": f"{d.year}，{d.place}。车票上的起点和终点，像人生中一个小小的坐标。\n\n你确认的重要的人是{d.importantPerson}。票面与站名只是场景布景，不是对真实车票的复原。"},
+            ]
+        elif d.templateId == "classroom":
+            anchors = [
+                {"id": "tv", "assetId": "graduation-board", "narration": f"黑板上的字还没有被擦去。你讲述的那一天：“{d.storyText}”\n\n这间教室承载你的讲述，不替你添加未说过的过去。"},
+                {"id": "doll", "assetId": "folded-letter", "narration": f"“{d.importantObject}”静静留在课桌上。有些心意，在当时很难说出口，过了很多年仍然记得。\n\n你与{d.importantPerson}的故事，以你确认的内容为准。"},
+                {"id": "photo", "assetId": "class-yearbook", "narration": f"{d.year}，{d.place}。纪念册把许多普通的日子装订在一起。\n\n关于{d.importantPerson}的每一页，都留给你自己确认。封面上的文字是虚构布景。"},
             ]
         imagined = {
             "old-home": [f"你在门边停了一下，转身问{d.importantPerson}：“可以再陪我坐一会儿吗？”", "屋里的光慢慢暖起来。两只茶杯被放到桌上，留出一个可以从容说话的下午。", "这是今天为自己写下的一种可能。它不会替代已经走过的路，也不意味着另一条路一定更好。"],

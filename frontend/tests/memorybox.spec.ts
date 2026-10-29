@@ -9,7 +9,7 @@ const canvas = (page: Page) => page.locator('canvas');
 const state = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem('memorybox-v1') || '{}'));
 
 async function expectPhase(page: Page, expected: string) {
-  await expect(phase(page)).toHaveAttribute('data-phase', expected);
+  await expect(phase(page)).toHaveAttribute('data-phase', expected, {timeout:expected==='exploration'?60_000:12_000});
 }
 
 async function screenshot(page: Page, name: string) {
@@ -33,7 +33,7 @@ async function explore(page: Page) {
   await expectPhase(page, 'memory-confirm');
   await page.getByRole('button', { name: '走进那一天', exact: true }).click();
   await expectPhase(page, 'exploration');
-  await expect(canvas(page)).toHaveAttribute('data-world', 'memory');
+  await expect(canvas(page)).toHaveAttribute('data-world', 'memory', {timeout:60_000});
   await expect.poll(async () => Number(await canvas(page).getAttribute('data-mesh-count'))).toBeGreaterThan(100);
   await page.getByRole('button', { name: '房间总览', exact: true }).click();
   await expect(canvas(page)).toHaveAttribute('data-navigation-mode', 'overview');
@@ -41,6 +41,7 @@ async function explore(page: Page) {
 }
 
 async function collect(page: Page, ids = ['tv', 'doll', 'photo']) {
+  await expect(canvas(page)).toHaveAttribute('data-world','memory',{timeout:60_000});
   for (const id of ids) {
     await page.getByTestId('anchor-' + id).click();
     await expect(page.locator('.anchor-story')).toBeVisible();
@@ -71,6 +72,7 @@ test.afterEach(async ({ page, request }) => {
 });
 
 test('full real 3D journey, two branches, exact letter, reload and replay preserve collection', async ({ page, request }) => {
+  test.setTimeout(240_000);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');

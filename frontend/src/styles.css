@@ -44,3 +44,60 @@
 @media(max-width:760px){
 .in-memory .header{height:73px;background:#f7f3e9eb}.in-memory .journey-title{left:5%;top:88px;padding:10px 13px;max-width:75%}.in-memory .journey-title h2{font-size:21px;margin:7px 0}.in-memory .journey-title p{font-size:8px}.in-memory .scene-tools{top:94px;right:5%}.zone-indicator{left:5%;top:192px;padding:6px 9px;font-size:8px;gap:5px}.zone-indicator>span:last-child{display:none}.navigation-toolbar{top:229px;right:5%;left:5%;justify-content:space-between;padding:3px}.navigation-toolbar button{font-size:9px;gap:5px;padding:8px 9px}.navigation-toolbar button svg{width:13px}.walk-controls{left:5%;bottom:190px;gap:6px}.walk-dpad{grid-template-columns:35px 35px 35px;grid-template-rows:35px 35px;gap:4px}.walk-controls small{font-size:6px}.walk-controls>span{font-size:7px}.room-minimap{right:5%;bottom:193px;width:105px;padding:5px}.room-minimap>span{font-size:6px}.in-memory .explore-instruction{bottom:335px;font-size:7px;gap:4px;background:#faf4e5d9;padding:6px 9px;border-radius:4px;max-width:92%;white-space:normal;text-align:center;line-height:1.8}.mode-walk .anchor-story{bottom:193px;max-height:44vh}.in-memory .exploration-footer{background:#faf6e8e8;backdrop-filter:blur(10px)}.character-scrim{padding:86px 13px 40px;align-items:center}.character-picker{padding:20px}.character-picker h2{font-size:20px;line-height:1.7}.character-picker>p{font-size:9px;margin:10px 0 17px}.character-grid{grid-template-columns:1fr 1fr;gap:10px}.character-choice{padding:13px 9px;gap:7px}.character-silhouette{width:48px;height:48px}.character-silhouette svg{width:23px}.character-choice strong{font-size:15px}.character-choice small{font-size:7px}.character-picker-footer{margin-top:19px;padding-top:15px;gap:12px}.character-picker-footer>span{font-size:7px;line-height:1.9;max-width:40%}.character-picker-footer .primary{font-size:9px;min-height:38px;padding:10px 13px;gap:9px}
 }
+/* Cinematic prologue and physical-world guidance. */
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']){background:#101615;color:#e6e1d1}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .header{background:linear-gradient(#0c1314bb,transparent);color:#ded9c9;border-bottom:0}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .brand-icon{color:#d6bd84;border-color:#a48c5970;background:#101c1b55}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .brand-cn,.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .header-tagline{color:#a7a895}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .header-divider,.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .nav-divider{background:#b6a47735}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .nav-link,.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .icon-button{color:#d0cbb9}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .status-bar{color:#a5a890;background:#111a17b0;border-top:1px solid #94896520}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .primary{background:linear-gradient(110deg,#d9c494,#b59b67);color:#192822;border:1px solid #ead9ac80;box-shadow:0 8px 30px #0003,0 1px 0 #fff5 inset}
+.app:is([data-phase='landing'],[data-phase='memory-room'],[data-phase='return-room']) .primary:hover{background:linear-gradient(110deg,#e8d6ac,#cfb981);box-shadow:0 10px 40px #c9ad7025}
+.phase-landing .landing-copy{left:7.5%;max-width:590px;top:46%}
+.phase-landing .landing-copy h1{font-size:clamp(43px,4.6vw,76px);line-height:1.5;letter-spacing:3px;color:#f0ebda;text-shadow:0 4px 30px #08151188}
+.phase-landing .handwritten{color:#d6bb7b}
+.phase-landing .eyebrow,.phase-memory-room .eyebrow,.phase-return-room .eyebrow{color:#c0aa7c}
+.phase-landing .little-line{background:#b9a16c}
+.phase-landing .hero-description,.phase-memory-room .room-copy>p,.phase-return-room .return-copy>p{color:#b5b9a5;font-size:14px;line-height:2.25}
+.phase-landing .hero-meta,.phase-landing .hero-bottom,.phase-landing .scene-caption,.phase-memory-room .scene-caption{color:#949e8c}
+.phase-landing .hero-bottom{border-top-color:#bca67427}
+.phase-landing .caption-dot{background:#cbb17b;box-shadow:0 0 15px #ceb77950}
+.phase-landing .caption-coordinates{color:#718376}
+.phase-memory-room .room-copy,.phase-return-room .return-copy{left:7.5%;color:#eee8d4}
+.phase-memory-room .small-note,.phase-memory-room .text-button,.phase-return-room .text-button{color:#b3ad94}
+.anchor-hotspot{display:flex;align-items:center;gap:7px;padding:8px 12px;font-size:12px;border:1px solid #e6dcc6;border-radius:22px;background:#faf7eeeb;color:#625642;white-space:nowrap;box-shadow:0 3px 20px #10151120;backdrop-filter:blur(8px)}
+.anchor-hotspot.visited{background:#526b5df0;color:#fffaf0;border-color:#879b7b}
+.anchor-hotspot:hover{box-shadow:0 0 0 5px #faf3db30}
+.room-minimap rect{fill:#e9e3d3;stroke:#b6ac91;stroke-width:1}
+.scene-location-note{display:block;font-size:8px;letter-spacing:1px;color:#8d886d;margin-top:8px;line-height:1.7}
+.transition-veil.transition-in{background:radial-gradient(ellipse at 65% 55%,#e9e1c0,#d9dfd1 35%,#13231d 100%);animation:parallel-passage 4.2s ease-in-out both;backdrop-filter:blur(0)}
+.transition-veil.transition-in>div{animation:passage-words 4.2s ease both;color:#fff3d5}
+.transition-veil.transition-in p,.transition-veil.transition-in>div>span:not(.transition-flower){color:#f0e7c9;text-shadow:0 2px 18px #20392d}
+.transition-veil.transition-in button{color:#e8dfc8;border-color:#d3c59a70}
+.transition-veil.transition-out{animation:journey-veil 2.4s ease both}
+@keyframes parallel-passage{0%{opacity:0;backdrop-filter:blur(0)}24%{opacity:.03;backdrop-filter:blur(1px)}42%{opacity:.48;backdrop-filter:blur(12px)}55%{opacity:1;backdrop-filter:blur(25px)}73%{opacity:.8;backdrop-filter:blur(18px)}100%{opacity:0;backdrop-filter:blur(0)}}
+@keyframes passage-words{0%,20%{opacity:0;transform:translateY(8px)}42%,70%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-5px)}}
+@media(max-width:760px){
+.phase-landing .landing-copy{left:8%;top:96px;max-width:88%;transform:none}
+.phase-landing .landing-copy h1{font-size:35px;letter-spacing:1px;line-height:1.45;margin:14px 0}
+.phase-landing .hero-description{font-size:11px;line-height:1.9;max-width:270px}
+.phase-landing .hero-button{margin-top:17px}.phase-landing .hero-meta{font-size:7px}
+.phase-landing .scene-caption{bottom:84px}.phase-landing .hero-bottom{bottom:40px;font-size:8px}
+.phase-memory-room .room-copy,.phase-return-room .return-copy{left:8%}
+.phase-memory-room .room-copy>p,.phase-return-room .return-copy>p{font-size:11px;line-height:1.9}
+.scene-location-note{font-size:7px;max-width:240px}
+.room-minimap text{font-size:8px}.transition-veil.transition-in>div{max-width:88%}
+}
+@media(max-height:740px) and (max-width:760px){.phase-landing .landing-copy{top:86px}.phase-landing .landing-copy h1{font-size:30px}.phase-landing .hero-description{font-size:10px}.phase-landing .hero-button{margin-top:13px}}
+/* Hold the fully veiled frame until the destination's geometry and environment are ready. */
+.transition-veil.transition-in{animation:parallel-cover 2.2s ease-in-out both}
+.transition-veil.transition-in.revealing{animation:parallel-reveal 2s ease both}
+.transition-veil.transition-in>div{animation:passage-words-in 2.2s ease both}
+.transition-veil.transition-in.revealing>div{animation:passage-words-out 2s ease both}
+@keyframes parallel-cover{0%{opacity:0;backdrop-filter:blur(0)}45%{opacity:.08;backdrop-filter:blur(2px)}80%{opacity:.85;backdrop-filter:blur(20px)}100%{opacity:1;backdrop-filter:blur(25px)}}
+@keyframes parallel-reveal{0%,15%{opacity:1;backdrop-filter:blur(25px)}100%{opacity:0;backdrop-filter:blur(0)}}
+@keyframes passage-words-in{0%,25%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes passage-words-out{0%{opacity:1}100%{opacity:0;transform:translateY(-5px)}}
+.phase-transition-in .header{background:linear-gradient(#0c1314bb,transparent);color:#ded9c9;border-bottom:0}
+.phase-transition-in .brand-icon,.phase-transition-in .header-tagline,.phase-transition-in .icon-button,.phase-transition-in .nav-link{color:#d0c7a9}

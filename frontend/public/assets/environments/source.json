@@ -1,0 +1,14 @@
+{
+  "assetId": "lebombo-environment",
+  "label": "室内HDR光照与反射",
+  "assetType": "texture",
+  "source": "cc0-polyhaven",
+  "imageUrl": "/assets/environments/lebombo_1k.hdr",
+  "sourceUrl": "https://polyhaven.com/a/lebombo",
+  "downloadUrl": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/lebombo_1k.hdr",
+  "license": "CC0-1.0",
+  "author": "Greg Zaal",
+  "bytes": 1476953,
+  "sha256": "a02c9615adeba91a753c3e4737c3ce7a719273df822eeaa85d24982bd43c9ecb",
+  "lux3dTaskId": null
+}

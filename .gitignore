@@ -19,3 +19,5 @@ artifacts/
 backend/.pip-cache/
 frontend/public/assets/models/*preview*
 frontend/public/assets/models/*.log
+frontend/public/assets/props/evidence/
+frontend/public/assets/props/source/polyhaven-license.html

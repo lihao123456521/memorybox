@@ -4,9 +4,9 @@ import {OrbitControls} from '@react-three/drei';
 import * as THREE from 'three';
 import type {SceneProps} from '../types';
 import {EYE_HEIGHT,WALK_START,moveWithCollisions,roomZone} from './navigation';
-import type {Collider} from './navigation';
+import type {Collider,WorldLayout} from './navigation';
 
-interface Props extends SceneProps {colliders:Collider[];anchorPositions:Record<string,[number,number,number]>;onDragging:(active:boolean)=>void}
+interface Props extends SceneProps {layout?:WorldLayout;colliders:Collider[];anchorPositions:Record<string,[number,number,number]>;onDragging:(active:boolean)=>void}
 export default function WalkController(props:Props){
   const {camera,gl,size}=useThree();
   const player=useRef(new THREE.Vector3(...WALK_START));
@@ -59,21 +59,21 @@ export default function WalkController(props:Props){
     if(!canWalk){keys.current.clear();dragging.current=false;props.onDragging(false);}
   },[canWalk]);
   useEffect(()=>{
-    player.current.set(...WALK_START);look.current={yaw:0,pitch:-.02};collisions.current=0;
+    player.current.set(...(props.layout?.start||WALK_START));look.current={yaw:0,pitch:-.02};collisions.current=0;
     if(inWalk){camera.position.copy(player.current);camera.rotation.set(look.current.pitch,look.current.yaw,0,'YXZ');}
-    else{const fit=size.width<700?Math.max(1,.84/(size.width/size.height)):1;camera.position.set(11*fit,9*fit,12*fit);camera.lookAt(.7,0,-1.1);}
-  },[props.resetKey]);
+    else{const fit=size.width<700?Math.max(1,.84/(size.width/size.height)):1;camera.position.fromArray(props.layout?.overview||[11,9,12]).multiplyScalar(fit);camera.lookAt(...(props.layout?.target||[.7,0,-1.1]));}
+  },[props.resetKey,props.layout?.id]);
   useEffect(()=>{
     const mode=props.viewMode||'walk';
     if(camera instanceof THREE.PerspectiveCamera){camera.fov=mode==='walk'?(size.width<700?72:66):43;camera.updateProjectionMatrix();}
     if(mode==='overview'){
       const fit=size.width<700?Math.max(1,.84/(size.width/size.height)):1;
-      camera.position.set(11*fit,9*fit,12*fit);camera.lookAt(.7,0,-1.1);
+      camera.position.fromArray(props.layout?.overview||[11,9,12]).multiplyScalar(fit);camera.lookAt(...(props.layout?.target||[.7,0,-1.1]));
     }else if(prevMode.current==='overview'){
       camera.position.copy(player.current);camera.rotation.set(look.current.pitch,look.current.yaw,0,'YXZ');
     }
     prevMode.current=mode;
-  },[props.viewMode,size.width,size.height,camera]);
+  },[props.viewMode,size.width,size.height,camera,props.layout?.id]);
   useEffect(()=>{
     if(props.selected&&!prevSelected.current)preFocusLook.current={...look.current};
     if(!props.selected&&prevSelected.current)look.current={...preFocusLook.current};
@@ -91,7 +91,7 @@ export default function WalkController(props:Props){
           const speed=1.65*dt/Math.max(1,length);
           const dx=(-Math.sin(look.current.yaw)*forward+Math.cos(look.current.yaw)*right)*speed;
           const dz=(-Math.cos(look.current.yaw)*forward-Math.sin(look.current.yaw)*right)*speed;
-          const next=moveWithCollisions(player.current.x,player.current.z,dx,dz,props.colliders);
+          const next=moveWithCollisions(player.current.x,player.current.z,dx,dz,props.colliders,props.layout);
           if(Math.hypot(next.x-player.current.x-dx,next.z-player.current.z-dz)>.001)collisions.current++;
           player.current.set(next.x,EYE_HEIGHT,next.z);stepTime.current+=dt;
         }
@@ -114,7 +114,7 @@ export default function WalkController(props:Props){
         }else camera.rotation.set(look.current.pitch,look.current.yaw,0,'YXZ');
       }
     }
-    const zone=roomZone(player.current.x,player.current.z);
+    const zone=roomZone(player.current.x,player.current.z,props.layout);
     if(lastZone.current!==zone){lastZone.current=zone;props.onZoneChange?.(zone);}
     if(clock.elapsedTime-lastDiag.current>.16){
       lastDiag.current=clock.elapsedTime;
@@ -127,5 +127,5 @@ export default function WalkController(props:Props){
       gl.domElement.dataset.navigationPaused=String(!canWalk);
     }
   });
-  return inWalk?null:<OrbitControls key={props.resetKey} makeDefault target={[.7,0,-1.1]} enablePan={false} minDistance={8} maxDistance={65} minPolarAngle={.3} maxPolarAngle={1.35} enabled={!props.selected&&!props.navigationPaused}/>;
+  return inWalk?null:<OrbitControls key={`${props.layout?.id}:${props.resetKey}`} makeDefault target={props.layout?.target||[.7,0,-1.1]} enablePan={false} minDistance={8} maxDistance={90} minPolarAngle={.3} maxPolarAngle={1.35} enabled={!props.selected&&!props.navigationPaused}/>;
 }

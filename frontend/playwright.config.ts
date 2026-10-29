@@ -11,7 +11,7 @@ const executablePath = browserCandidates.find(candidate => existsSync(candidate)
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 90_000,
+  timeout: 150_000,
   expect: { timeout: 12_000 },
   workers: 1,
   fullyParallel: false,

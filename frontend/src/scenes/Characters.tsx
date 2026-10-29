@@ -1,15 +1,15 @@
 import { Component, Suspense, useEffect, useMemo, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 export type CharacterPreset = 'young-man'|'elder-man'|'young-woman'|'elder-woman';
 export const CHARACTER_PRESETS:{id:CharacterPreset;label:string;description:string}[] = [
-  {id:'young-man',label:'青年男性',description:'自然成年比例，短发，浅蓝长袖衬衫与深色长裤'},
-  {id:'elder-man',label:'长者男性',description:'年长面部形态，灰白短发、眼镜与米色长袖衬衫'},
-  {id:'young-woman',label:'青年女性',description:'自然成年比例，深色中长发，陶红长袖上衣与长裤'},
-  {id:'elder-woman',label:'长者女性',description:'年长面部形态，银灰盘发、眼镜与鼠尾草绿上衣'},
+  {id:'young-man',label:'青年男性',description:'利落短发，蓝色翻领衬衣，牛仔裤与皮鞋'},
+  {id:'elder-man',label:'长者男性',description:'年长面部形态，灰白短发、细框眼镜与条纹衬衫'},
+  {id:'young-woman',label:'青年女性',description:'自然成年比例，长发马尾，衬衫与裙装'},
+  {id:'elder-woman',label:'长者女性',description:'年长面部形态，银灰辫发、细框眼镜与日常长袖便装'},
 ];
 type Pose='standing'|'seated';
 type Props={preset:CharacterPreset;position?:[number,number,number];rotation?:number;pose?:Pose;visible?:boolean};
@@ -27,6 +27,7 @@ class CharacterBoundary extends Component<{children:ReactNode;fallback:ReactNode
 }
 
 function HumanAsset({preset,pose}:{preset:CharacterPreset;pose:Pose}){
+  const {gl,invalidate}=useThree();
   const {scene}=useGLTF(`/assets/models/${preset}${pose==='seated'?'-seated':''}.glb`);
   const model=useMemo(()=>{
     const copy=scene.clone(true);
@@ -35,14 +36,28 @@ function HumanAsset({preset,pose}:{preset:CharacterPreset;pose:Pose}){
     return copy;
   },[scene]);
   useEffect(()=>{
-    let alive=true;let skin:THREE.Texture|undefined;
-    new THREE.TextureLoader().load(`/assets/models/skins/${preset}.webp`,texture=>{
-      skin=texture;texture.colorSpace=THREE.SRGBColorSpace;texture.flipY=true;texture.anisotropy=4;
-      if(!alive){texture.dispose();return;}
-      model.traverse(o=>{if(o instanceof THREE.Mesh){for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof THREE.MeshStandardMaterial&&material.name==='skin'){material.map=texture;material.color.set('#ffffff');material.roughness=.82;material.needsUpdate=true;}}});
-    },undefined,()=>{/* A missing optional skin map retains the complete, clothed mesh. */});
-    return()=>{alive=false;skin?.dispose();};
-  },[model,preset]);
+    let alive=true;const textures:THREE.Texture[]=[];
+    const loader=new THREE.TextureLoader();
+    const load=(url:string,normal:boolean,apply:(texture:THREE.Texture)=>void)=>loader.load(url,texture=>{
+      if(!alive){texture.dispose();return;}textures.push(texture);
+      texture.colorSpace=normal?THREE.NoColorSpace:THREE.SRGBColorSpace;texture.flipY=true;texture.anisotropy=4;
+      apply(texture);gl.shadowMap.needsUpdate=true;invalidate();
+    },undefined,()=>{/* Complete cloth geometry remains visible if an optional texture fails. */});
+    const byName=new Map<string,THREE.MeshStandardMaterial[]>();
+    model.traverse(o=>{if(o instanceof THREE.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material]){
+      if(material instanceof THREE.MeshStandardMaterial){const list=byName.get(material.name)||[];list.push(material);byName.set(material.name,list);}
+    }});
+    for(const [name,materials]of byName){
+      if(name==='skin')load(`/assets/models/skins/${preset}.webp`,false,texture=>materials.forEach(m=>{m.map=texture;m.color.set('#fff');m.roughness=.67;m.needsUpdate=true;}));
+      if(!name.startsWith('cc0:'))continue;
+      const id=name.slice(4);
+      load(`/assets/models/materials/${id}-color.webp`,false,texture=>materials.forEach(m=>{m.map=texture;m.needsUpdate=true;}));
+      if(['male_casualsuit01','male_casualsuit03','female_elegantsuit01','elder-shirt','shoes04'].includes(id)){
+        load(`/assets/models/materials/${id}-normal.webp`,true,texture=>materials.forEach(m=>{m.normalMap=texture;m.normalScale.set(.48,.48);m.needsUpdate=true;}));
+      }
+    }
+    return()=>{alive=false;textures.forEach(t=>t.dispose());for(const list of byName.values())list.forEach(m=>m.dispose());};
+  },[model,preset,gl,invalidate]);
   return <primitive object={model} dispose={null}/>;
 }
 

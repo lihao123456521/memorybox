@@ -1,0 +1,964 @@
+{
+  "blend": {
+    "1k": {
+      "blend": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/television_02/television_02_1k.blend",
+        "md5": "2d5d948257da73ccb6fafe737f0e746e",
+        "size": 159961,
+        "include": {
+          "textures/television_02_diff_1k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+            "md5": "a80b482e7aa0b57c93978c11cc0d0a1b",
+            "size": 391490
+          },
+          "textures/television_02_metal_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_metal_1k.exr",
+            "md5": "440f3e807e85e841e4b8cc2c6fa45ef4",
+            "size": 91158
+          },
+          "textures/television_02_nor_gl_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_nor_gl_1k.exr",
+            "md5": "8d460ecabe9cf35a85dffb79bb072ed5",
+            "size": 566668
+          },
+          "textures/television_02_rough_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_rough_1k.exr",
+            "md5": "0a583a45222ddcd1561b7da6a9d8e98c",
+            "size": 363501
+          }
+        }
+      }
+    },
+    "2k": {
+      "blend": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/2k/television_02/television_02_2k.blend",
+        "md5": "a37578981844d47774a60cbc4a53e7f2",
+        "size": 159961,
+        "include": {
+          "textures/television_02_diff_2k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_diff_2k.jpg",
+            "md5": "baf46886abbfa45b4f22364ee5315b1f",
+            "size": 1404458
+          },
+          "textures/television_02_metal_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_metal_2k.exr",
+            "md5": "a8cfc464ef2b498b9944b83b0878221b",
+            "size": 185623
+          },
+          "textures/television_02_nor_gl_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_nor_gl_2k.exr",
+            "md5": "e9f38333231d1a07bfd3d84ac8cb9eb8",
+            "size": 1529184
+          },
+          "textures/television_02_rough_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_rough_2k.exr",
+            "md5": "63b8f439f5f272c066d6a06367363b29",
+            "size": 1182392
+          }
+        }
+      }
+    },
+    "4k": {
+      "blend": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/4k/television_02/television_02_4k.blend",
+        "md5": "1f98bbbcb8278a16ec0b1c5326a4e92f",
+        "size": 159961,
+        "include": {
+          "textures/television_02_diff_4k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_diff_4k.jpg",
+            "md5": "8ccb7bbb55eb64c179c82c9559af158d",
+            "size": 4957519
+          },
+          "textures/television_02_metal_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_metal_4k.exr",
+            "md5": "26da01b8966b93723cae264aa93d2838",
+            "size": 364586
+          },
+          "textures/television_02_nor_gl_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_nor_gl_4k.exr",
+            "md5": "e3fe518bf5947b18804580ed6902aa7d",
+            "size": 4217952
+          },
+          "textures/television_02_rough_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_rough_4k.exr",
+            "md5": "6539889be6f23633e7917b3c04ade530",
+            "size": 3845096
+          }
+        }
+      }
+    },
+    "8k": {
+      "blend": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/blend/8k/television_02/television_02_8k.blend",
+        "md5": "60e87efabeb4204e843cc55b8495ce51",
+        "size": 159961,
+        "include": {
+          "textures/television_02_diff_8k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_diff_8k.jpg",
+            "md5": "d0894936acca58745c8ec8c092ff0153",
+            "size": 17547261
+          },
+          "textures/television_02_metal_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_metal_8k.exr",
+            "md5": "ba0b56acad10294c34bc311df65a7447",
+            "size": 682984
+          },
+          "textures/television_02_nor_gl_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_nor_gl_8k.exr",
+            "md5": "867de509a9feb1981bea24495cf5d62f",
+            "size": 13161297
+          },
+          "textures/television_02_rough_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_rough_8k.exr",
+            "md5": "62a5377cb03fb1db3fd65dcd59e99f1d",
+            "size": 12433856
+          }
+        }
+      }
+    }
+  },
+  "AO": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_ao_1k.exr",
+        "md5": "34fc72c0a877397462728cf1ad581eb1",
+        "size": 264303
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_ao_1k.jpg",
+        "md5": "2aaa47ae7225d6c2fbc28af84ff7a6c8",
+        "size": 223054
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_ao_1k.png",
+        "md5": "0d5591f72d9a509310ab24f2a024bf2e",
+        "size": 893685
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_ao_2k.exr",
+        "md5": "958f85eca4dd604f5f935d9e38a4e327",
+        "size": 696729
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_ao_2k.jpg",
+        "md5": "24737b6130a5dc15dfb6e4d889832c43",
+        "size": 681677
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_ao_2k.png",
+        "md5": "2314fe354b5a96f71ca5ba766390ed30",
+        "size": 2838566
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_ao_4k.exr",
+        "md5": "b169d62ad2a9ddff5691819f1ba9b5b2",
+        "size": 2213062
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_ao_4k.jpg",
+        "md5": "2140ebafa1043aa044349c6d468a8b67",
+        "size": 2577666
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_ao_4k.png",
+        "md5": "cc5e7ec9c6f2f7c667d958d463ab2b92",
+        "size": 8043298
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_ao_8k.exr",
+        "md5": "cd39dff6dcc829050a3f45e76c2d0651",
+        "size": 10495118
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_ao_8k.jpg",
+        "md5": "1e724c86571eb03e39f0ee02cefb69d6",
+        "size": 11613604
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_ao_8k.png",
+        "md5": "9228b1bc6c1acb72b833ba1d99b73365",
+        "size": 15347209
+      }
+    }
+  },
+  "arm": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_arm_1k.exr",
+        "md5": "ef764914fcf4310665b9d28e3efe04d4",
+        "size": 952708
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_arm_1k.jpg",
+        "md5": "607a19871471d04b32924fe0138b5423",
+        "size": 471183
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_arm_1k.png",
+        "md5": "c8d720122c68ae8c29c3118bc22364ee",
+        "size": 2860474
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_arm_2k.exr",
+        "md5": "c39a1f776b1e6ce444c54d9cc8cfb316",
+        "size": 2959941
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_arm_2k.jpg",
+        "md5": "528c7af82a77a81fe9cec9fe32949618",
+        "size": 1532647
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_arm_2k.png",
+        "md5": "5ede89fd44f2d6bbae1f857fba127bae",
+        "size": 10463807
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_arm_4k.exr",
+        "md5": "a203fa955df68419f988387929b9f59a",
+        "size": 9245267
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_arm_4k.jpg",
+        "md5": "d3c9e3101e112a947a943b8c4b8fe23e",
+        "size": 5071272
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_arm_4k.png",
+        "md5": "3042c775ea6b7346274f3cc58a1676ef",
+        "size": 37400208
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_arm_8k.exr",
+        "md5": "77ff9c2c7c9fa9f24ab16ea2853a0542",
+        "size": 30647173
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_arm_8k.jpg",
+        "md5": "2a7825fac00bd14be2322ac7d744f422",
+        "size": 17445284
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_arm_8k.png",
+        "md5": "8555a2fec64113d17629a2666fa17052",
+        "size": 122519744
+      }
+    }
+  },
+  "Diffuse": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_diff_1k.exr",
+        "md5": "e0c3c5b0056e22c4d8cc81fb5480d2d5",
+        "size": 667413
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+        "md5": "a80b482e7aa0b57c93978c11cc0d0a1b",
+        "size": 391490
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_diff_1k.png",
+        "md5": "a98262c4c3bb601cb315a33405462a8c",
+        "size": 4303050
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_diff_2k.exr",
+        "md5": "eff3a0f87ae9f3efea5d82ad7df5cb2f",
+        "size": 2320760
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_diff_2k.jpg",
+        "md5": "baf46886abbfa45b4f22364ee5315b1f",
+        "size": 1404458
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_diff_2k.png",
+        "md5": "83a174ddf2997e92eac9a089e4a990f1",
+        "size": 16537579
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_diff_4k.exr",
+        "md5": "78c0db5b34706a9f7127b175555b26f3",
+        "size": 8177653
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_diff_4k.jpg",
+        "md5": "8ccb7bbb55eb64c179c82c9559af158d",
+        "size": 4957519
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_diff_4k.png",
+        "md5": "71d35346e2e78bdac96777ab5ee7398c",
+        "size": 62252150
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_diff_8k.exr",
+        "md5": "108c87f23d978b4971467397643d4215",
+        "size": 29154193
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_diff_8k.jpg",
+        "md5": "d0894936acca58745c8ec8c092ff0153",
+        "size": 17547261
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_diff_8k.png",
+        "md5": "f23eb6540fe33a9b2bc397603a2923b8",
+        "size": 241469698
+      }
+    }
+  },
+  "Metal": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_metal_1k.exr",
+        "md5": "440f3e807e85e841e4b8cc2c6fa45ef4",
+        "size": 91158
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_metal_1k.jpg",
+        "md5": "01c62c12a297de4b21545df392a0872a",
+        "size": 66412
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_metal_1k.png",
+        "md5": "e52152103c2730d90d57ad134bf3d33a",
+        "size": 26945
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_metal_2k.exr",
+        "md5": "a8cfc464ef2b498b9944b83b0878221b",
+        "size": 185623
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_metal_2k.jpg",
+        "md5": "c7e526946b684b737ab900281240481e",
+        "size": 164841
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_metal_2k.png",
+        "md5": "3c8c1443122ec71087eb3f6671487029",
+        "size": 61837
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_metal_4k.exr",
+        "md5": "26da01b8966b93723cae264aa93d2838",
+        "size": 364586
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_metal_4k.jpg",
+        "md5": "14b985e5abab5a300820c1beaa5ae22e",
+        "size": 427113
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_metal_4k.png",
+        "md5": "6176b1609376091260e02fe59574d1d6",
+        "size": 150259
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_metal_8k.exr",
+        "md5": "ba0b56acad10294c34bc311df65a7447",
+        "size": 682984
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_metal_8k.jpg",
+        "md5": "ede06ff70b389463a87f9a25b3b4bf76",
+        "size": 1243419
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_metal_8k.png",
+        "md5": "dde0be4d96f423672f70fd8979145a5c",
+        "size": 411462
+      }
+    }
+  },
+  "nor_dx": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_nor_dx_1k.exr",
+        "md5": "d25f41b45b8f0b3bd7bc1f32ed0ac136",
+        "size": 567326
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_nor_dx_1k.jpg",
+        "md5": "4867f4407d89d96eb8be2116e0b4a6ea",
+        "size": 291004
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_nor_dx_1k.png",
+        "md5": "79b7bdb52e515acb717bcc06ea32113e",
+        "size": 2104549
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_nor_dx_2k.exr",
+        "md5": "c2ab6e7b2d93ca6551a2d12a1034a5b2",
+        "size": 1532790
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_nor_dx_2k.jpg",
+        "md5": "9a79e72d7d27ff1e59ad0d47e50ff089",
+        "size": 845116
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_nor_dx_2k.png",
+        "md5": "38e770157ea0511306b45813ccedba37",
+        "size": 7379893
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_nor_dx_4k.exr",
+        "md5": "996c603d3e6be607ce9e4149cdd91316",
+        "size": 4223685
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_nor_dx_4k.jpg",
+        "md5": "993c17bde6e0b9f854dfb6ce63ac00bc",
+        "size": 2480662
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_nor_dx_4k.png",
+        "md5": "cccc51052bbaac3fdebfa13a56dd4c7a",
+        "size": 25738749
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_nor_dx_8k.exr",
+        "md5": "c08c5469c45abed489d8c380fe9ecd29",
+        "size": 13187395
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_nor_dx_8k.jpg",
+        "md5": "1b45f8be773026cf6c6353ea73810e97",
+        "size": 7796073
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_nor_dx_8k.png",
+        "md5": "395b70b2c133dca682e41acf30b42e27",
+        "size": 83876609
+      }
+    }
+  },
+  "nor_gl": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_nor_gl_1k.exr",
+        "md5": "8d460ecabe9cf35a85dffb79bb072ed5",
+        "size": 566668
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_nor_gl_1k.jpg",
+        "md5": "f7f3e0ea914c0fa01e3be02fc4146b3e",
+        "size": 292847
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_nor_gl_1k.png",
+        "md5": "ff29d47c219d7f8a622064f6917bd603",
+        "size": 2104206
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_nor_gl_2k.exr",
+        "md5": "e9f38333231d1a07bfd3d84ac8cb9eb8",
+        "size": 1529184
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_nor_gl_2k.jpg",
+        "md5": "dc1b0912d013ba28fbe4486bdabbbd3d",
+        "size": 851841
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_nor_gl_2k.png",
+        "md5": "11f4ab66cd3cc21e06f89c1c8ae12d23",
+        "size": 7377868
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_nor_gl_4k.exr",
+        "md5": "e3fe518bf5947b18804580ed6902aa7d",
+        "size": 4217952
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_nor_gl_4k.jpg",
+        "md5": "65db5eec336e23690977afc084822399",
+        "size": 2504804
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_nor_gl_4k.png",
+        "md5": "597b77c41549c3b351099591e0b38946",
+        "size": 25735666
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_nor_gl_8k.exr",
+        "md5": "867de509a9feb1981bea24495cf5d62f",
+        "size": 13161297
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_nor_gl_8k.jpg",
+        "md5": "20de9fd6332591c8b778708856b3b8cf",
+        "size": 7833337
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_nor_gl_8k.png",
+        "md5": "ff731a54f816fa5896287657152c4b0b",
+        "size": 99929395
+      }
+    }
+  },
+  "Rough": {
+    "1k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_rough_1k.exr",
+        "md5": "0a583a45222ddcd1561b7da6a9d8e98c",
+        "size": 363501
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_rough_1k.jpg",
+        "md5": "3489cb337af2cb5e3a81f78402e0b2f6",
+        "size": 296888
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/television_02/television_02_rough_1k.png",
+        "md5": "3a09e4c7b421f05f7698d4662fb92643",
+        "size": 1471735
+      }
+    },
+    "2k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_rough_2k.exr",
+        "md5": "63b8f439f5f272c066d6a06367363b29",
+        "size": 1182392
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_rough_2k.jpg",
+        "md5": "2bff1c890d7a95c384660617be57d075",
+        "size": 1027442
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/television_02/television_02_rough_2k.png",
+        "md5": "431102f45ba28bfad7f852fb7456eaf6",
+        "size": 5647412
+      }
+    },
+    "4k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_rough_4k.exr",
+        "md5": "6539889be6f23633e7917b3c04ade530",
+        "size": 3845096
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_rough_4k.jpg",
+        "md5": "deeb3ebdb199a945dcd75b3ceea1043f",
+        "size": 3501021
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/4k/television_02/television_02_rough_4k.png",
+        "md5": "854348504475006b2712b2744338f446",
+        "size": 21343369
+      }
+    },
+    "8k": {
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_rough_8k.exr",
+        "md5": "62a5377cb03fb1db3fd65dcd59e99f1d",
+        "size": 12433856
+      },
+      "jpg": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_rough_8k.jpg",
+        "md5": "5be83edc320eef967ba4e3f539c351e4",
+        "size": 11672193
+      },
+      "png": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/8k/television_02/television_02_rough_8k.png",
+        "md5": "a97064434bfb10c32a6820eba006f5a5",
+        "size": 79004234
+      }
+    }
+  },
+  "fbx": {
+    "1k": {
+      "fbx": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/1k/television_02/television_02_1k.fbx",
+        "md5": "335385f93b238b430ce55cec9e90527a",
+        "size": 85116,
+        "include": {
+          "textures/television_02_diff_1k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+            "md5": "a80b482e7aa0b57c93978c11cc0d0a1b",
+            "size": 391490
+          },
+          "textures/television_02_metal_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_metal_1k.exr",
+            "md5": "440f3e807e85e841e4b8cc2c6fa45ef4",
+            "size": 91158
+          },
+          "textures/television_02_nor_gl_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_nor_gl_1k.exr",
+            "md5": "8d460ecabe9cf35a85dffb79bb072ed5",
+            "size": 566668
+          },
+          "textures/television_02_rough_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_rough_1k.exr",
+            "md5": "0a583a45222ddcd1561b7da6a9d8e98c",
+            "size": 363501
+          }
+        }
+      }
+    },
+    "2k": {
+      "fbx": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/2k/television_02/television_02_2k.fbx",
+        "md5": "37eeda00029313712d17035228a81737",
+        "size": 85116,
+        "include": {
+          "textures/television_02_diff_2k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_diff_2k.jpg",
+            "md5": "baf46886abbfa45b4f22364ee5315b1f",
+            "size": 1404458
+          },
+          "textures/television_02_metal_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_metal_2k.exr",
+            "md5": "a8cfc464ef2b498b9944b83b0878221b",
+            "size": 185623
+          },
+          "textures/television_02_nor_gl_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_nor_gl_2k.exr",
+            "md5": "e9f38333231d1a07bfd3d84ac8cb9eb8",
+            "size": 1529184
+          },
+          "textures/television_02_rough_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_rough_2k.exr",
+            "md5": "63b8f439f5f272c066d6a06367363b29",
+            "size": 1182392
+          }
+        }
+      }
+    },
+    "4k": {
+      "fbx": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/4k/television_02/television_02_4k.fbx",
+        "md5": "c08a1c6181373ddb2356639582697618",
+        "size": 85116,
+        "include": {
+          "textures/television_02_diff_4k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_diff_4k.jpg",
+            "md5": "8ccb7bbb55eb64c179c82c9559af158d",
+            "size": 4957519
+          },
+          "textures/television_02_metal_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_metal_4k.exr",
+            "md5": "26da01b8966b93723cae264aa93d2838",
+            "size": 364586
+          },
+          "textures/television_02_nor_gl_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_nor_gl_4k.exr",
+            "md5": "e3fe518bf5947b18804580ed6902aa7d",
+            "size": 4217952
+          },
+          "textures/television_02_rough_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_rough_4k.exr",
+            "md5": "6539889be6f23633e7917b3c04ade530",
+            "size": 3845096
+          }
+        }
+      }
+    },
+    "8k": {
+      "fbx": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/fbx/8k/television_02/television_02_8k.fbx",
+        "md5": "79524a70281250a13611a43d41c56621",
+        "size": 85116,
+        "include": {
+          "textures/television_02_diff_8k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_diff_8k.jpg",
+            "md5": "d0894936acca58745c8ec8c092ff0153",
+            "size": 17547261
+          },
+          "textures/television_02_metal_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_metal_8k.exr",
+            "md5": "ba0b56acad10294c34bc311df65a7447",
+            "size": 682984
+          },
+          "textures/television_02_nor_gl_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_nor_gl_8k.exr",
+            "md5": "867de509a9feb1981bea24495cf5d62f",
+            "size": 13161297
+          },
+          "textures/television_02_rough_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_rough_8k.exr",
+            "md5": "62a5377cb03fb1db3fd65dcd59e99f1d",
+            "size": 12433856
+          }
+        }
+      }
+    }
+  },
+  "gltf": {
+    "1k": {
+      "gltf": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/television_02/television_02_1k.gltf",
+        "md5": "7fac593c38eda87404e5fd77a0da6979",
+        "size": 2767,
+        "include": {
+          "textures/television_02_nor_gl_1k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_nor_gl_1k.jpg",
+            "md5": "f7f3e0ea914c0fa01e3be02fc4146b3e",
+            "size": 292847
+          },
+          "textures/television_02_diff_1k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+            "md5": "a80b482e7aa0b57c93978c11cc0d0a1b",
+            "size": 391490
+          },
+          "textures/television_02_arm_1k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_arm_1k.jpg",
+            "md5": "607a19871471d04b32924fe0138b5423",
+            "size": 471183
+          },
+          "television_02.bin": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02.bin",
+            "md5": "2d486ed0c0d589cdb4b2acaf65242773",
+            "size": 81668
+          }
+        }
+      }
+    },
+    "2k": {
+      "gltf": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/television_02/television_02_2k.gltf",
+        "md5": "deb01c892343949a0de94f81c87e4d0e",
+        "size": 2767,
+        "include": {
+          "textures/television_02_nor_gl_2k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_nor_gl_2k.jpg",
+            "md5": "dc1b0912d013ba28fbe4486bdabbbd3d",
+            "size": 851841
+          },
+          "textures/television_02_diff_2k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_diff_2k.jpg",
+            "md5": "baf46886abbfa45b4f22364ee5315b1f",
+            "size": 1404458
+          },
+          "textures/television_02_arm_2k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_arm_2k.jpg",
+            "md5": "528c7af82a77a81fe9cec9fe32949618",
+            "size": 1532647
+          },
+          "television_02.bin": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02.bin",
+            "md5": "2d486ed0c0d589cdb4b2acaf65242773",
+            "size": 81668
+          }
+        }
+      }
+    },
+    "4k": {
+      "gltf": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/television_02/television_02_4k.gltf",
+        "md5": "de8151c3ab74940a433ee3b7a847c9b3",
+        "size": 2767,
+        "include": {
+          "textures/television_02_nor_gl_4k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_nor_gl_4k.jpg",
+            "md5": "65db5eec336e23690977afc084822399",
+            "size": 2504804
+          },
+          "textures/television_02_diff_4k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_diff_4k.jpg",
+            "md5": "8ccb7bbb55eb64c179c82c9559af158d",
+            "size": 4957519
+          },
+          "textures/television_02_arm_4k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_arm_4k.jpg",
+            "md5": "d3c9e3101e112a947a943b8c4b8fe23e",
+            "size": 5071272
+          },
+          "television_02.bin": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02.bin",
+            "md5": "2d486ed0c0d589cdb4b2acaf65242773",
+            "size": 81668
+          }
+        }
+      }
+    },
+    "8k": {
+      "gltf": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02_8k.gltf",
+        "md5": "ac7c170c37f07eef5ab3dc9074abed86",
+        "size": 2767,
+        "include": {
+          "textures/television_02_nor_gl_8k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_nor_gl_8k.jpg",
+            "md5": "20de9fd6332591c8b778708856b3b8cf",
+            "size": 7833337
+          },
+          "textures/television_02_diff_8k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_diff_8k.jpg",
+            "md5": "d0894936acca58745c8ec8c092ff0153",
+            "size": 17547261
+          },
+          "textures/television_02_arm_8k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_arm_8k.jpg",
+            "md5": "2a7825fac00bd14be2322ac7d744f422",
+            "size": 17445284
+          },
+          "television_02.bin": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02.bin",
+            "md5": "2d486ed0c0d589cdb4b2acaf65242773",
+            "size": 81668
+          }
+        }
+      }
+    }
+  },
+  "usd": {
+    "1k": {
+      "usd": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/1k/television_02/television_02_1k.usdc",
+        "md5": "d60a76390789185d9e1a754ecdc05c6f",
+        "size": 108170,
+        "include": {
+          "textures/television_02_diff_1k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+            "md5": "a80b482e7aa0b57c93978c11cc0d0a1b",
+            "size": 391490
+          },
+          "textures/television_02_metal_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_metal_1k.exr",
+            "md5": "440f3e807e85e841e4b8cc2c6fa45ef4",
+            "size": 91158
+          },
+          "textures/television_02_nor_gl_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_nor_gl_1k.exr",
+            "md5": "8d460ecabe9cf35a85dffb79bb072ed5",
+            "size": 566668
+          },
+          "textures/television_02_rough_1k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/1k/television_02/television_02_rough_1k.exr",
+            "md5": "0a583a45222ddcd1561b7da6a9d8e98c",
+            "size": 363501
+          }
+        }
+      }
+    },
+    "2k": {
+      "usd": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/2k/television_02/television_02_2k.usdc",
+        "md5": "0feddeb0f6596c800d18ee46850bb889",
+        "size": 108170,
+        "include": {
+          "textures/television_02_diff_2k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/television_02/television_02_diff_2k.jpg",
+            "md5": "baf46886abbfa45b4f22364ee5315b1f",
+            "size": 1404458
+          },
+          "textures/television_02_metal_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_metal_2k.exr",
+            "md5": "a8cfc464ef2b498b9944b83b0878221b",
+            "size": 185623
+          },
+          "textures/television_02_nor_gl_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_nor_gl_2k.exr",
+            "md5": "e9f38333231d1a07bfd3d84ac8cb9eb8",
+            "size": 1529184
+          },
+          "textures/television_02_rough_2k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/2k/television_02/television_02_rough_2k.exr",
+            "md5": "63b8f439f5f272c066d6a06367363b29",
+            "size": 1182392
+          }
+        }
+      }
+    },
+    "4k": {
+      "usd": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/4k/television_02/television_02_4k.usdc",
+        "md5": "bde47dae62007db08327d1fcd063a887",
+        "size": 108170,
+        "include": {
+          "textures/television_02_diff_4k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/4k/television_02/television_02_diff_4k.jpg",
+            "md5": "8ccb7bbb55eb64c179c82c9559af158d",
+            "size": 4957519
+          },
+          "textures/television_02_metal_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_metal_4k.exr",
+            "md5": "26da01b8966b93723cae264aa93d2838",
+            "size": 364586
+          },
+          "textures/television_02_nor_gl_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_nor_gl_4k.exr",
+            "md5": "e3fe518bf5947b18804580ed6902aa7d",
+            "size": 4217952
+          },
+          "textures/television_02_rough_4k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/4k/television_02/television_02_rough_4k.exr",
+            "md5": "6539889be6f23633e7917b3c04ade530",
+            "size": 3845096
+          }
+        }
+      }
+    },
+    "8k": {
+      "usd": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/Models/usd/8k/television_02/television_02_8k.usdc",
+        "md5": "79b48b48219823eda83b4c98257ae729",
+        "size": 108170,
+        "include": {
+          "textures/television_02_diff_8k.jpg": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/8k/television_02/television_02_diff_8k.jpg",
+            "md5": "d0894936acca58745c8ec8c092ff0153",
+            "size": 17547261
+          },
+          "textures/television_02_metal_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_metal_8k.exr",
+            "md5": "ba0b56acad10294c34bc311df65a7447",
+            "size": 682984
+          },
+          "textures/television_02_nor_gl_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_nor_gl_8k.exr",
+            "md5": "867de509a9feb1981bea24495cf5d62f",
+            "size": 13161297
+          },
+          "textures/television_02_rough_8k.exr": {
+            "url": "https://dl.polyhaven.org/file/ph-assets/Models/exr/8k/television_02/television_02_rough_8k.exr",
+            "md5": "62a5377cb03fb1db3fd65dcd59e99f1d",
+            "size": 12433856
+          }
+        }
+      }
+    }
+  }
+}

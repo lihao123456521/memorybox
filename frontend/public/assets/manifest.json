@@ -1,23 +1,23 @@
 {
-  "version": 2,
-  "mode": "local-procedural-and-cc0",
+  "version": 3,
+  "mode": "local-original-and-cc0",
   "lux3dIntegrated": false,
   "assets": [
     {
       "assetId": "memory-box",
-      "label": "开合的胡桃木记忆盒",
+      "label": "机械八音盒与可开合镜面盒盖",
       "assetType": "model",
       "source": "procedural",
       "modelUrl": null,
       "license": "project-original",
-      "generator": "Three.js original geometry",
+      "generator": "Original Three.js mechanical meshes, pinned cylinder, tuned comb, gears, hinges and planar mirror",
       "lux3dTaskId": null,
       "fallbackAssetId": "memory-box",
-      "component": "MemoryBox"
+      "component": "MusicBox"
     },
     {
       "assetId": "present-room",
-      "label": "现实书桌与房间",
+      "label": "八音盒的电影感现实空间",
       "assetType": "model",
       "source": "procedural",
       "modelUrl": null,
@@ -25,11 +25,11 @@
       "generator": "Three.js original geometry and canvas wood grain",
       "lux3dTaskId": null,
       "fallbackAssetId": "present-room",
-      "component": "PresentRoom"
+      "component": "PresentScene"
     },
     {
       "assetId": "old-home-summer",
-      "label": "真实尺度的客厅、厨房与阳台",
+      "label": "五个可通行空间：客厅、厨房、阳台、卧室、书房",
       "assetType": "model",
       "source": "procedural",
       "modelUrl": null,
@@ -43,13 +43,14 @@
       "assetId": "old-tv",
       "label": "可互动旧电视",
       "assetType": "model",
-      "source": "procedural",
-      "modelUrl": null,
-      "license": "project-original",
-      "generator": "Three.js original geometry",
+      "source": "cc0-polyhaven",
+      "modelUrl": "/assets/props/television_02-1k.glb",
+      "license": "CC0-1.0",
+      "generator": "Poly Haven Television 02; locally embedded glTF conversion",
       "lux3dTaskId": null,
       "fallbackAssetId": "old-tv",
-      "component": "TV"
+      "component": "TV",
+      "sourceUrl": "https://polyhaven.com/a/television_02"
     },
     {
       "assetId": "red-doll",
@@ -74,18 +75,6 @@
       "lux3dTaskId": null,
       "fallbackAssetId": "family-frame",
       "component": "Frame"
-    },
-    {
-      "assetId": "grandma-and-child",
-      "label": "绘本化奶奶与童年角色",
-      "assetType": "model",
-      "source": "procedural",
-      "modelUrl": null,
-      "license": "project-original",
-      "generator": "Three.js original geometry",
-      "lux3dTaskId": null,
-      "fallbackAssetId": "grandma-and-child",
-      "component": "Person"
     },
     {
       "assetId": "letter-envelope",
@@ -118,11 +107,12 @@
       "assetType": "model",
       "source": "derived-cc0",
       "modelUrl": "/assets/models/young-man.glb",
-      "license": "CC0-1.0 base; project-original clothing",
-      "generator": "MakeHuman base topology, original clothing and local GLB build script",
+      "license": "CC0-1.0 graphical assets; original fitting and conversion code",
+      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
       "lux3dTaskId": null,
       "fallbackAssetId": "clothed-fallback-young-man",
-      "component": "Character"
+      "component": "Character",
+      "provenance": "docs/character-assets-v3.md"
     },
     {
       "assetId": "character-elder-man",
@@ -130,11 +120,12 @@
       "assetType": "model",
       "source": "derived-cc0",
       "modelUrl": "/assets/models/elder-man.glb",
-      "license": "CC0-1.0 base; project-original clothing",
-      "generator": "MakeHuman base topology, original clothing and local GLB build script",
+      "license": "CC0-1.0 graphical assets; original fitting and conversion code",
+      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
       "lux3dTaskId": null,
       "fallbackAssetId": "clothed-fallback-elder-man",
-      "component": "Character"
+      "component": "Character",
+      "provenance": "docs/character-assets-v3.md"
     },
     {
       "assetId": "character-young-woman",
@@ -142,11 +133,12 @@
       "assetType": "model",
       "source": "derived-cc0",
       "modelUrl": "/assets/models/young-woman.glb",
-      "license": "CC0-1.0 base; project-original clothing",
-      "generator": "MakeHuman base topology, original clothing and local GLB build script",
+      "license": "CC0-1.0 graphical assets; original fitting and conversion code",
+      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
       "lux3dTaskId": null,
       "fallbackAssetId": "clothed-fallback-young-woman",
-      "component": "Character"
+      "component": "Character",
+      "provenance": "docs/character-assets-v3.md"
     },
     {
       "assetId": "character-elder-woman",
@@ -154,11 +146,12 @@
       "assetType": "model",
       "source": "derived-cc0",
       "modelUrl": "/assets/models/elder-woman.glb",
-      "license": "CC0-1.0 base; project-original clothing",
-      "generator": "MakeHuman base topology, original clothing and local GLB build script",
+      "license": "CC0-1.0 graphical assets; original fitting and conversion code",
+      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
       "lux3dTaskId": null,
       "fallbackAssetId": "clothed-fallback-elder-woman",
-      "component": "Character"
+      "component": "Character",
+      "provenance": "docs/character-assets-v3.md"
     },
     {
       "assetId": "room-pbr-materials",
@@ -170,6 +163,52 @@
       "modelUrl": null,
       "lux3dTaskId": null,
       "provenance": "docs/room-assets.md"
+    },
+    {
+      "assetId": "railway-station",
+      "label": "候车大厅、站台与可步入的绿皮车厢",
+      "component": "Station",
+      "assetType": "model",
+      "source": "procedural",
+      "modelUrl": null,
+      "license": "project-original",
+      "generator": "Original Three.js detailed architectural geometry",
+      "lux3dTaskId": null
+    },
+    {
+      "assetId": "sunlit-classroom",
+      "label": "独立教室与阳光走廊",
+      "component": "Classroom",
+      "assetType": "model",
+      "source": "procedural",
+      "modelUrl": null,
+      "license": "project-original",
+      "generator": "Original Three.js detailed architectural geometry",
+      "lux3dTaskId": null
+    },
+    {
+      "assetId": "chinese-armchair",
+      "label": "精细中式木扶手椅",
+      "assetType": "model",
+      "source": "cc0-polyhaven",
+      "modelUrl": "/assets/props/chinese_armchair-1k.glb",
+      "license": "CC0-1.0",
+      "sourceUrl": "https://polyhaven.com/a/chinese_armchair",
+      "lux3dTaskId": null
+    },
+    {
+      "assetId": "lebombo-environment",
+      "label": "室内HDR光照与反射",
+      "assetType": "texture",
+      "source": "cc0-polyhaven",
+      "imageUrl": "/assets/environments/lebombo_1k.hdr",
+      "sourceUrl": "https://polyhaven.com/a/lebombo",
+      "downloadUrl": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/lebombo_1k.hdr",
+      "license": "CC0-1.0",
+      "author": "Greg Zaal",
+      "bytes": 1476953,
+      "sha256": "a02c9615adeba91a753c3e4737c3ce7a719273df822eeaa85d24982bd43c9ecb",
+      "lux3dTaskId": null
     }
   ]
 }

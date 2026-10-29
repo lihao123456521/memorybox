@@ -1,0 +1,91 @@
+{
+  "license": "CC0-1.0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "retrievedAt": "2026-10-28T23:35:02.815Z",
+  "records": [
+    {
+      "path": "television_02/television_02_1k.gltf",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/television_02/television_02_1k.gltf",
+      "bytes": 2767,
+      "md5": "7fac593c38eda87404e5fd77a0da6979",
+      "sha256": "8e7d7cb6bbdb5713b7d4ed21ece7c0f9c41912359c2c0f5065b7e77f5bf4cdcf"
+    },
+    {
+      "path": "television_02/textures/television_02_nor_gl_1k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_nor_gl_1k.jpg",
+      "bytes": 292847,
+      "md5": "f7f3e0ea914c0fa01e3be02fc4146b3e",
+      "sha256": "d241001bb67ffe262612ff46930d62f751c425b6e9be8704e762c2dc5b48e536"
+    },
+    {
+      "path": "television_02/textures/television_02_diff_1k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_diff_1k.jpg",
+      "bytes": 391490,
+      "md5": "a80b482e7aa0b57c93978c11cc0d0a1b",
+      "sha256": "216bc64108a79f3728e4f0fa2927da2491a3c3f5c619c8d48418c2aad84afb5e"
+    },
+    {
+      "path": "television_02/textures/television_02_arm_1k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/television_02/television_02_arm_1k.jpg",
+      "bytes": 471183,
+      "md5": "607a19871471d04b32924fe0138b5423",
+      "sha256": "7fa42cc4ce2b2a09e2889aaf7897265a79223cad2f3267e035884c96ab37d48b"
+    },
+    {
+      "path": "television_02/television_02.bin",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/television_02/television_02.bin",
+      "bytes": 81668,
+      "md5": "2d486ed0c0d589cdb4b2acaf65242773",
+      "sha256": "73f1d3519f7bdacca24c892e2614ff756d5d27f5c33fb518cb8aac9154fa710b"
+    },
+    {
+      "path": "../television_02-1k.glb",
+      "derivedFrom": "https://api.polyhaven.com/files/television_02",
+      "bytes": 1238988,
+      "sha256": "3a9fbae7ccc5f33e17c54c8d3e93ffc001379a5d44621ee81b6fa699d7fa1b23",
+      "triangles": 2310
+    },
+    {
+      "path": "chinese_armchair/chinese_armchair_1k.gltf",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/chinese_armchair/chinese_armchair_1k.gltf",
+      "bytes": 2816,
+      "md5": "ecad26c95dbf2c7e631f848711700678",
+      "sha256": "e0649ac9e63135627b824035e9a45a7c06411062589b971e633e5ab5f9e17f04"
+    },
+    {
+      "path": "chinese_armchair/textures/chinese_armchair_arm_1k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_arm_1k.jpg",
+      "bytes": 618850,
+      "md5": "ed3bece412754abf3aa2c5f6bc6aa9de",
+      "sha256": "5daef0846dd4f4a32a50106ee12930e547c8a577d60687e6e88b370f0ed84d28"
+    },
+    {
+      "path": "chinese_armchair/textures/chinese_armchair_nor_gl_1k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_nor_gl_1k.jpg",
+      "bytes": 483304,
+      "md5": "ba905cf32062cf2869ec39f7adbb95b8",
+      "sha256": "8599f79dcd01b20ba4916a959a2e0dcf4beaa21597356acc6abe0c13cb330eff"
+    },
+    {
+      "path": "chinese_armchair/chinese_armchair.bin",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/chinese_armchair/chinese_armchair.bin",
+      "bytes": 81428,
+      "md5": "7575b1f0e7de094e7c1cbebf610e5da0",
+      "sha256": "7e72b5360513057bdc453d6c03d5a837d32a8c9a2e6185f1b016c1bc62dc5b27"
+    },
+    {
+      "path": "chinese_armchair/textures/chinese_armchair_diff_1k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/chinese_armchair/chinese_armchair_diff_1k.jpg",
+      "bytes": 516908,
+      "md5": "5ae99f09fe8a767d4ecd49c86539d46d",
+      "sha256": "41332d6df2c5abad15ba227382bda160e55e9c75f2b4ecc079f8171aecd8d689"
+    },
+    {
+      "path": "../chinese_armchair-1k.glb",
+      "derivedFrom": "https://api.polyhaven.com/files/chinese_armchair",
+      "bytes": 1702316,
+      "sha256": "27ba0fc0b9f934597b399ca1a01c91ab8cd3dfcb951d7b4c2bfe90a70a348699",
+      "triangles": 2675
+    }
+  ]
+}

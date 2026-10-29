@@ -1,142 +1,254 @@
-/** Offline asset build. MakeHuman graphical inputs: CC0; all assembly code: project original. */
+/** Independent MHCLO asset fitting. Graphical inputs are MakeHuman Community CC0 assets. */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import {fileURLToPath} from 'node:url';
 import * as THREE from '../../../node_modules/three/build/three.module.js';
-import { GLTFExporter } from '../../../node_modules/three/examples/jsm/exporters/GLTFExporter.js';
+import {GLTFExporter} from '../../../node_modules/three/examples/jsm/exporters/GLTFExporter.js';
 
 const dir=path.dirname(fileURLToPath(import.meta.url));
-globalThis.FileReader=class { result=null; onloadend=null; onerror=null; readAsArrayBuffer(blob){blob.arrayBuffer().then(r=>{this.result=r;this.onloadend?.();}).catch(e=>this.onerror?.(e));} readAsDataURL(blob){blob.arrayBuffer().then(r=>{this.result='data:'+blob.type+';base64,'+Buffer.from(r).toString('base64');this.onloadend?.();});} };
-const vertices=[], faces=[], uvs=[], uvByVertex=[], groups=new Map();let group='';
-for(const line of fs.readFileSync(path.join(dir,'makehuman-base.obj'),'utf8').split(/\r?\n/)){
-  const p=line.trim().split(/\s+/);
-  if(p[0]==='v')vertices.push(p.slice(1).map(Number));
-  if(p[0]==='vt')uvs.push(p.slice(1,3).map(Number));
-  if(p[0]==='g'){group=p[1];if(!groups.has(group))groups.set(group,[]);}
-  if(p[0]==='f'){const tuples=p.slice(1).map(v=>v.split('/').map(Number));const indices=tuples.map(v=>v[0]-1);groups.get(group).push(...indices);if(group==='body'){for(const [v,uv] of tuples)if(!uvByVertex[v-1])uvByVertex[v-1]=uvs[uv-1];for(let i=1;i<indices.length-1;i++)faces.push([indices[0],indices[i],indices[i+1]]);}}
+const source=path.join(dir,'source','system-cc0');
+globalThis.FileReader=class{
+  result=null;onloadend=null;onerror=null;
+  readAsArrayBuffer(blob){blob.arrayBuffer().then(r=>{this.result=r;this.onloadend?.();}).catch(e=>this.onerror?.(e));}
+  readAsDataURL(blob){blob.arrayBuffer().then(r=>{this.result='data:'+blob.type+';base64,'+Buffer.from(r).toString('base64');this.onloadend?.();});}
+};
+
+function readObj(filename){
+  const vertices=[],uvs=[],faces=[],groups=new Map();let group='';
+  for(const line of fs.readFileSync(filename,'utf8').split(/\r?\n/)){
+    const p=line.trim().split(/\s+/);
+    if(p[0]==='v')vertices.push(p.slice(1,4).map(Number));
+    if(p[0]==='vt')uvs.push(p.slice(1,3).map(Number));
+    if(p[0]==='g'){group=p[1];if(!groups.has(group))groups.set(group,[]);}
+    if(p[0]==='f'){
+      const corners=p.slice(1).map(c=>{const [v,t]=c.split('/').map(Number);return [v<0?vertices.length+v:v-1,t<0?uvs.length+t:t-1];});
+      if(!groups.has(group))groups.set(group,[]);groups.get(group).push(...corners.map(c=>c[0]));
+      for(let i=1;i<corners.length-1;i++)faces.push({corners:[corners[0],corners[i],corners[i+1]],group});
+    }
+  }
+  return {vertices,uvs,faces,groups};
 }
-const sourceBodyIds=[...new Set(faces.flat())];
+const base=readObj(path.join(dir,'makehuman-base.obj'));
+base.faces=base.faces.filter(f=>f.group==='body');
+const bodyIds=[...new Set(base.faces.flatMap(f=>f.corners.map(c=>c[0])))];
+
+// Split exported vertices at actual OBJ UV seams; reuse smooth normals across those seams.
+function geometry(obj,coordinates,faces=obj.faces){
+  const smoothGeometry=new THREE.BufferGeometry();
+  smoothGeometry.setAttribute('position',new THREE.Float32BufferAttribute(coordinates.flat(),3));
+  smoothGeometry.setIndex(obj.faces.flatMap(f=>f.corners.map(c=>c[0])));smoothGeometry.computeVertexNormals();
+  const sourceNormals=smoothGeometry.attributes.normal;
+  const positions=[],uvs=[],normals=[],indices=[],lookup=new Map();
+  for(const face of faces)for(const [vertex,uv]of face.corners){
+    const key=vertex+'/'+uv;let id=lookup.get(key);
+    if(id===undefined){
+      id=lookup.size;lookup.set(key,id);positions.push(...coordinates[vertex]);uvs.push(...(obj.uvs[uv]||[0,0]));
+      normals.push(sourceNormals.getX(vertex),sourceNormals.getY(vertex),sourceNormals.getZ(vertex));
+    }
+    indices.push(id);
+  }
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));g.setIndex(indices);
+  smoothGeometry.dispose();return g;
+}
+
+function refineHead(coordinates,visibleFaces,neckY){
+  const edges=new Map(),neighbors=coordinates.map(()=>new Set());
+  const visible=new Set(visibleFaces),uvs=base.uvs.map(v=>[...v]);
+  const edgeKey=(a,b)=>a<b?a+'/'+b:b+'/'+a;
+  for(const face of base.faces){
+    const ids=face.corners.map(c=>c[0]);
+    for(let j=0;j<3;j++){
+      const a=ids[j],b=ids[(j+1)%3],c=ids[(j+2)%3],key=edgeKey(a,b);
+      neighbors[a].add(b);neighbors[b].add(a);
+      if(!edges.has(key))edges.set(key,{a,b,opposites:[]});edges.get(key).opposites.push(c);
+    }
+  }
+  const boundaries=coordinates.map(()=>[]);
+  for(const edge of edges.values())if(edge.opposites.length===1){boundaries[edge.a].push(edge.b);boundaries[edge.b].push(edge.a);}
+  const coords=coordinates.map((p,id)=>{
+    const weight=smooth(neckY+.015,neckY+.07,p[1]);const adjacent=[...neighbors[id]];
+    if(!weight||!adjacent.length)return [...p];
+    let target;
+    if(boundaries[id].length===2)target=p.map((v,axis)=>v*.75+(coordinates[boundaries[id][0]][axis]+coordinates[boundaries[id][1]][axis])*.125);
+    else{const beta=adjacent.length===3?3/16:3/(8*adjacent.length);target=p.map((v,axis)=>v*(1-adjacent.length*beta)+beta*adjacent.reduce((sum,i)=>sum+coordinates[i][axis],0));}
+    return p.map((v,axis)=>THREE.MathUtils.lerp(v,target[axis],weight));
+  });
+  for(const edge of edges.values()){
+    const a=coordinates[edge.a],b=coordinates[edge.b],mid=a.map((v,axis)=>(v+b[axis])*.5),weight=smooth(neckY+.015,neckY+.07,mid[1]);
+    const loop=edge.opposites.length===2?a.map((v,axis)=>(v+b[axis])*.375+(coordinates[edge.opposites[0]][axis]+coordinates[edge.opposites[1]][axis])*.125):mid;
+    edge.index=coords.length;coords.push(mid.map((v,axis)=>THREE.MathUtils.lerp(v,loop[axis],weight)));
+  }
+  const midpointUV=new Map();
+  function middle(a,b){
+    const key=edgeKey(a[1],b[1]);let uv=midpointUV.get(key);
+    if(uv===undefined){uv=uvs.length;uvs.push([0,1].map(axis=>((uvs[a[1]]||[0,0])[axis]+(uvs[b[1]]||[0,0])[axis])*.5));midpointUV.set(key,uv);}
+    return [edges.get(edgeKey(a[0],b[0])).index,uv];
+  }
+  const faces=[],shown=[];
+  for(const parent of base.faces){
+    const [a,b,c]=parent.corners,ab=middle(a,b),bc=middle(b,c),ca=middle(c,a);
+    for(const corners of [[a,ab,ca],[b,bc,ab],[c,ca,bc],[ab,bc,ca]]){
+      const face={corners,group:'body'};faces.push(face);if(visible.has(parent))shown.push(face);
+    }
+  }
+  return {obj:{uvs,faces},coordinates:coords,visible:shown};
+}
+
+function readProxy(fragment){
+  const filename=path.join(source,fragment+'.mhclo');
+  const header={},mapping=[],deleted=new Set();let state='header';
+  for(const original of fs.readFileSync(filename,'utf8').split(/\r?\n/)){
+    const line=original.trim();if(!line||line.startsWith('#'))continue;const p=line.split(/\s+/);
+    if(p[0]==='verts'){state='verts';continue;}
+    if(p[0]==='delete_verts'){state='deleted';continue;}
+    if(state==='deleted'){
+      for(let i=0;i<p.length;i++){
+        if(p[i+1]==='-'){const end=Number(p[i+2]);for(let v=Number(p[i]);v<=end;v++)deleted.add(v);i+=2;}
+        else if(/^\d+$/.test(p[i]))deleted.add(Number(p[i]));
+      }
+    }else if(state==='verts'&&/^\d/.test(line))mapping.push(p.map(Number));
+    else header[p[0]]=p.slice(1);
+  }
+  const obj=readObj(path.join(path.dirname(filename),header.obj_file.join(' ')));
+  if(obj.vertices.length!==mapping.length)throw Error('MHCLO/OBJ vertex count mismatch: '+fragment);
+  return {fragment,obj,header,mapping,deleted};
+}
+const assets={
+  casual:readProxy('clothes/male_casualsuit01/male_casualsuit01'),
+  shirt:readProxy('clothes/male_casualsuit03/male_casualsuit03'),
+  blouse:readProxy('clothes/female_elegantsuit01/female_elegantsuit01'),
+  shoes:readProxy('clothes/shoes04/shoes04'),
+  short:readProxy('hair/short04/short04'),
+  silver:readProxy('hair/short02/short02'),
+  ponytail:readProxy('hair/ponytail01/ponytail01'),
+  braid:readProxy('hair/braid01/braid01'),
+  eyes:readProxy('eyes/high-poly/high-poly'),
+  brows:readProxy('eyebrows/eyebrow001/eyebrow001'),
+  lashes:readProxy('eyelashes/eyelashes01/eyelashes01'),
+};
 const presets=[
-  {id:'young-man',target:'asian-male-young',height:1.78,skin:'#c99f85',shirt:'#8aabb4',pants:'#3d4d58',hair:'#282622',elder:false,female:false},
-  {id:'elder-man',target:'asian-male-old',height:1.72,skin:'#c3a089',shirt:'#b3ab95',pants:'#535349',hair:'#c1bdb3',elder:true,female:false},
-  {id:'young-woman',target:'asian-female-young',height:1.66,skin:'#d7af98',shirt:'#a86e61',pants:'#4c5552',hair:'#302a26',elder:false,female:true},
-  {id:'elder-woman',target:'asian-female-old',height:1.64,skin:'#c7a28a',shirt:'#7e9283',pants:'#535249',hair:'#b7b5ad',elder:true,female:true},
+  {id:'young-man',target:'asian-male-young',height:1.78,outfit:'casual',hair:'short',outfitColor:'#c7d2df',elder:false},
+  {id:'elder-man',target:'asian-male-old',height:1.72,outfit:'shirt',hair:'silver',outfitColor:'#bfc1bb',elder:true},
+  {id:'young-woman',target:'asian-female-young',height:1.66,outfit:'blouse',hair:'ponytail',outfitColor:'#d6bab5',elder:false},
+  {id:'elder-woman',target:'asian-female-old',height:1.64,outfit:'shirt',hair:'braid',outfitColor:'#9caf9c',elder:true},
 ];
 const smooth=(a,b,x)=>THREE.MathUtils.smoothstep(x,a,b);
-const vec=p=>new THREE.Vector3(...p);
-const material=(name,color,roughness=.83)=>new THREE.MeshStandardMaterial({name,color,roughness,metalness:0});
-function sphere(name,p,s,mat,segments=28){const m=new THREE.Mesh(new THREE.SphereGeometry(1,segments,20),mat);m.name=name;m.position.set(...p);m.scale.set(...s);m.castShadow=true;m.receiveShadow=true;return m;}
-function curve(name,points,radius,mat){const c=new THREE.CatmullRomCurve3(points.map(vec));const m=new THREE.Mesh(new THREE.TubeGeometry(c,14,radius,7,false),mat);m.name=name;return m;}
-function indexedGeometry(coords,indices){const used=[...new Set(indices)],map=new Map(used.map((id,i)=>[id,i]));const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(used.flatMap(id=>Array.from(coords.slice(id*3,id*3+3))),3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(used.flatMap(id=>uvByVertex[id]||[0,0]),2));geo.setIndex(indices.map(id=>map.get(id)));geo.computeVertexNormals();return geo;}
+function surface(name,color,roughness=.82){return new THREE.MeshStandardMaterial({name,color,roughness,metalness:0});}
+function fit(proxy,points){
+  const scale=[0,1,2].map((axis)=>{
+    const p=proxy.header[['x_scale','y_scale','z_scale'][axis]];
+    return p?Math.abs(points[Number(p[1])][axis]-points[Number(p[0])][axis])/Number(p[2]):1;
+  });
+  return proxy.mapping.map(row=>row.length===1?[...points[row[0]]]:[0,1,2].map(axis=>
+    points[row[0]][axis]*row[3]+points[row[1]][axis]*row[4]+points[row[2]][axis]*row[5]+row[6+axis]*scale[axis]));
+}
+function lineMesh(name,points,radius,mat){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const mesh=new THREE.Mesh(new THREE.TubeGeometry(curve,18,radius,8,false),mat);mesh.name=name;return mesh;}
+
 function create(preset,seated){
-  const points=vertices.map(v=>[...v]);
+  const points=base.vertices.map(v=>[...v]);
   for(const line of fs.readFileSync(path.join(dir,'source',preset.target+'.target'),'utf8').split(/\r?\n/)){
     if(!/^\d/.test(line))continue;const [id,x,y,z]=line.trim().split(/\s+/).map(Number);points[id][0]+=x;points[id][1]+=y;points[id][2]+=z;
   }
-  const minY=Math.min(...sourceBodyIds.map(i=>points[i][1])), maxY=Math.max(...sourceBodyIds.map(i=>points[i][1]));const scale=preset.height/(maxY-minY);
-  const marker=name=>{const ids=[...new Set(groups.get(name))];return [0,1,2].map(a=>ids.reduce((s,i)=>s+points[i][a],0)/ids.length);};
-  const shoulderL=marker('joint-l-shoulder'), shoulderR=marker('joint-r-shoulder');
-  const raw=points.map(([x,y,z])=>[x*scale,(y-minY)*scale,z*scale]);
-  const hipY=(marker('joint-pelvis')[1]-minY)*scale-.025;
-  const kneeY=(marker('joint-l-knee')[1]-minY)*scale;
-  const seatOffset=seated?hipY-.465:0;
-  const transform=(p,arm=true)=>{
-    let [x,y,z]=p;
-    const isLeg=p[1]<hipY+.06&&Math.abs(p[0])<.32;
-    if(arm){const shoulder=(x>=0?shoulderL:shoulderR).map((v,a)=>a===1?(v-minY)*scale:v*scale);const lowerMask=Math.abs(x)>Math.abs(shoulder[0])+.12?1:smooth(hipY-.06,hipY+.08,y);const w=smooth(Math.abs(shoulder[0])-.045,Math.abs(shoulder[0])+.065,Math.abs(x))*(1-smooth(shoulder[1]+.02,shoulder[1]+.12,y))*lowerMask;if(w>0){const a=(x>=0?-.69:.69)*w,dx=x-shoulder[0],dy=y-shoulder[1];x=shoulder[0]+dx*Math.cos(a)-dy*Math.sin(a);y=shoulder[1]+dx*Math.sin(a)+dy*Math.cos(a);z+=.012*w;if(seated){const bend=smooth(Math.abs(shoulder[0])+.09,Math.abs(shoulder[0])+.25,Math.abs(p[0]))*w;z+=.18*bend;y+=.11*bend;}}}
-    // Preserve an anatomically sensible stance instead of the source editing A-pose.
-    const legWeight=isLeg?1-smooth(hipY-.10,hipY+.04,y):0;x*=1-legWeight*.13;
-    if(seated){const w=isLeg?1-smooth(hipY-.025,hipY+.06,y):0;if(w>0){const below=Math.max(0,kneeY-y);const thigh=Math.min(hipY-y,hipY-kneeY);const posedY=hipY-below;const posedZ=z+Math.max(0,thigh);y=THREE.MathUtils.lerp(y,posedY,w);z=THREE.MathUtils.lerp(z,posedZ,w);}y-=seatOffset;}
+  const marker=name=>{const ids=[...new Set(base.groups.get(name))];return [0,1,2].map(axis=>ids.reduce((sum,i)=>sum+points[i][axis],0)/ids.length);};
+  const minimum=Math.min(...bodyIds.map(i=>points[i][1]));const scale=preset.height/(Math.max(...bodyIds.map(i=>points[i][1]))-minimum);
+  const normalize=([x,y,z])=>[x*scale,(y-minimum)*scale,z*scale];
+  const shoulders=[marker('joint-r-shoulder'),marker('joint-l-shoulder')].map(normalize);
+  const hip=normalize(marker('joint-pelvis'))[1]-.025,knee=normalize(marker('joint-l-knee'))[1];
+  const seatOffset=seated?hip-.465:0;
+  function pose(original){
+    let [x,y,z]=original;const shoulder=shoulders[x>=0?1:0];
+    // Blend arm rotation smoothly into the deltoid without moving the chest or face.
+    const lateral=smooth(Math.abs(shoulder[0])-.035,Math.abs(shoulder[0])+.085,Math.abs(x));
+    const vertical=1-smooth(shoulder[1]+.015,shoulder[1]+.12,y);
+    const lower=Math.abs(x)>Math.abs(shoulder[0])+.12?1:smooth(hip-.06,hip+.08,y);
+    const influence=lateral*vertical*lower;
+    if(influence>0){const angle=(x>=0?-.70:.70)*influence,dx=x-shoulder[0],dy=y-shoulder[1];x=shoulder[0]+dx*Math.cos(angle)-dy*Math.sin(angle);y=shoulder[1]+dx*Math.sin(angle)+dy*Math.cos(angle);z+=.012*influence;}
+    const isLeg=original[1]<hip+.06&&Math.abs(original[0])<.33;
+    if(isLeg)x*=1-(1-smooth(hip-.10,hip+.04,y))*.10;
+    if(seated){
+      const w=isLeg?1-smooth(hip-.025,hip+.06,y):0;
+      if(w>0){
+        // Rotate the thigh, preserving its depth as vertical volume instead of flattening it.
+        const kneeZ=normalize(marker('joint-l-knee'))[2];
+        const hipZ=normalize(marker('joint-pelvis'))[2];
+        const fold=1-smooth(knee-.035,knee+.035,original[1]);
+        const thighY=hip+(original[2]-hipZ),thighZ=hipZ+hip-original[1];
+        const shinY=hip+original[1]-knee,shinZ=hipZ+hip-knee+original[2]-kneeZ;
+        y=THREE.MathUtils.lerp(y,THREE.MathUtils.lerp(thighY,shinY,fold),w);
+        z=THREE.MathUtils.lerp(z,THREE.MathUtils.lerp(thighZ,shinZ,fold),w);
+      }
+      // Bend the forearms forward; a seated pose is a separate exported asset.
+      if(influence>.5){const hand=smooth(.21,.43,Math.abs(original[0]))*influence;z+=.15*hand;y+=.08*hand;}
+      y-=seatOffset;
+    }
     return [x,y,z];
-  };
-  const positions=raw.map(v=>transform(v));
-  if(process.env.CHARACTER_DEBUG==='1'){const outer=sourceBodyIds.reduce((best,i)=>positions[i][0]>positions[best][0]?i:best,sourceBodyIds[0]);console.log('ANATOMY',preset.id,{shoulderL,rawShoulderY:(shoulderL[1]-minY)*scale,outer,raw:raw[outer],posed:positions[outer],hand:marker('joint-l-hand')});}
-  const root=new THREE.Group();root.name=preset.id+(seated?'-seated':'');
-  root.userData={source:'MakeHuman CC0 hm08 + official Asian age/sex target',unit:'meter',height:preset.height,pose:seated?'seated':'standing',fullyClothed:true};
-  const mats={skin:material('skin',preset.skin,.72),shirt:material('woven long-sleeve shirt',preset.shirt,.94),pants:material('loose woven trousers',preset.pants,.98),shoe:material('leather walking shoes','#3d3833',.62),hair:material('hair',preset.hair,.9),lip:material('natural lips',preset.elder?'#a78377':'#b58477',.75),eye:material('eye whites','#e5dfd4',.3),iris:material('dark brown iris','#3a3028',.38),pupil:material('pupil','#171817',.2),button:material('shirt buttons','#d1cbbd',.66)};
-  const categories={skin:[],shirt:[],pants:[],shoe:[],lip:[]};
-  const collarY=(marker('joint-neck')[1]-minY)*scale-.015;
-  const shoulderY=(shoulderL[1]-minY)*scale;
-  const hemY=hipY-.09;
-  const wristX=Math.abs(marker('joint-l-hand')[0])*scale-.008;
-  for(const tri of faces){const center=[0,1,2].map(a=>tri.reduce((s,i)=>s+raw[i][a],0)/3);const sourceCenter=[0,1,2].map(a=>tri.reduce((s,i)=>s+points[i][a],0)/3);let category='skin';
-    if(center[1]<hipY+.025)category=center[1]<.115?'shoe':'pants';
-    else if(center[1]<collarY&&Math.abs(center[0])<wristX)category='shirt';
-    // Clothing has its own continuous surface; cropped body triangles leave ragged seams.
-    if(category==='shirt')continue;
-    if(category==='shoe')continue;
-    if(category==='pants'&&seated)continue;
-    categories[category].push(...tri);
   }
-  const shirtRadius=preset.female?.19:.212;
-  const shirtHem=seated?hipY+.035:hemY;
-  // Fit the lower garment to this age/sex shape, including the trousers' added ease.
-  // The original arm vertices lie outside this torso band and must not widen the hem.
-  const fitTorsoRing=(y,minimum)=>sourceBodyIds.reduce((radius,id)=>{
-    const [x,bodyY,z]=raw[id];
-    if(Math.abs(x)>=.3||Math.abs(bodyY-y)>.045)return radius;
-    return Math.max(radius,Math.hypot(x*1.055,(z*1.04+.004-.022)/.69)+.012);
-  },minimum);
-  const lowerProfile=[[shirtRadius*.91,shirtHem],[shirtRadius*.94,hipY+.065],[shirtRadius*.86,hipY+.16]].map(([radius,y])=>[fitTorsoRing(y,radius),y]);
-  const shirtProfile=[...lowerProfile,[shirtRadius,shoulderY-.16],[shirtRadius*1.035,shoulderY-.025],[.062,collarY+.006]].map(([radius,y])=>new THREE.Vector2(radius,y-seatOffset));
-  const torso=new THREE.Mesh(new THREE.LatheGeometry(shirtProfile,48),mats.shirt);torso.name='loose opaque tailored shirt torso';torso.scale.z=.69;torso.position.z=.022;torso.castShadow=true;torso.receiveShadow=true;root.add(torso);
-  const hem=new THREE.Mesh(new THREE.TorusGeometry(lowerProfile[0][0],.004,8,48),mats.shirt);hem.name='continuous sewn shirt hem';hem.rotation.x=Math.PI/2;hem.scale.y=.69;hem.position.set(0,shirtHem-seatOffset,.022);root.add(hem);
-  const neckband=new THREE.Mesh(new THREE.TorusGeometry(.061,.010,10,40),mats.shirt);neckband.name='continuous shirt neckline';neckband.rotation.x=Math.PI/2;neckband.scale.y=.69;neckband.position.set(0,collarY+.009-seatOffset,.022);root.add(neckband);
-  for(const side of ['l','r']){
-    const joint=name=>vec(transform(marker('joint-'+side+'-'+name).map((v,a)=>a===1?(v-minY)*scale:v*scale)));
-    const shoulder=joint('shoulder'),elbow=joint('elbow'),wrist=joint('hand');
-    shoulder.x*=.94; // Bury the sleeve root inside the separate shirt body.
-    const outward=wrist.clone().sub(elbow).normalize();
-    const cuff=wrist.clone().addScaledVector(outward,.010);
-    const path=new THREE.CatmullRomCurve3([shoulder,elbow,cuff]);
-    const segments=24,radial=20,geometry=new THREE.TubeGeometry(path,segments,1,radial,false);
-    const coords=geometry.attributes.position,normals=geometry.attributes.normal;
-    const shoulderRadius=preset.female?.060:.066,cuffRadius=preset.female?.036:.040;
-    for(let ring=0;ring<=segments;ring++){
-      const t=ring/segments,center=path.getPointAt(t);
-      const radius=THREE.MathUtils.lerp(shoulderRadius,cuffRadius,smooth(0,1,t));
-      for(let slice=0;slice<=radial;slice++){
-        const i=ring*(radial+1)+slice;
-        coords.setXYZ(i,center.x+normals.getX(i)*radius,center.y+normals.getY(i)*radius,center.z+normals.getZ(i)*radius);
+  const root=new THREE.Group();root.name=preset.id+(seated?'-seated':'');
+  root.userData={source:'MakeHuman CC0 hm08 body + MHCLO fitted system garments and hair',unit:'meter',height:preset.height,pose:seated?'seated':'standing',fullyClothed:true,uvSeams:'split per face corner'};
+  const selected=[assets[preset.outfit],assets.shoes,assets[preset.hair],assets.eyes,assets.brows,...(preset.id.endsWith('woman')?[assets.lashes]:[])];
+  const hidden=new Set(selected.flatMap(a=>[...a.deleted]));
+  const visibleFaces=base.faces.filter(f=>!f.corners.some(([vertex])=>hidden.has(vertex)));
+  const skin=surface('skin','#d2ac92',.67);
+  const refined=refineHead(points.map(p=>pose(normalize(p))),visibleFaces,normalize(marker('joint-neck'))[1]-seatOffset);
+  const body=new THREE.Mesh(geometry(refined.obj,refined.coordinates,refined.visible),skin);
+  body.name='smooth human anatomy with per-corner UV seams';root.add(body);
+  for(const asset of selected){
+    const isHair=asset===assets[preset.hair],isEye=asset===assets.eyes,isDetail=asset===assets.brows||asset===assets.lashes;
+    const id=isEye?'brown':asset===assets[preset.outfit]&&preset.id==='elder-woman'?'elder-shirt':path.basename(asset.fragment);
+    const mat=surface('cc0:'+id,isHair||isDetail||isEye?'#ffffff':asset===assets[preset.outfit]?preset.outfitColor:'#d5d1c5',isHair?.75:isEye?.24:.88);
+    if(isHair||isDetail){mat.alphaTest=.35;mat.side=THREE.DoubleSide;mat.depthWrite=true;}
+    if(isEye){mat.alphaTest=.1;mat.roughness=.2;}
+    const fitted=fit(asset,points).map(normalize);
+    if(isEye){
+      const centers=[normalize(marker('joint-r-eye')),normalize(marker('joint-l-eye'))];
+      fitted.forEach(p=>{const center=centers[p[0]>=0?1:0];for(let axis=0;axis<3;axis++)p[axis]=center[axis]+(p[axis]-center[axis])*.985;p[2]-=.0011;});
+    }
+    const seatedSkirt=seated&&preset.outfit==='blouse'&&asset===assets[preset.outfit];
+    const garmentFaces=seatedSkirt?asset.obj.faces.filter(f=>f.corners.reduce((sum,[v])=>sum+fitted[v][1],0)/3>hip+.11):asset.obj.faces;
+    const mesh=new THREE.Mesh(geometry(asset.obj,fitted.map(pose),garmentFaces),mat);
+    mesh.name='CC0 fitted '+asset.fragment;mesh.castShadow=!isDetail;mesh.receiveShadow=true;root.add(mesh);
+  }
+  if(seated&&preset.outfit==='blouse'){
+    // A continuous draped skirt covers both thighs when the straight standing skirt folds.
+    const positions=[],indices=[];const rings=24,sides=48;
+    for(let ring=0;ring<=rings;ring++){
+      const t=ring/rings,z=.015+t*.46,width=.198+.025*Math.sin(t*Math.PI*.7),height=.123-.027*t;
+      for(let side=0;side<=sides;side++){
+        const a=side/sides*Math.PI*2,ripple=.0018*Math.sin(a*12+t*4)*Math.sin(Math.PI*t);
+        positions.push(Math.cos(a)*(width+ripple),.492+Math.sin(a)*(height+ripple),z);
       }
     }
-    geometry.computeVertexNormals();
-    const sleeve=new THREE.Mesh(geometry,mats.shirt);sleeve.name='continuous tailored long sleeve '+side;sleeve.castShadow=true;sleeve.receiveShadow=true;root.add(sleeve);
-    root.add(sphere('rounded tailored shoulder cap '+side,shoulder.toArray(),[shoulderRadius*1.015,shoulderRadius*1.015,shoulderRadius*1.015],mats.shirt));
-    const cuffSeam=new THREE.Mesh(new THREE.TorusGeometry(cuffRadius,.0035,8,radial),mats.shirt);cuffSeam.name='closed sewn sleeve cuff '+side;cuffSeam.position.copy(cuff);cuffSeam.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),path.getTangentAt(1));root.add(cuffSeam);
+    for(let r=0;r<rings;r++)for(let s=0;s<sides;s++){
+      const a=r*(sides+1)+s,b=a+sides+1;indices.push(a,b,a+1,b,b+1,a+1);
+    }
+    const front=positions.length/3;positions.push(0,.492,.480);
+    for(let s=0;s<sides;s++)indices.push(front,rings*(sides+1)+s,rings*(sides+1)+s+1);
+    const cloth=new THREE.BufferGeometry();cloth.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));cloth.setIndex(indices);cloth.computeVertexNormals();
+    const skirtMat=surface('opaque draped seated skirt fabric','#282822',.94);skirtMat.side=THREE.DoubleSide;
+    const skirt=new THREE.Mesh(cloth,skirtMat);skirt.name='continuous seated skirt drape over both thighs';root.add(skirt);
   }
-  for(const [category,indices] of Object.entries(categories)){
-    if(!indices.length)continue;const p=new Float32Array(positions.flat());
-    for(const id of sourceBodyIds){let [x,y,z]=positions[id];if(category==='pants'){x*=1.055;z=z*1.04+.004;if(Math.abs(raw[id][0])<.075&&raw[id][1]>.69&&raw[id][1]<hipY+.05)z=Math.min(z,.105+(seated?.15:0));}if(category==='shoe'){x*=1.04;z+=.008;}p.set([x,y,z],id*3);}
-    const geo=indexedGeometry(p,indices);const mesh=new THREE.Mesh(geo,mats[category]);mesh.name=category==='skin'?'anatomical face neck and articulated fingers':category==='shirt'?'opaque long sleeve shirt and collar':'opaque '+category;mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);
+  if(preset.elder){
+    const eye=pose(normalize(marker('joint-l-eye'))),frame=surface('aged bronze spectacle frames','#6b6657',.38);frame.metalness=.72;
+    for(const side of [-1,1]){
+      const x=side*Math.abs(eye[0]);const rim=new THREE.Mesh(new THREE.TorusGeometry(.023,.0011,8,40),frame);
+      rim.name='fine oval reading glasses';rim.position.set(x,eye[1],eye[2]+.019);rim.scale.y=.79;root.add(rim);
+      root.add(lineMesh('spectacle temple '+side,[[x+side*.022,eye[1],eye[2]+.017],[side*.075,eye[1]+.003,eye[2]-.013],[side*.080,eye[1]-.007,eye[2]-.053]],.0011,frame));
+    }
+    root.add(lineMesh('arched spectacle bridge',[[-.011,eye[1]+.004,eye[2]+.019],[0,eye[1]+.009,eye[2]+.021],[.011,eye[1]+.004,eye[2]+.019]],.0011,frame));
   }
-  // Eyes sit inside the source mesh's actual eyelid rims; no oversized toy eyes.
-  for(const side of ['l','r']){const center=marker('joint-'+side+'-eye').map((v,a)=>a===1?(v-minY)*scale:v*scale);const eye=transform(center,false);const radius=.119*scale;
-    root.add(sphere(side+' eyeball',eye,[radius,radius,radius],mats.eye));
-    root.add(sphere(side+' brown iris',[eye[0],eye[1],eye[2]+radius*.91],[radius*.48,radius*.48,radius*.12],mats.iris));
-    root.add(sphere(side+' pupil',[eye[0],eye[1],eye[2]+radius*1.015],[radius*.22,radius*.22,radius*.06],mats.pupil));
-    root.add(sphere(side+' eye catchlight',[eye[0]-radius*.12,eye[1]+radius*.2,eye[2]+radius*1.07],[radius*.07,radius*.07,radius*.025],mats.eye,12));
-    const ey=eye[1]+radius*1.65;root.add(curve(side+' eyebrow',[[eye[0]-.019,ey-.002,eye[2]+.026],[eye[0],ey+.0015,eye[2]+.028],[eye[0]+.018,ey-.003,eye[2]+.024]],preset.elder?.0011:.0014,mats.hair));
-  }
-  // Hair follows the detailed scalp, keeping ear and facial topology unobscured.
-  const hairIndices=[];
-  const eyeRaw=marker('joint-l-eye').map((v,a)=>a===1?(v-minY)*scale:v*scale);
-  for(const tri of faces){const c=[0,1,2].map(a=>tri.reduce((s,i)=>s+raw[i][a],0)/3);const frontLine=eyeRaw[1]+(preset.elder&&!preset.female?.102:.048);const cap=c[1]>frontLine||(c[1]>eyeRaw[1]-.054&&c[2]<eyeRaw[2]-.025);const ear=Math.abs(c[0])>.077*preset.height/1.72&&c[1]<eyeRaw[1]+.005;if(cap&&!ear)hairIndices.push(...tri);}
-  const hp=new Float32Array(positions.flat());for(const i of sourceBodyIds){hp[i*3]*=1.045;hp[i*3+1]+=.004;hp[i*3+2]=(hp[i*3+2]-.025)*1.05+.025;}const hairGeo=indexedGeometry(hp,hairIndices);const hair=new THREE.Mesh(hairGeo,mats.hair);hair.name='scalp fitted hair';root.add(hair);
-  const head=transform(marker('joint-head').map((v,a)=>a===1?(v-minY)*scale:v*scale),false);const headTop=preset.height-seatOffset;
-  if(preset.female){root.add(sphere(preset.elder?'silver hair bun':'shoulder length hair back',[0,head[1]+.036,head[2]-.062],preset.elder?[.049,.054,.047]:[.076,.123,.063],mats.hair));}
-  for(let i=0;i<28;i++){const a=i/(27)*Math.PI*1.75+.39;const radius=.076;const yy=headTop-.015;const depth=head[2]+Math.cos(a)*.067;const xx=Math.sin(a)*radius;const endY=head[1]+(preset.female&&!preset.elder?-.075:.026);if(depth>head[2]+.045&&preset.elder&&!preset.female)continue;root.add(curve('individual swept hair lock '+i,[[xx*.24,yy,head[2]],[xx*.79,yy-.03,depth*.85],[xx,endY,depth]],.0011,material('strand '+i,new THREE.Color(preset.hair).offsetHSL(0,0,(i%3-1)*.025))));}
-  // Collars, button placket, cuffs and soles make the covering read as clothing.
-  const frontZ=shirtRadius*.69+.028;const cY=collarY-seatOffset;
-  for(const s of [-1,1]){root.add(curve('folded shirt collar '+s,[[s*.026,cY+.007,.061],[s*.055,cY-.024,.095],[s*.035,cY-.071,.125]],.006,mats.shirt));}
-  for(let i=0;i<5;i++){const yy=collarY-.10-i*.065;if(yy<hipY+.035)continue;root.add(sphere('shirt button '+i,[0,yy-seatOffset,frontZ],[.0036,.0036,.002],mats.button,12));}
-  for(const side of ['l','r']){const ankle=transform(marker('joint-'+side+'-ankle').map((v,a)=>a===1?(v-minY)*scale:v*scale),false);const x=ankle[0],z=ankle[2]+.077;root.add(sphere('fully enclosed leather shoe '+side,[x,.058,z],[.055,.053,.125],mats.shoe));root.add(sphere('solid shoe sole '+side,[x,.016,z],[.058,.014,.133],mats.shoe));root.add(sphere('shoe tongue '+side,[x,.098,z-.055],[.043,.024,.055],mats.shoe));}
-  if(seated){root.add(sphere('opaque seated trouser pelvis',[0,.48,.025],[.17,.125,.125],mats.pants));for(const side of ['l','r']){const knee=transform(marker('joint-'+side+'-knee').map((v,a)=>a===1?(v-minY)*scale:v*scale),false);const ankle=transform(marker('joint-'+side+'-ankle').map((v,a)=>a===1?(v-minY)*scale:v*scale),false);const thigh=curve('fully covered seated thigh '+side,[[knee[0],.48,.045],[knee[0],.49,knee[2]*.55],[knee[0],.475,knee[2]]],.078,mats.pants);root.add(thigh);root.add(curve('fully covered seated shin '+side,[[knee[0],.475,knee[2]],[ankle[0],.29,ankle[2]],[ankle[0],.10,ankle[2]]],.059,mats.pants));root.add(sphere('rounded trouser knee '+side,[knee[0],.475,knee[2]],[.078,.077,.08],mats.pants));}}
-  if(preset.elder){const glasses=new THREE.MeshStandardMaterial({color:'#625d52',roughness:.45,metalness:.55});const ey=transform(marker('joint-l-eye').map((v,a)=>a===1?(v-minY)*scale:v*scale),false);for(const s of [-1,1]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.023,.0012,7,28),glasses);ring.name='reading glasses';ring.position.set(s*Math.abs(ey[0]),ey[1],ey[2]+.017);ring.scale.y=.78;root.add(ring);}root.add(curve('glasses bridge',[[-.01,ey[1]+.003,ey[2]+.018],[0,ey[1]+.006,ey[2]+.019],[.01,ey[1]+.003,ey[2]+.018]],.0012,glasses));}
-  root.updateMatrixWorld(true);return root;
+  root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+  root.updateMatrixWorld(true);const box=new THREE.Box3().setFromObject(root);root.position.y-=box.min.y;root.updateMatrixWorld(true);
+  return root;
 }
-const stats=[];
+
+const report=[];
 for(const preset of presets)for(const seated of [false,true]){
-  const scene=create(preset,seated);const buffer=await new GLTFExporter().parseAsync(scene,{binary:true,onlyVisible:true});const filename=preset.id+(seated?'-seated':'')+'.glb';fs.writeFileSync(path.join(dir,filename),Buffer.from(buffer));let meshes=0,triangles=0;scene.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}});const b=new THREE.Box3().setFromObject(scene),size=b.getSize(new THREE.Vector3());stats.push({filename,bytes:buffer.byteLength,meshes,triangles,height:size.y,width:size.x,depth:size.z,sourceBodyVertices:sourceBodyIds.length,sourceBodyTriangles:faces.length,fullyClothed:true});
+  const model=create(preset,seated);const data=await new GLTFExporter().parseAsync(model,{binary:true,onlyVisible:true});
+  const filename=preset.id+(seated?'-seated':'')+'.glb';fs.writeFileSync(path.join(dir,filename),Buffer.from(data));
+  let meshes=0,triangles=0;model.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}});
+  const size=new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+  report.push({filename,bytes:data.byteLength,meshes,triangles,height:size.y,width:size.x,depth:size.z,sourceBodyVertices:bodyIds.length,sourceBodyTriangles:base.faces.length,fullyClothed:true,uvSeamsPreserved:true,garment:assets[preset.outfit].fragment,hair:assets[preset.hair].fragment});
 }
-fs.writeFileSync(path.join(dir,'character-build-report.json'),JSON.stringify({builtAt:new Date().toISOString(),source:'MakeHuman hm08 CC0 official mesh + official Asian male/female young/old targets',variants:stats},null,2));console.log(JSON.stringify(stats,null,2));
+fs.writeFileSync(path.join(dir,'character-build-report.json'),JSON.stringify({builtAt:new Date().toISOString(),source:'MakeHuman Community CC0 hm08 and official system assets',variants:report},null,2));
+console.log(JSON.stringify(report,null,2));

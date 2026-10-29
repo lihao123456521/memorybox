@@ -1,23 +1,24 @@
-import { Component, Suspense, lazy, useEffect, useReducer, useState } from 'react';
+import { Component, Suspense, lazy, useEffect, useReducer, useRef, useState } from 'react';
 import type { ErrorInfo, FormEvent, ReactNode } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, Box, Check, ChevronRight, Flower2, Home, Leaf, LoaderCircle, Mail, Maximize2, MousePointer2, RotateCcw, Send, Sparkles, TrainFront, Trash2, Volume2, VolumeX, X, Users, Footprints, LayoutGrid, ChevronUp, ChevronDown, ChevronLeft } from 'lucide-react';
 import type { AnchorId, CollectionEntry, Draft, Phase, CharacterPreset, NavigationMode, RoomZone } from './types';
-import { anchorLabels, anchorSubtitles, composeLocal, defaultLetter, exampleDraft, templates } from './data';
+import { getAnchorLabels, getAnchorSubtitles, composeLocal, defaultLetter, exampleDraft, templates } from './data';
 import { loadState, reducer } from './store';
 import * as api from './api';
 import { chime, setSound } from './audio';
+import WorldMap from './WorldMap';
 
 const portable=location.protocol==='file:';
 const Scene = lazy(()=>import('./scenes/Scene'));
-const journeyPhases:Phase[]=['exploration','decision','real-branch','imagined-branch','letter','transition-out'];
+const journeyPhases:Phase[]=['transition-in','exploration','decision','real-branch','imagined-branch','letter','transition-out'];
 const anchors:AnchorId[]=['tv','doll','photo'];
 const companions:{id:CharacterPreset;label:string;description:string;initial:string}[]=[
-  {id:'young-man',label:'青年男性',description:'约 25 岁 · 日常衬衣',initial:'青'},
-  {id:'elder-man',label:'长者男性',description:'约 68 岁 · 米色衬衣',initial:'长'},
-  {id:'young-woman',label:'青年女性',description:'约 25 岁 · 简洁便装',initial:'青'},
+  {id:'young-man',label:'青年男性',description:'约 25 岁 · 夹克与牛仔裤',initial:'青'},
+  {id:'elder-man',label:'长者男性',description:'约 68 岁 · 细框眼镜与衬衣',initial:'长'},
+  {id:'young-woman',label:'青年女性',description:'约 25 岁 · 衬衣与裙装',initial:'青'},
   {id:'elder-woman',label:'长者女性',description:'约 68 岁 · 家常衣着',initial:'长'},
 ];
-const zoneLabels:Record<RoomZone,string>={living:'客厅',kitchen:'厨房',balcony:'阳台'};
+const zoneLabels:Record<RoomZone,string>={living:'客厅',kitchen:'厨房',balcony:'阳台',bedroom:'卧室',study:'书房',concourse:'候车大厅',platform:'站台',carriage:'车厢',classroom:'教室',corridor:'走廊'};
 
 class SceneBoundary extends Component<{children:ReactNode},{failed:boolean}> {
   state={failed:false};
@@ -29,6 +30,7 @@ class SceneBoundary extends Component<{children:ReactNode},{failed:boolean}> {
 function App(){
   const [state,dispatch]=useReducer(reducer,undefined,loadState);
   const e=state.experience;
+  const anchorLabels=getAnchorLabels(e.draft.templateId),anchorSubtitles=getAnchorSubtitles(e.draft.templateId);
   const [backend,setBackend]=useState<'checking'|'online'|'offline'>('checking');
   const [selected,setSelected]=useState<AnchorId|null>(null);
   const [hint,setHint]=useState(false);
@@ -40,6 +42,8 @@ function App(){
   const [notice,setNotice]=useState('');
   const [letterOpen,setLetterOpen]=useState<string|null>(null);
   const [sceneReady,setSceneReady]=useState(false);
+  const [memoryReady,setMemoryReady]=useState(false),[passageRevealing,setPassageRevealing]=useState(false);
+  const passageStart=useRef(0);
   const [viewMode,setViewMode]=useState<NavigationMode>(()=>{try{return localStorage.getItem('memorybox-view-mode')==='overview'?'overview':'walk';}catch{return 'walk';}});
   const [companion,setCompanion]=useState<CharacterPreset>(()=>{try{const saved=localStorage.getItem('memorybox-companion');return companions.some(c=>c.id===saved)?saved as CharacterPreset:'elder-woman';}catch{return 'elder-woman';}});
   const [characterPicker,setCharacterPicker]=useState(false);
@@ -63,9 +67,15 @@ function App(){
   useEffect(()=>{
     if(e.phase!=='transition-in'&&e.phase!=='transition-out')return;
     const next=e.phase==='transition-in'?'exploration':'return-room';
-    const timer=setTimeout(()=>dispatch({type:'phase',phase:next}),reducedMotion?250:2200);
-    return ()=>clearTimeout(timer);
-  },[e.phase,reducedMotion]);
+    if(e.phase==='transition-in'&&!memoryReady)return;
+    if(reducedMotion||e.phase==='transition-out'){
+      const timer=setTimeout(()=>dispatch({type:'phase',phase:next}),reducedMotion?250:2400);
+      return()=>clearTimeout(timer);
+    }
+    let finish:ReturnType<typeof setTimeout>|undefined;
+    const begin=setTimeout(()=>{setPassageRevealing(true);finish=setTimeout(()=>dispatch({type:'phase',phase:'exploration'}),2000);},Math.max(0,2200-(performance.now()-passageStart.current)));
+    return()=>{clearTimeout(begin);if(finish)clearTimeout(finish);};
+  },[e.phase,reducedMotion,memoryReady]);
   useEffect(()=>{setSelected(null);},[e.phase]);
   useEffect(()=>{try{localStorage.setItem('memorybox-companion',companion);}catch{/* Keep working when storage is unavailable. */}},[companion]);
   useEffect(()=>{try{localStorage.setItem('memorybox-view-mode',viewMode);}catch{/* The current view remains usable without persistent preferences. */}},[viewMode]);
@@ -90,7 +100,8 @@ function App(){
     if(busy||!e.story)return;setBusy(true);
     try{const memory=await api.createMemory(e.draft,e.story);dispatch({type:'memory-id',id:memory.id});dispatch({type:'story',story:memory.story});setBackend('online');}
     catch{setBackend('offline');setNotice(portable?'已进入离线体验。草稿与信件只保存在当前浏览器。':'已进入离线演示模式。草稿与信件会保存在此浏览器，可以稍后同步。');}
-    setViewMode('walk');setZone('living');go('transition-in');setBusy(false);
+    setMemoryReady(false);setPassageRevealing(false);passageStart.current=performance.now();
+    setViewMode('walk');setZone(e.draft.templateId==='station'?'concourse':e.draft.templateId==='classroom'?'classroom':'living');go('transition-in');setBusy(false);
   }
   function startLetter(){
     if(!e.letterText)dispatch({type:'letter',text:defaultLetter(e.draft,e.recipient)});
@@ -125,10 +136,10 @@ function App(){
   const modalBack=()=>{if(e.phase==='template-select')go('memory-room');if(e.phase==='memory-input')go('template-select');if(e.phase==='memory-confirm')go('memory-input');if(e.phase==='decision')go('exploration');if(e.phase==='letter')go(e.branch==='imagined'?'imagined-branch':'real-branch');if(e.phase==='collection')go('memory-room');};
   const isPanel=['template-select','memory-input','memory-confirm','decision','letter','collection'].includes(e.phase);
 
-  return <main className={`app phase-${e.phase} ${memoryWorld?'in-memory':''} ${reducedMotion?'reduced-motion':''} ${largeText?'large-type':''} ${memoryWorld?`mode-${viewMode}`:''}`} data-phase={e.phase}>
+  return <main className={`app phase-${e.phase} ${memoryWorld?'in-memory':''} ${reducedMotion?'reduced-motion':''} ${largeText?'large-type':''} ${memoryWorld?`mode-${viewMode}`:''}`} data-phase={e.phase} data-template={e.draft.templateId}>
     <div className="scene-layer" aria-label={memoryWorld?'可以行走探索的三维记忆房间':'可以拖动旋转的三维现实桌面'}>
       <SceneBoundary><Suspense fallback={<div className="scene-loader"><Box size={32}/><span>把阳光放进房间…</span></div>}>
-        <Scene world={memoryWorld?'memory':'present'} phase={e.phase} visited={e.visited} selected={selected} branch={e.branch} realDeparture={e.draft.actualChoice===exampleDraft().actualChoice} collected={state.collection.length>0} hint={hint} resetKey={resetKey} reducedMotion={reducedMotion} viewMode={viewMode} companion={companion} characterPreview={characterPicker} navigationPaused={characterPicker||busy||isPanel} moveIntent={moveIntent} onZoneChange={setZone} onAnchor={visit} onBox={()=>{if(e.phase==='landing')go('memory-room');else if(['memory-room','return-room'].includes(e.phase))openCollection();}} onReady={()=>setSceneReady(true)}/>
+        <Scene templateId={e.draft.templateId} world={memoryWorld?'memory':'present'} phase={e.phase} visited={e.visited} selected={selected} branch={e.branch} realDeparture={e.draft.actualChoice===exampleDraft(e.draft.templateId).actualChoice} collected={state.collection.length>0} hint={hint} resetKey={resetKey} reducedMotion={reducedMotion} viewMode={viewMode} companion={companion} characterPreview={characterPicker} navigationPaused={characterPicker||busy||isPanel} moveIntent={moveIntent} onZoneChange={setZone} onAnchor={visit} onBox={()=>{if(e.phase==='landing')go('memory-room');else if(['memory-room','return-room'].includes(e.phase))openCollection();}} onReady={()=>setSceneReady(true)} onWorldReady={()=>setMemoryReady(true)}/>
       </Suspense></SceneBoundary>
     </div>
     <div className="paper-grain" aria-hidden="true"/>
@@ -160,7 +171,7 @@ function App(){
 
         {e.phase==='memory-input'&&<><div className="panel-heading compact"><p className="overline">{activeTemplate.name}</p><h2>把那一天，讲给盒子听。</h2><p>不必记得所有细节，几个熟悉的瞬间就够了。</p></div><form onSubmit={confirmDraft}><div className="interview-heading"><span><span className="mini-dot"/> 只整理你确认的事实</span><button type="button" className="sample-button" onClick={()=>{dispatch({type:'draft',draft:exampleDraft(e.draft.templateId)});setNotice('已填入虚构的演示故事，你可以自由修改。');}}><Sparkles size={14}/> 用示例故事体验</button></div><div className="form-grid"><label>那是哪一年？<input name="year" value={e.draft.year} onChange={ev=>editDraft('year',ev.target.value)} placeholder="例如：2005" required maxLength={12}/></label><label>你想回到哪里？<input name="place" value={e.draft.place} onChange={ev=>editDraft('place',ev.target.value)} placeholder="例如：奶奶家的客厅" required maxLength={100}/></label><label>记忆里重要的人<input name="importantPerson" value={e.draft.importantPerson} onChange={ev=>editDraft('importantPerson',ev.target.value)} required maxLength={60}/></label><label>想珍藏的一件物品<input name="importantObject" value={e.draft.importantObject} onChange={ev=>editDraft('importantObject',ev.target.value)} required maxLength={100}/></label><label className="full-width">那一天，发生了什么？<textarea name="storyText" value={e.draft.storyText} onChange={ev=>editDraft('storyText',ev.target.value)} rows={3} required minLength={3} maxLength={4000}/></label><label className="full-width">当时，你做了怎样的选择？<input name="actualChoice" value={e.draft.actualChoice} onChange={ev=>editDraft('actualChoice',ev.target.value)} required maxLength={500}/></label></div><div className="panel-footer"><span>演示房间采用绘本场景，不上传照片。</span><button className="primary" disabled={busy||Object.values(e.draft).some(v=>!v.trim())}>{busy?<LoaderCircle size={17} className="spin"/>:null}整理这段记忆 <ArrowRight size={17}/></button></div></form></>}
 
-        {e.phase==='memory-confirm'&&e.story&&<><div className="panel-heading"><p className="overline">在出发之前</p><h2>这是你想珍藏的那一天。</h2><p>确认下面的事实，我们就轻轻推开那扇门。</p></div><div className="confirmation-card"><div className="confirmation-year">{e.draft.year}<span>那年 · 那一天</span></div><div className="confirmation-details"><h3>{e.draft.place}</h3><p>与 {e.draft.importantPerson} · {e.draft.importantObject}</p><blockquote>{e.draft.storyText}</blockquote><span>你当年的选择</span><p>{e.draft.actualChoice}</p></div></div><div className="fact-note"><Leaf size={18}/><p><strong>记忆的事实，由你确认。</strong>另一条路线会明确标为「AI 想象 · 并非真实历史」。场景与角色为模板布景，不是对真实人物和住处的精确复原。{e.draft.templateId!=='old-home'?' 本模板目前共用老屋 3D 空间与三件象征道具。':''}</p></div><div className="panel-footer"><span>模板叙事 · 无实时 AI 调用</span><button className="primary" disabled={busy} onClick={()=>void enterMemory()}>{busy?<LoaderCircle className="spin" size={17}/>:<Box size={17}/>}走进那一天 <ArrowRight size={17}/></button></div></>}
+        {e.phase==='memory-confirm'&&e.story&&<><div className="panel-heading"><p className="overline">在出发之前</p><h2>这是你想珍藏的那一天。</h2><p>确认下面的事实，我们就轻轻推开那扇门。</p></div><div className="confirmation-card"><div className="confirmation-year">{e.draft.year}<span>那年 · 那一天</span></div><div className="confirmation-details"><h3>{e.draft.place}</h3><p>与 {e.draft.importantPerson} · {e.draft.importantObject}</p><blockquote>{e.draft.storyText}</blockquote><span>你当年的选择</span><p>{e.draft.actualChoice}</p></div></div><div className="fact-note"><Leaf size={18}/><p><strong>记忆的事实，由你确认。</strong>另一条路线会明确标为「AI 想象 · 并非真实历史」。场景与角色为模板布景，不是对真实人物和住处的精确复原。</p></div><div className="panel-footer"><span>模板叙事 · 无实时 AI 调用</span><button className="primary" disabled={busy} onClick={()=>void enterMemory()}>{busy?<LoaderCircle className="spin" size={17}/>:<Box size={17}/>}走进那一天 <ArrowRight size={17}/></button></div></>}
 
         {e.phase==='decision'&&e.story&&<><div className="panel-heading"><p className="overline">回忆走到了这一刻</p><h2>让记忆，再停留一会儿。</h2><p>{e.story.decision.question}</p></div><div className="branch-options"><button className="branch-option real-option" onClick={()=>{dispatch({type:'branch',branch:'real'});chime();}}><span className="branch-icon"><Home size={28} strokeWidth={1}/></span><span className="overline">THE WAY IT WAS</span><h3>重温真实路线</h3><p>沿着你确认的记忆，<br/>再走一遍那时的选择。</p><span className="branch-bottom">你确认的真实回忆 <ArrowRight size={17}/></span></button><button className="branch-option imagined-option" onClick={()=>{dispatch({type:'branch',branch:'imagined'});chime();}}><span className="branch-icon"><Sparkles size={28} strokeWidth={1}/></span><span className="overline">WHAT IF WE STAYED</span><h3>{e.story.decision.imagined.label}</h3><p>给那时的自己，<br/>留一点想象的自由。</p><span className="branch-bottom">AI 想象 · 并非真实历史 <ArrowRight size={17}/></span></button></div><p className="gentle-note">没有更好的答案，只有另一种看见。你可以回来重新选择。</p></>}
 
@@ -171,7 +182,7 @@ function App(){
     </div>}
 
     {e.phase==='exploration'&&<>
-      <div className="journey-title fade-in"><span className="eyebrow">CHAPTER 01 / {e.draft.year} · 记忆片段</span><h2>{e.draft.place}</h2><p>有些日子，当时觉得再普通不过。</p>{e.draft.templateId!=='old-home'&&<span className="shared-scene-note">{activeTemplate.name} · 共用老屋场景预览</span>}</div>
+      <div className="journey-title fade-in"><span className="eyebrow">CHAPTER 01 / {e.draft.year} · 记忆片段</span><h2>{e.draft.place}</h2><p>有些日子，当时觉得再普通不过。</p><span className="scene-location-note">{e.draft.templateId==='old-home'?'客厅 · 厨房 · 阳台 · 卧室 · 书房':e.draft.templateId==='station'?'候车大厅 · 站台 · 可进入车厢':'教室 · 阳光走廊'}</span></div>
       <div className="scene-tools"><button className="tool-button" onClick={()=>{setSelected(null);setResetKey(k=>k+1);}} aria-label="重置视角"><Maximize2 size={16}/><span>重置视角</span></button><button className={`tool-button ${hint?'active':''}`} aria-label={hint ? "收起提示" : "寻找线索"} onClick={()=>setHint(!hint)}><Sparkles size={16}/><span>{hint?'收起提示':'寻找线索'}</span></button></div>
       {selected?<section className="anchor-story fade-in" aria-live="polite"><div className="anchor-story-top"><span className="overline">{String(anchors.indexOf(selected)+1).padStart(2,'0')} / 记忆碎片</span><button className="icon-button" aria-label="关闭物品故事" onClick={()=>setSelected(null)}><X size={17}/></button></div><h2>{anchorSubtitles[selected]}</h2><p>{e.story?.anchors.find(a=>a.id===selected)?.narration}</p><button className="text-button" onClick={()=>setSelected(null)}>继续探索 <ArrowRight size={16}/></button></section>:<div className="explore-instruction"><MousePointer2 size={15}/><span>{viewMode==="walk"?"WASD / 方向键移动 · 拖动环顾 · 轻触旧物":"拖动旋转 · 滚轮缩放 · 轻触发光的旧物"}</span></div>}
       <div className="exploration-footer"><div className="progress-copy"><span className="overline">PIECES OF A DAY</span><span>记忆碎片 <strong>{e.visited.length}<small> / 3</small></strong></span></div><div className="fragment-list">{anchors.map((a,i)=><button key={a} aria-label={`回看${anchorLabels[a]}`} className={`fragment ${e.visited.includes(a)?'found':''}`} onClick={()=>{if(e.visited.includes(a))visit(a);else setHint(true);}}><span>{e.visited.includes(a)?<Check size={14}/>:String(i+1).padStart(2,'0')}</span>{anchorLabels[a]}</button>)}</div><button className="primary decision-unlock" disabled={e.visited.length<3} onClick={()=>{setSelected(null);go('decision');}}>{e.visited.length<3?'找到三件旧物，回忆就会展开':'走到那扇门前'}<ArrowRight size={16}/></button></div>
@@ -185,19 +196,19 @@ function App(){
       </div>
       <div className="zone-indicator" aria-live="polite"><span className="mini-dot"/>正在{zoneLabels[zone]}<span>{zone==='living'?'熟悉的旧物，留在原来的位置':zone==='kitchen'?'门后，是生活曾经发出的声音':'走到窗边，让风吹进这段回忆'}</span></div>
       {viewMode==='walk'&&!selected&&!characterPicker&&<div className="walk-controls" aria-label="触屏移动控制"><span>移动</span><div className="walk-dpad">{[{name:'向前移动',forward:1,right:0,icon:<ChevronUp size={20}/>,cls:'north'},{name:'向左移动',forward:0,right:-1,icon:<ChevronLeft size={20}/>,cls:'west'},{name:'向后移动',forward:-1,right:0,icon:<ChevronDown size={20}/>,cls:'south'},{name:'向右移动',forward:0,right:1,icon:<ChevronRight size={20}/>,cls:'east'}].map(dir=><button key={dir.cls} className={dir.cls} aria-label={dir.name} onPointerDown={event=>{event.preventDefault();event.currentTarget.setPointerCapture(event.pointerId);setMoveIntent({forward:dir.forward,right:dir.right});}} onPointerUp={()=>setMoveIntent({forward:0,right:0})} onPointerCancel={()=>setMoveIntent({forward:0,right:0})} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setMoveIntent({forward:dir.forward,right:dir.right});}}} onKeyUp={()=>setMoveIntent({forward:0,right:0})}>{dir.icon}</button>)}</div><small>WASD / 方向键</small></div>}
-      {!selected&&!characterPicker&&<div className="room-minimap" aria-label={`房间平面示意，目前在${zoneLabels[zone]}`}><svg viewBox="0 0 136 112" role="img" aria-hidden="true"><path d="M9 9H89V43H9Z" className={zone==='kitchen'?'map-active':''}/><path d="M9 44H89V103H9Z" className={zone==='living'?'map-active':''}/><path d="M90 49H125V97H90Z" className={zone==='balcony'?'map-active':''}/><path className="map-door" d="M34 43H47M89 67V81"/><text x="49" y="29">厨房</text><text x="49" y="78">客厅</text><text x="108" y="77">阳台</text></svg><span>经过门口，走进另一处空间</span></div>}
+      {!selected&&!characterPicker&&<div className="room-minimap" aria-label={`空间平面示意，目前在${zoneLabels[zone]}`}><WorldMap templateId={e.draft.templateId} zone={zone}/><span>经过门口，走进另一处空间</span></div>}
       {characterPicker&&<div className="character-scrim"><section className="character-picker" role="dialog" aria-modal="true" aria-label="选择陪伴角色"><div className="character-picker-heading"><div><span className="overline">FACES IN A MEMORY</span><h2>让熟悉的身影，陪你坐一会儿。</h2></div><button className="icon-button" onClick={()=>setCharacterPicker(false)} aria-label="关闭人物设置"><X size={18}/></button></div><p>选择场景中的外观。记忆里的人是谁，仍以你的讲述为准。</p><div className="character-grid">{companions.map(person=><button key={person.id} className={`character-choice ${companion===person.id?'selected':''}`} onClick={()=>setCompanion(person.id)} aria-pressed={companion===person.id}><span className={`character-silhouette ${person.id}`}><Users size={28} strokeWidth={1}/><span>{person.initial}</span></span><strong>{person.label}</strong><small>{person.description}</small><span className="character-check">{companion===person.id?<Check size={15}/>:null}</span></button>)}</div><div className="character-picker-footer"><span>四种独立人物 · 自然比例与衣着</span><button className="primary" onClick={()=>setCharacterPicker(false)}>让这位陪伴我 <ArrowRight size={16}/></button></div></section></div>}
     </>}
 
     {(e.phase==='real-branch'||e.phase==='imagined-branch')&&e.story&&<>
       <div className={`branch-label ${e.branch==='imagined'?'imagined':''}`}>{e.branch==='imagined'?<Sparkles size={15}/>:<Check size={15}/>}<span>{e.branch==='imagined'?'AI 想象 · 并非真实历史':'你确认的真实记忆'}</span></div>
-      <section className="branch-story fade-in"><span className="eyebrow">{e.branch==='real'?'THE WAY IT WAS':'ANOTHER LITTLE POSSIBILITY'}</span><h2>{e.branch==='real'?'让那一天，保持你记得的样子。':'你决定，把告别放慢一点。'}</h2>{e.story.decision[e.branch||'real'].script.map((line,i)=><p key={i}>{line}</p>)}<div className="branch-story-actions"><button className="text-button" onClick={()=>go('decision')}><RotateCcw size={15}/> 重新选择</button><button className="primary" onClick={startLetter}>写一封信 <ArrowRight size={16}/></button></div></section>
-      <div className="branch-scene-caption">{e.branch==='imagined'?'灯亮了。桌边多了一杯茶，那个下午被轻轻延长。':'你确认的那一刻，被轻轻保留。'}</div>
+      <section className="branch-story fade-in"><span className="eyebrow">{e.branch==='real'?'THE WAY IT WAS':'ANOTHER LITTLE POSSIBILITY'}</span><h2>{e.branch==='real'?'让那一天，保持你记得的样子。':e.draft.templateId==='station'?'出发之前，再认真告别一次。':e.draft.templateId==='classroom'?'让那句谢谢，终于被听见。':'你决定，把告别放慢一点。'}</h2>{e.story.decision[e.branch||'real'].script.map((line,i)=><p key={i}>{line}</p>)}<div className="branch-story-actions"><button className="text-button" onClick={()=>go('decision')}><RotateCcw size={15}/> 重新选择</button><button className="primary" onClick={startLetter}>写一封信 <ArrowRight size={16}/></button></div></section>
+      <div className="branch-scene-caption">{e.branch==='imagined'?(e.draft.templateId==='station'?'列车仍将出发，而告别可以不那么匆忙。':e.draft.templateId==='classroom'?'纸条终于递出，阳光还停留在那张课桌上。':'灯亮了。桌边多了一杯茶，那个下午被轻轻延长。'):'你确认的那一刻，被轻轻保留。'}</div>
     </>}
 
     {e.phase==='return-room'&&<section className="return-copy fade-in"><div className="eyebrow">WELCOME BACK / 回到此刻</div><h1>回忆无法重来，<br/>但爱可以被<br/><span className="handwritten">重新看见。</span></h1><p>你回到了同一张桌子前。<br/>盒子里，多了一只布娃娃、一张回忆卡，<br/>还有你刚刚写下的那封信。</p><button className="primary" onClick={openCollection}>打开我的收藏 <BookOpen size={17}/></button><button className="text-button" onClick={()=>dispatch({type:'restart'})}>再走进一段回忆 <ArrowRight size={16}/></button></section>}
 
-    {(e.phase==='transition-in'||e.phase==='transition-out')&&<div className={`transition-veil ${e.phase}`}><div><span className="transition-flower"><Flower2 size={38} strokeWidth={.7}/></span><p>{e.phase==='transition-in'?'把现在轻轻放下。':'把珍惜的，带回现在。'}</p><span>{e.phase==='transition-in'?`${e.draft.year} · ${e.draft.place}`:'同一张桌子，同一束光。'}</span><button onClick={()=>go(e.phase==='transition-in'?'exploration':'return-room')}>跳过动画 <ChevronRight size={14}/></button></div></div>}
+    {(e.phase==='transition-in'||e.phase==='transition-out')&&<div className={`transition-veil ${e.phase} ${passageRevealing?'revealing':''}`}><div><span className="transition-flower"><Flower2 size={38} strokeWidth={.7}/></span><p>{e.phase==='transition-in'?'把现在轻轻放下。':'把珍惜的，带回现在。'}</p><span>{e.phase==='transition-in'?`${e.draft.year} · ${e.draft.place}`:'同一张桌子，同一束光。'}</span><button onClick={()=>go(e.phase==='transition-in'?'exploration':'return-room')}>跳过动画 <ChevronRight size={14}/></button></div></div>}
 
     <footer className="status-bar"><span className={`connection ${backend}`}><span/>{backend==='online'?'本机服务已连接 · 模板体验':backend==='offline'?'离线演示模式 · 仅此浏览器保存':'正在连接本机服务…'}</span><span className="status-right">{memoryWorld?'现实 → 回忆 → 现实':'A STORY TO KEEP, A PLACE TO RETURN.'}</span>{!sceneReady&&<span className="loading-indicator"><LoaderCircle size={12} className="spin"/> 正在布置房间</span>}</footer>
     {(notice||storageWarning)&&<div className="toast" role="status"><span>{storageWarning?'浏览器存储空间不可用，请保持此页面打开，并连接本机后端保存。':notice}</span><button className="icon-button" onClick={()=>{setNotice('');setStorageWarning(false);}} aria-label="关闭提示"><X size={15}/></button></div>}
