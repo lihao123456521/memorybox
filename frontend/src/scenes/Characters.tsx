@@ -1,24 +1,34 @@
 import { Component, Suspense, useEffect, useMemo, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { Html, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import { animateHumanRig, createHumanRig } from './HumanRig';
+import type { HumanAnimation, HumanMotion } from './HumanRig';
 
 export type CharacterPreset = 'young-man'|'elder-man'|'young-woman'|'elder-woman';
 export const CHARACTER_PRESETS:{id:CharacterPreset;label:string;description:string}[] = [
   {id:'young-man',label:'青年男性',description:'利落短发，蓝色翻领衬衣，牛仔裤与皮鞋'},
-  {id:'elder-man',label:'长者男性',description:'年长面部形态，灰白短发、细框眼镜与条纹衬衫'},
+  {id:'elder-man',label:'长者男性',description:'年长面部形态，灰白短发、细框眼镜与浅灰细格衬衫'},
   {id:'young-woman',label:'青年女性',description:'自然成年比例，长发马尾，衬衫与裙装'},
-  {id:'elder-woman',label:'长者女性',description:'年长面部形态，银灰辫发、细框眼镜与日常长袖便装'},
+  {id:'elder-woman',label:'长者女性',description:'年长面部形态，银灰短发、细框眼镜与鼠尾草绿针织开衫'},
 ];
 type Pose='standing'|'seated';
-type Props={preset:CharacterPreset;position?:[number,number,number];rotation?:number;pose?:Pose;visible?:boolean};
-const colors:Record<CharacterPreset,{skin:string;shirt:string;hair:string;trousers:string;height:number}>={
-  'young-man':{skin:'#c99f85',shirt:'#8aabb4',hair:'#282622',trousers:'#3d4d58',height:1.78},
-  'elder-man':{skin:'#c3a089',shirt:'#b3ab95',hair:'#c1bdb3',trousers:'#535349',height:1.72},
-  'young-woman':{skin:'#d7af98',shirt:'#a86e61',hair:'#302a26',trousers:'#4c5552',height:1.66},
-  'elder-woman':{skin:'#c7a28a',shirt:'#7e9283',hair:'#b7b5ad',trousers:'#535249',height:1.64},
-};
+export type CharacterAnimationRef={current:HumanAnimation};
+type Props={preset:CharacterPreset;position?:[number,number,number];rotation?:number;pose?:Pose;visible?:boolean;
+  motion?:HumanMotion;animationTime?:number;walkingSpeed?:number;reducedMotion?:boolean;
+  animationClock?:{current:{time:number;playing:boolean;revision:number}};animation?:CharacterAnimationRef};
+
+// Geometry and textures belong to the asset cache. Only bones and artist-facing material
+// parameters are local to an instance, so two identical presets can animate independently.
+const textureCache=new Map<string,Promise<THREE.Texture>>();
+function sharedTexture(url:string,normal:boolean){
+  let pending=textureCache.get(url);
+  if(!pending){pending=new THREE.TextureLoader().loadAsync(url).then(texture=>{
+    texture.colorSpace=normal?THREE.NoColorSpace:THREE.SRGBColorSpace;texture.flipY=true;texture.anisotropy=4;return texture;
+  });textureCache.set(url,pending);}
+  return pending;
+}
 
 class CharacterBoundary extends Component<{children:ReactNode;fallback:ReactNode},{failed:boolean}>{
   state={failed:false};
@@ -26,91 +36,77 @@ class CharacterBoundary extends Component<{children:ReactNode;fallback:ReactNode
   render(){return this.state.failed?this.props.fallback:this.props.children;}
 }
 
-function HumanAsset({preset,pose}:{preset:CharacterPreset;pose:Pose}){
+function HumanAsset({preset,pose,motion='idle',animationTime,walkingSpeed=.65,reducedMotion=false,animationClock,animation}:Props&{pose:Pose}){
   const {gl,invalidate}=useThree();
   const {scene}=useGLTF(`/assets/models/${preset}${pose==='seated'?'-seated':''}.glb`);
-  const model=useMemo(()=>{
-    const copy=scene.clone(true);
-    copy.name=`glb-character-${preset}`;
-    copy.traverse(o=>{if(o instanceof THREE.Mesh){o.castShadow=true;o.receiveShadow=true;o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();}});
-    return copy;
-  },[scene]);
+  const rig=useMemo(()=>createHumanRig(scene,preset,pose==='seated'),[scene,preset,pose]);
+  const lastShadow=useRef(-1);
+  const sampledRevision=useRef(-1);
+  const lastSample=useRef<{model:THREE.Group;time:number;motion:HumanMotion;speed:number;reduced:boolean}|null>(null);
+  const model=rig.model;
+  useFrame(({clock},dt)=>{
+    const state=animation?.current,time=animationClock?.current.time??state?.time??animationTime??clock.elapsedTime;
+    const currentMotion=state?.motion??motion,speed=state?.speed??walkingSpeed;
+    if(animationClock&&(sampledRevision.current!==animationClock.current.revision||lastSample.current?.model!==model)){
+      for(const name of ['idle','walk','wave','talk'] as const)rig.blend[name]=name===currentMotion?1:0;
+      sampledRevision.current=animationClock.current.revision;lastSample.current=null;
+    }
+    const last=lastSample.current;
+    if(animationClock&&!animationClock.current.playing&&last&&last.model===model&&last.time===time&&last.motion===currentMotion&&last.speed===speed&&last.reduced===reducedMotion)return;
+    animateHumanRig(rig,currentMotion,time,speed,animationClock&&!animationClock.current.playing?0:Math.min(dt,.1),reducedMotion);
+    lastSample.current={model,time,motion:currentMotion,speed,reduced:reducedMotion};
+    // Animated shadows need another shadow pass; the scene otherwise caches its static map.
+    if(currentMotion!=='idle'&&(!reducedMotion||currentMotion==='walk')&&clock.elapsedTime-lastShadow.current>.12){gl.shadowMap.needsUpdate=true;lastShadow.current=clock.elapsedTime;}
+  });
   useEffect(()=>{
-    let alive=true;const textures:THREE.Texture[]=[];
-    const loader=new THREE.TextureLoader();
-    const load=(url:string,normal:boolean,apply:(texture:THREE.Texture)=>void)=>loader.load(url,texture=>{
-      if(!alive){texture.dispose();return;}textures.push(texture);
-      texture.colorSpace=normal?THREE.NoColorSpace:THREE.SRGBColorSpace;texture.flipY=true;texture.anisotropy=4;
-      apply(texture);gl.shadowMap.needsUpdate=true;invalidate();
-    },undefined,()=>{/* Complete cloth geometry remains visible if an optional texture fails. */});
+    let alive=true;const pending:Promise<unknown>[]=[];
+    model.userData.characterTextureErrors=[];
+    const load=(url:string,normal:boolean,apply:(texture:THREE.Texture)=>void)=>{pending.push(sharedTexture(url,normal).then(texture=>{
+      if(!alive)return;apply(texture);gl.shadowMap.needsUpdate=true;invalidate();
+    }).catch(()=>{if(alive)model.userData.characterTextureErrors.push(url);}));};
     const byName=new Map<string,THREE.MeshStandardMaterial[]>();
     model.traverse(o=>{if(o instanceof THREE.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material]){
       if(material instanceof THREE.MeshStandardMaterial){const list=byName.get(material.name)||[];list.push(material);byName.set(material.name,list);}
     }});
     for(const [name,materials]of byName){
-      if(name==='skin')load(`/assets/models/skins/${preset}.webp`,false,texture=>materials.forEach(m=>{m.map=texture;m.color.set('#fff');m.roughness=.67;m.needsUpdate=true;}));
+      if(name==='reference:hair-strands')materials.forEach(m=>{m.roughness=.88;m.envMapIntensity=.25;});
+      // These maps were baked offline from the reviewed v5 multi-view references.
+      // Keep independent eye/brow meshes on their original, seam-correct UV textures.
+      if(name==='skin'){
+        load(`/assets/models/reference-materials-v5/${preset}-skin-color.webp`,false,texture=>materials.forEach(m=>{m.map=texture;m.color.set('#fff');m.roughness=.64;m.envMapIntensity=.55;m.needsUpdate=true;}));
+        load(`/assets/models/reference-materials-v5/${preset}-skin-normal.webp`,true,texture=>materials.forEach(m=>{m.normalMap=texture;m.normalScale.set(.18,.18);m.needsUpdate=true;}));
+      }
       if(!name.startsWith('cc0:'))continue;
       const id=name.slice(4);
+      if(['male_casualsuit01','male_casualsuit03','female_elegantsuit01','elder-shirt'].includes(id)){
+        load(`/assets/models/reference-materials-v5/${preset}-outfit-color.webp`,false,texture=>materials.forEach(m=>{m.map=texture;m.color.set('#fff');m.roughness=.89;m.envMapIntensity=.32;m.needsUpdate=true;}));
+        load(`/assets/models/reference-materials-v5/${preset}-outfit-normal.webp`,true,texture=>materials.forEach(m=>{m.normalMap=texture;m.normalScale.set(.24,.24);m.needsUpdate=true;}));
+        continue;
+      }
+      if(id==='brown')materials.forEach(m=>{m.roughness=.29;m.envMapIntensity=.38;});
+      if(['short04','short02','ponytail01','braid01'].includes(id))materials.forEach(m=>{m.roughness=.88;m.envMapIntensity=.25;});
       load(`/assets/models/materials/${id}-color.webp`,false,texture=>materials.forEach(m=>{m.map=texture;m.needsUpdate=true;}));
       if(['male_casualsuit01','male_casualsuit03','female_elegantsuit01','elder-shirt','shoes04'].includes(id)){
         load(`/assets/models/materials/${id}-normal.webp`,true,texture=>materials.forEach(m=>{m.normalMap=texture;m.normalScale.set(.48,.48);m.needsUpdate=true;}));
       }
     }
-    return()=>{alive=false;textures.forEach(t=>t.dispose());for(const list of byName.values())list.forEach(m=>m.dispose());};
+    void Promise.allSettled(pending).then(()=>{if(alive){model.userData.characterReady=true;gl.shadowMap.needsUpdate=true;invalidate();}});
+    return()=>{alive=false;};
   },[model,preset,gl,invalidate]);
+  useEffect(()=>()=>{rig.skeleton.dispose();rig.materials.forEach(m=>m.dispose());},[rig]);
   return <primitive object={model} dispose={null}/>;
 }
 
-function Ellipsoid({p,s,color}:{p:[number,number,number];s:[number,number,number];color:string}){
-  return <mesh position={p} scale={s} castShadow><sphereGeometry args={[1,24,18]}/><meshStandardMaterial color={color} roughness={.84}/></mesh>;
-}
-function Limb({a,b,r,color}:{a:[number,number,number];b:[number,number,number];r:number;color:string}){
-  const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),direction=end.clone().sub(start);
-  const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),direction.clone().normalize());
-  return <mesh position={start.add(end).multiplyScalar(.5)} quaternion={q} castShadow><capsuleGeometry args={[r,Math.max(.001,direction.length()-r*2),8,16]}/><meshStandardMaterial color={color} roughness={.94}/></mesh>;
+function CharacterLoadError(){
+  return <Html position={[0,1.25,0]} center><div role="status" style={{width:170,padding:'10px 14px',borderRadius:10,background:'rgba(25,30,33,.85)',color:'#f3efe5',fontSize:12,lineHeight:1.6,textAlign:'center',boxShadow:'0 8px 30px #0003'}}>人物模型加载失败<br/>请刷新后重试</div></Html>;
 }
 
-/** Complete adult, fully clothed fallback; never substitutes a naked body on load failure. */
-function ClothedFallback({preset,pose}:{preset:CharacterPreset;pose:Pose}){
-  const c=colors[preset],seated=pose==='seated',drop=seated?.44:0,hip=.91-drop,head=1.62-drop;
-  const female=preset.endsWith('woman'),elder=preset.startsWith('elder');
-  return <group scale={c.height/1.76} name={`fully-clothed-fallback-${preset}`}>
-    <Ellipsoid p={[0,1.25-drop,.015]} s={[female?.18:.205,.30,.12]} color={c.shirt}/>
-    <Ellipsoid p={[0,.94-drop,0]} s={[.173,.15,.12]} color={c.trousers}/>
-    <Limb a={[0,1.44-drop,0]} b={[0,1.54-drop,.008]} r={.048} color={c.skin}/>
-    <Ellipsoid p={[0,head,.014]} s={[.081,.113,.082]} color={c.skin}/>
-    <Ellipsoid p={[0,head+.061,-.008]} s={[.085,.065,.079]} color={c.hair}/>
-    {female&&<Ellipsoid p={[0,head+.014,-.053]} s={elder?[.047,.058,.049]:[.083,.11,.051]} color={c.hair}/>}
-    <Ellipsoid p={[0,head-.004,.091]} s={[.014,.026,.018]} color={c.skin}/>
-    <Ellipsoid p={[0,head-.046,.085]} s={[.023,.004,.005]} color="#aa7d70"/>
-    {[-1,1].map(side=><group key={side}>
-      <Ellipsoid p={[side*.082,head-.008,.004]} s={[.015,.029,.018]} color={c.skin}/>
-      <Ellipsoid p={[side*.031,head+.015,.086]} s={[.011,.006,.004]} color="#ddd8cd"/>
-      <Ellipsoid p={[side*.031,head+.015,.09]} s={[.004,.005,.002]} color="#302d28"/>
-      <Ellipsoid p={[side*.031,head+.034,.084]} s={[.018,.002,.003]} color={c.hair}/>
-      <Limb a={[side*.185,1.43-drop,0]} b={[side*.228,1.17-drop,.022]} r={.057} color={c.shirt}/>
-      <Limb a={[side*.228,1.17-drop,.022]} b={[side*.24,.96-drop,seated?.15:.045]} r={.045} color={c.shirt}/>
-      <Ellipsoid p={[side*.24,.913-drop,seated?.16:.047]} s={[.035,.055,.022]} color={c.skin}/>
-      {[0,1,2,3].map(i=><Limb key={i} a={[side*(.219+i*.013),.89-drop,seated?.166:.052]} b={[side*(.219+i*.013),.848-drop+(i===0?.008:0),seated?.17:.056]} r={.0055} color={c.skin}/>)}
-      <Limb a={[side*.223,.931-drop,seated?.18:.065]} b={[side*.207,.898-drop,seated?.193:.082]} r={.007} color={c.skin}/>
-      <Limb a={[side*.103,hip,0]} b={[side*.115,seated?.47:.47,seated?.39:.025]} r={.085} color={c.trousers}/>
-      <Limb a={[side*.115,.47,seated?.39:.025]} b={[side*.117,.10,seated?.40:.012]} r={.062} color={c.trousers}/>
-      <Ellipsoid p={[side*.117,.05,seated?.46:.073]} s={[.057,.044,.112]} color="#39352f"/>
-      <Ellipsoid p={[side*.117,.017,seated?.46:.073]} s={[.059,.012,.114]} color="#292a26"/>
-      {elder&&<mesh position={[side*.032,head+.014,.095]} scale={[1,.79,1]}><torusGeometry args={[.022,.0015,6,24]}/><meshStandardMaterial color="#716d61" roughness={.5} metalness={.3}/></mesh>}
-    </group>)}
-    {[-.08,.08].map((x,i)=><Limb key={i} a={[x*.35,1.49-drop,.067]} b={[x,1.43-drop,.118]} r={.009} color={c.shirt}/>)}
-    {[0,1,2,3].map(i=><Ellipsoid key={i} p={[0,1.37-drop-i*.075,.139]} s={[.0035,.0035,.002]} color="#d5cdbb"/>)}
-  </group>;
-}
-
-/** One unit is one metre. Root y=0 corresponds to the floor for either pose. */
-export function Character({preset,position=[0,0,0],rotation=0,pose='standing',visible=true}:Props){
-  const breathing=useRef<THREE.Group>(null);
-  useFrame(({clock})=>{if(breathing.current){const reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;breathing.current.scale.y=reduced?1:1+Math.sin(clock.elapsedTime*1.2)*.0012;breathing.current.rotation.y=reduced?0:Math.sin(clock.elapsedTime*.21)*.006;}});
+/** One unit is one metre; +Z faces forward. Path movement belongs to the parent. */
+export function Character({preset,position=[0,0,0],rotation=0,pose='standing',visible=true,...animation}:Props){
   if(!visible)return null;
-  const fallback=<ClothedFallback preset={preset} pose={pose}/>;
   return <group position={position} rotation={[0,rotation,0]} name={`character-${preset}-${pose}`}>
-    <group ref={breathing}><CharacterBoundary key={`${preset}-${pose}`} fallback={fallback}><Suspense fallback={fallback}><HumanAsset preset={preset} pose={pose}/></Suspense></CharacterBoundary></group>
+    <CharacterBoundary key={`${preset}-${pose}`} fallback={<CharacterLoadError/>}>
+      <Suspense fallback={null}><HumanAsset preset={preset} pose={pose} {...animation}/></Suspense>
+    </CharacterBoundary>
   </group>;
 }

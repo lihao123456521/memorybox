@@ -9,22 +9,38 @@ import MusicBox from './MusicBox';
 function Camera({ phase, resetKey, reducedMotion }: Pick<SceneProps, 'phase' | 'resetKey' | 'reducedMotion'>) {
   const { camera, size } = useThree(), controls = useRef<OrbitControlsImpl>(null);
   const destination = useRef<{ eye: THREE.Vector3; target: THREE.Vector3 } | null>(null);
+  const passage = useRef<{ started: number; eye: THREE.Vector3; target: THREE.Vector3 } | null>(null);
   const mobile = size.width < 700, transition = phase === 'transition-in';
   useEffect(() => {
-    const portraitFit = Math.max(1, 1 / (size.width / size.height));
-    const open = phase !== 'landing';
-    const eye = mobile ? new THREE.Vector3(5.4, 5.6, 7.8).multiplyScalar(portraitFit * 1.16) : new THREE.Vector3(6.25, open ? 7.875 : 7.50, 9.375);
-    const target = mobile ? new THREE.Vector3(.30, open ? 1.8 : 1.0, 0) : new THREE.Vector3(-1.5, open ? 1.65 : .35, 0);
+    const portraitFit = Math.max(1, .77 / (size.width / size.height)), open = phase !== 'landing';
+    const eye = mobile ? new THREE.Vector3(5.0, open ? 6.6 : 5.9, open ? 9.0 : 8.0).multiplyScalar(portraitFit * 1.06) : new THREE.Vector3(open ? 6.3 : 5.5, open ? 7.4 : 6.3, open ? 9.8 : 8.6);
+    const target = mobile ? new THREE.Vector3(.30, open ? 1.90 : 1.0, 0) : new THREE.Vector3(-1.20, open ? 1.86 : .65, 0);
     if (camera instanceof THREE.PerspectiveCamera) { camera.fov = mobile ? 37 : 30; camera.updateProjectionMatrix(); }
-    destination.current = transition ? { eye: new THREE.Vector3(.35, 1.74, .85), target: new THREE.Vector3(.20, .85, -.30) } : { eye, target };
+    if (transition) {
+      destination.current = null;
+      passage.current = { started: performance.now(), eye: camera.position.clone(), target: controls.current?.target.clone() ?? target };
+    } else {
+      passage.current = null; destination.current = { eye, target }; camera.up.set(0, 1, 0);
+    }
   }, [phase, resetKey, size.width, size.height, camera]);
   useFrame((_, dt) => {
-    if (!destination.current || !controls.current) return;
-    const a = reducedMotion ? 1 : 1 - Math.exp(-dt * (transition ? 2.0 : 3.4));
+    if (!controls.current) return;
+    if (transition && passage.current) {
+      if (reducedMotion) return;
+      const start = passage.current, t = THREE.MathUtils.clamp((performance.now() - start.started) / 2600, 0, 1);
+      const eased = t * t * (3 - 2 * t), endEye = new THREE.Vector3(-.16, 2.82, 2.50);
+      const curve = new THREE.CubicBezierCurve3(start.eye, new THREE.Vector3(start.eye.x * .82 + 1, start.eye.y + .5, start.eye.z * .8), new THREE.Vector3(1.5, 3.5, 3.6), endEye);
+      camera.position.copy(curve.getPoint(eased));
+      const target = start.target.clone().lerp(new THREE.Vector3(-.49, 2.65, .03), THREE.MathUtils.smoothstep(t, 0, .82));
+      controls.current.target.copy(target); camera.up.set(-Math.sin(t * Math.PI) * .035, 1, 0); camera.lookAt(target);
+      return;
+    }
+    if (!destination.current) return;
+    const a = reducedMotion ? 1 : 1 - Math.exp(-dt * 3.4);
     camera.position.lerp(destination.current.eye, a); controls.current.target.lerp(destination.current.target, a); controls.current.update();
     if (camera.position.distanceTo(destination.current.eye) < .006) destination.current = null;
   });
-  return <OrbitControls key={`${resetKey}-${mobile}`} ref={controls} makeDefault target={mobile ? [.3, 1.05, 0] : [-1.5, 1.05, 0]} enablePan={false} enableDamping dampingFactor={.065} minDistance={transition ? .2 : 5.6} maxDistance={mobile ? 45 : 22} minPolarAngle={.25} maxPolarAngle={1.34} enabled={!transition} onStart={() => { destination.current = null; }} />;
+  return <OrbitControls key={resetKey + '-' + mobile} ref={controls} makeDefault target={mobile ? [.3, 1.3, 0] : [-1.2, 1.3, 0]} enablePan={false} enableDamping dampingFactor={.065} minDistance={transition ? .2 : 5.6} maxDistance={mobile ? 45 : 22} minPolarAngle={.25} maxPolarAngle={1.40} enabled={!transition} onStart={() => { destination.current = null; }} />;
 }
 
 function Lighting() {
@@ -48,7 +64,7 @@ function Diagnostics() {
   useFrame(({ clock }) => {
     if (clock.elapsedTime - last.current < .18) return; last.current = clock.elapsedTime;
     let count = 0; scene.traverse(o => { if (o instanceof THREE.Mesh) count++; });
-    const c = gl.domElement; c.dataset.world = 'present'; c.dataset.sceneRevision = 'mechanical-musicbox-v3'; c.dataset.meshCount = String(count); c.dataset.triangles = String(gl.info.render.triangles); c.dataset.cameraPosition = camera.position.toArray().map(v => v.toFixed(3)).join(','); c.dataset.mechanism = 'pinned-cylinder,44-tuned-comb-teeth,3-meshing-spur-gears,spring-barrel,governor,winding-key,planar-mirror';
+    const c = gl.domElement; c.dataset.world = 'present'; c.dataset.sceneRevision = 'atelier-musicbox-v4'; c.dataset.meshCount = String(count); c.dataset.triangles = String(gl.info.render.triangles); c.dataset.cameraPosition = camera.position.toArray().map(v => v.toFixed(3)).join(','); c.dataset.mechanism = 'recessed-pinned-cylinder,44-tuned-comb-teeth,3-meshing-spur-gears,spring-barrel,governor,winding-key,oval-planar-mirror,mother-of-pearl-inlay,velvet-lining,rotating-crystal-rose,petal-time-gate';
     const rect = c.getBoundingClientRect(), point = new THREE.Vector3(.30, 1.00, 0).project(camera);
     c.dataset.boxScreen = JSON.stringify({ x: rect.left + (point.x + 1) * rect.width / 2, y: rect.top + (1 - point.y) * rect.height / 2 });
   });
@@ -60,7 +76,6 @@ function World(props: SceneProps) {
   return <>
     <color attach="background" args={['#101615']} /><fog attach="fog" args={['#101615', 18, 50]} />
     <Lighting />
-    <mesh position={[0, 4.6, 5]} rotation={[0, Math.PI, 0]} name="studio-card-visible-in-lid-mirror"><planeGeometry args={[4, 1.45]} /><meshBasicMaterial color="#d2cbb7" toneMapped={false} /></mesh>
     <mesh position={[0, -.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow><planeGeometry args={[120, 120]} /><meshStandardMaterial color="#090f0d" roughness={.94} metalness={.02} /></mesh>
     <mesh position={[.3, -.095, 0]} receiveShadow castShadow><cylinderGeometry args={[4.6, 4.64, .16, 128]} /><meshStandardMaterial color="#202620" roughness={.48} metalness={.1} /></mesh>
     <mesh position={[.3, -.005, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow><circleGeometry args={[4.57, 128]} /><meshStandardMaterial color="#1b241f" roughness={.78} /></mesh>

@@ -1,7 +1,9 @@
-import {Suspense} from 'react';
+import {useRef} from 'react';
+import {useFrame,useThree} from '@react-three/fiber';
+import * as THREE from 'three';
 import type {SceneProps} from '../types';
 import type {WorldLayout} from './navigation';
-import {Character} from './Characters';
+import {companionFootprint,isStoryBranch,readStoryTime,StoryCompanion} from './StoryActions';
 import {AnchorObject,Part,Rod,Sign,useArchitectureMaterials} from './Architecture';
 import type {ArchitectureMaterials,V3} from './Architecture';
 
@@ -19,8 +21,24 @@ export const CLASSROOM_LAYOUT:WorldLayout={
     ...Array.from({length:5},(_,i)=>{const a=-.525+i*.21,b=a+.21,s=Math.sin(.82),c=Math.cos(.82),back=i<2?-.1:-.058;return {xMin:5.53+s*a+c*back,xMax:5.53+s*b+c*.04,zMin:4.66+c*a-s*.04,zMax:4.66+c*b-s*back};}),
     ...[3.3,4.7].map(z=>({xMin:5,xMax:5.08,zMin:z-.0375,zMax:z+.0375})),
     ...desks.map(({x,z})=>({xMin:x-.55,xMax:x+.55,zMin:z-.32,zMax:z+.8})),
+    companionFootprint('classroom'),
   ]
 };
+function ThankyouNote({props}:{props:SceneProps}){
+  const light=useRef<THREE.PointLight>(null),{gl}=useThree();
+  useFrame(()=>{
+    const t=readStoryTime(props),focus=isStoryBranch(props)&&props.branch==='imagined'&&t<3;
+    // The original note stays on its actual desk. The imagined act is speaking
+    // the gratitude aloud, rather than showing a hand-off that never occurs.
+    const strength=focus?.55*Math.sin(Math.PI*Math.min(t/3,1)):.0;
+    if(light.current)light.current.intensity=strength;
+    gl.domElement.dataset.noteStatus='on-desk';gl.domElement.dataset.noteFocus=strength.toFixed(3);
+  });
+  return <group name="graduation-thankyou-note" position={[1.9,.813,0]}>
+    <group rotation={[-Math.PI/2,0,-.18]}><Part s={[.24,.16,.003]} color="#e3d8b9" radius={.003}/><Sign text="谢谢你" small="一张没来得及递出的纸条" p={[0,0,.003]} s={[.23,.15,.002]} background="#e3d8b9" color="#797464"/></group>
+    <pointLight ref={light} position={[0,.27,0]} color="#ffe3b1" intensity={0} distance={1.3} decay={2}/>
+  </group>;
+}
 function Desk({p,m,index}:{p:V3;m:ArchitectureMaterials;index:number}){
   return <group position={p}>
     <Part p={[0,.76,0]} s={[1.05,.065,.62]} radius={.035} material={m.wood}/><Part p={[0,.71,.15]} s={[1,.025,.25]} color="#514b37"/>
@@ -58,7 +76,7 @@ export default function Classroom(props:SceneProps){
     <AnchorObject id="tv" onAnchor={id=>explore&&props.onAnchor(id)}><Part p={[0,1.76,-6.85]} s={[6.6,1.9,.11]} material={m.wood} radius={.02}/><Sign text="毕业快乐 · 后会有期" small="THANK YOU FOR BEING PART OF MY YOUTH" p={[0,1.76,-6.77]} s={[6.4,1.69,.03]} background="#28443d" color="#c0cbb5"/><Part p={[0,.8,-6.67]} s={[6.6,.06,.15]} material={m.silver}/>{[-2,-1.5,1.9].map(x=><Part key={x} p={[x,.84,-6.65]} s={[.12,.015,.02]} color="#dfd4b6"/>)}<Part p={[2.5,.83,-6.65]} s={[.17,.05,.07]} color="#7f7763"/></AnchorObject>
     <Part p={[0,.86,-6.02]} s={[1.95,.08,.72]} material={m.wood}/><Part p={[0,.44,-6.06]} s={[1.65,.8,.52]} color="#88714f"/>
     {desks.map(({x,z},i)=><Desk key={x+':'+z} p={[x,0,z]} m={m} index={i}/>)}
-    <AnchorObject id="doll" onAnchor={id=>explore&&props.onAnchor(id)}><group position={[1.9,.813,0]} rotation={[-Math.PI/2,0,-.18]}><Part s={[.24,.16,.003]} color="#e3d8b9" radius={.003}/><Sign text="谢谢你" small="一张没来得及递出的纸条" p={[0,0,.003]} s={[.23,.15,.002]} background="#e3d8b9" color="#797464"/></group></AnchorObject>
+    <AnchorObject id="doll" onAnchor={id=>explore&&props.onAnchor(id)}><ThankyouNote props={props}/></AnchorObject>
     <Part p={[-4.49,.49,1.4]} s={[.61,.98,1.3]} material={m.wood}/><Part p={[-4.12,.7,1.4]} s={[.025,.45,1.2]} material={m.glass}/>
     <AnchorObject id="photo" onAnchor={id=>explore&&props.onAnchor(id)}><Sign text="我们的毕业纪念册" small="EVERY ORDINARY DAY WAS A GIFT" p={[-4.09,1.2,1.4]} s={[1.2,.7,.035]} rotation={[0,Math.PI/2,0]} background="#68766b" color="#e5dcc2"/></AnchorObject>
     <Sign text="高二 · 三班" small="CLASS THREE" p={[5.14,3.13,4]} s={[1.15,.35,.035]} rotation={[0,Math.PI/2,0]}/>
@@ -73,8 +91,8 @@ export default function Classroom(props:SceneProps){
       {[-2.5,2.5].map(x=><group key={x}><Rod a={[x,3.62,z]} b={[x,3.2,z]} r={.008} material={m.iron}/><Part p={[x,3.18,z]} s={[1.25,.08,.16]} color="#b9beb2"/><mesh position={[x,3.132,z]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[1.16,.1]}/><meshStandardMaterial color="#eee9ce" emissive="#e5dfbd" emissiveIntensity={.7}/></mesh></group>)}
     </group>)}
     <Sign text="值日生：认真过好今天" small="DAY BY DAY" p={[3.95,2.23,-6.88]} s={[1.25,.85,.04]} background="#c6bf9f" color="#526151"/>
-    <Suspense fallback={null}><Character preset={props.companion||'young-woman'} position={[-2.35,0,-1.6]} rotation={.5}/></Suspense>
-    {props.branch==='imagined'&&<><Part p={[-.4,.82,0]} s={[.24,.004,.17]} color="#ede0b9"/><pointLight position={[0,2,-1]} intensity={1.5} color="#ffdfa2" distance={7}/></>}
+    <StoryCompanion template="classroom" preset={props.companion||'young-woman'} props={props}/>
+    {props.branch==='imagined'&&<pointLight position={[0,2,-1]} intensity={1.5} color="#ffdfa2" distance={7}/>}
     <Part p={[-11,-.6,-1]} s={[10,.15,22]} color="#8a9870"/>
     {[-5,1,6].map(z=><group key={z}><Rod a={[-9,-.5,z]} b={[-9,4,z]} r={.13} color="#716c50"/>{[0,1,2,3,4].map(i=><mesh key={i} position={[-9+Math.cos(i*2.4)*1.1,3.1+i*.28,z+Math.sin(i*2.4)]} scale={[1.7,1.05,1.5]} castShadow><icosahedronGeometry args={[1,2]}/><meshStandardMaterial color={i%2?'#7d926a':'#84986b'} roughness={.9}/></mesh>)}</group>)}
     <Part p={[12,1.25,-6]} s={[7,4,14]} color="#b3b5a4"/>

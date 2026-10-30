@@ -1,16 +1,16 @@
 {
-  "version": 3,
+  "version": 4,
   "mode": "local-original-and-cc0",
   "lux3dIntegrated": false,
   "assets": [
     {
       "assetId": "memory-box",
-      "label": "机械八音盒与可开合镜面盒盖",
+      "label": "珠贝胡桃木八音盒、绒布内衬与旋转水晶玫瑰",
       "assetType": "model",
       "source": "procedural",
       "modelUrl": null,
       "license": "project-original",
-      "generator": "Original Three.js mechanical meshes, pinned cylinder, tuned comb, gears, hinges and planar mirror",
+      "generator": "Original Three.js inlaid walnut, velvet lining, engraved movement window, crystal rose and mirrored lid",
       "lux3dTaskId": null,
       "fallbackAssetId": "memory-box",
       "component": "MusicBox"
@@ -105,53 +105,57 @@
       "assetId": "character-young-man",
       "label": "青年男性",
       "assetType": "model",
-      "source": "derived-cc0",
+      "source": "derived-cc0-and-generated-references",
       "modelUrl": "/assets/models/young-man.glb",
       "license": "CC0-1.0 graphical assets; original fitting and conversion code",
-      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
+      "generator": "MakeHuman CC0 continuous body and clothing; image_gen multi-view reference-guided geometry and UV materials; not automatic image-to-3D",
       "lux3dTaskId": null,
-      "fallbackAssetId": "clothed-fallback-young-man",
+      "fallbackAssetId": null,
       "component": "Character",
-      "provenance": "docs/character-assets-v3.md"
+      "provenance": "docs/character-reference-materials-v5.md",
+      "runtimeAnimation": "21-bone continuous skinning from original MakeHuman CC0 bind-pose coordinates; idle, walk, wave, talk; independent instances"
     },
     {
       "assetId": "character-elder-man",
       "label": "长者男性",
       "assetType": "model",
-      "source": "derived-cc0",
+      "source": "derived-cc0-and-generated-references",
       "modelUrl": "/assets/models/elder-man.glb",
       "license": "CC0-1.0 graphical assets; original fitting and conversion code",
-      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
+      "generator": "MakeHuman CC0 continuous body and clothing; image_gen multi-view reference-guided geometry and UV materials; not automatic image-to-3D",
       "lux3dTaskId": null,
-      "fallbackAssetId": "clothed-fallback-elder-man",
+      "fallbackAssetId": null,
       "component": "Character",
-      "provenance": "docs/character-assets-v3.md"
+      "provenance": "docs/character-reference-materials-v5.md",
+      "runtimeAnimation": "21-bone continuous skinning from original MakeHuman CC0 bind-pose coordinates; idle, walk, wave, talk; independent instances"
     },
     {
       "assetId": "character-young-woman",
       "label": "青年女性",
       "assetType": "model",
-      "source": "derived-cc0",
+      "source": "derived-cc0-and-generated-references",
       "modelUrl": "/assets/models/young-woman.glb",
       "license": "CC0-1.0 graphical assets; original fitting and conversion code",
-      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
+      "generator": "MakeHuman CC0 continuous body and clothing; image_gen multi-view reference-guided geometry and UV materials; not automatic image-to-3D",
       "lux3dTaskId": null,
-      "fallbackAssetId": "clothed-fallback-young-woman",
+      "fallbackAssetId": null,
       "component": "Character",
-      "provenance": "docs/character-assets-v3.md"
+      "provenance": "docs/character-reference-materials-v5.md",
+      "runtimeAnimation": "21-bone continuous skinning from original MakeHuman CC0 bind-pose coordinates; idle, walk, wave, talk; independent instances"
     },
     {
       "assetId": "character-elder-woman",
       "label": "长者女性",
       "assetType": "model",
-      "source": "derived-cc0",
+      "source": "derived-cc0-and-generated-references",
       "modelUrl": "/assets/models/elder-woman.glb",
       "license": "CC0-1.0 graphical assets; original fitting and conversion code",
-      "generator": "MakeHuman CC0 body, complete clothes/hair/shoes/eyes, per-face UVs and smoothed head; local GLB build",
+      "generator": "MakeHuman CC0 continuous body and clothing; image_gen multi-view reference-guided geometry and UV materials; not automatic image-to-3D",
       "lux3dTaskId": null,
-      "fallbackAssetId": "clothed-fallback-elder-woman",
+      "fallbackAssetId": null,
       "component": "Character",
-      "provenance": "docs/character-assets-v3.md"
+      "provenance": "docs/character-reference-materials-v5.md",
+      "runtimeAnimation": "21-bone continuous skinning from original MakeHuman CC0 bind-pose coordinates; idle, walk, wave, talk; independent instances"
     },
     {
       "assetId": "room-pbr-materials",
@@ -208,6 +212,16 @@
       "author": "Greg Zaal",
       "bytes": 1476953,
       "sha256": "a02c9615adeba91a753c3e4737c3ce7a719273df822eeaa85d24982bd43c9ecb",
+      "lux3dTaskId": null
+    },
+    {
+      "assetId": "local-tv-programme",
+      "label": "旧电视原创动态节目",
+      "assetType": "texture",
+      "source": "procedural",
+      "license": "project-original",
+      "component": "LocalTelevision",
+      "generator": "Original offline CanvasTexture animation with play, pause and replay",
       "lux3dTaskId": null
     }
   ]

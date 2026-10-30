@@ -1,0 +1,597 @@
+{
+  "version": 5,
+  "pipeline": "generated turnarounds first -> manual landmark/mask review -> CPU UV bake -> independent glTF material binding",
+  "sourceAttribution": "MakeHuman Community CC0 base/proxy UV assets plus original AI-generated v5 character turnarounds and original procedural fabric patterns",
+  "runtimeNetwork": false,
+  "totalBytes": 2910508,
+  "assets": [
+    {
+      "id": "elder-woman-skin",
+      "preset": "elder-woman",
+      "material": "skin",
+      "color": "/assets/models/reference-materials-v5/elder-woman-skin-color.webp",
+      "normal": "/assets/models/reference-materials-v5/elder-woman-skin-normal.webp",
+      "colorBytes": 480450,
+      "normalBytes": 244420,
+      "colorSha256": "a76f8d9bd4a41a4e922eebe45061f3ff39d6c622e747eeadc8c7e1812031673f",
+      "normalSha256": "a69e991ee7e89ca2fd8c1fea0a42f4b0a188975b844fff671639b085157f534a",
+      "colorSize": [
+        2048,
+        2048
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "referenceSkinMedian": [
+        203.75,
+        154.64999389648438,
+        130.5
+      ],
+      "projectedTexels": 182549,
+      "uvCoveredTexels": 2615778,
+      "sourceSkin": "source/elder-woman-skin-original.png",
+      "sourceSkinSha256": "e0c6317c2354ee54c16ad5f871293121e4eee697d16423536bb1db3641d56bc9",
+      "referenceLandmarks": {
+        "eyes": [
+          1492,
+          1590,
+          211
+        ],
+        "nose": [
+          1540,
+          275
+        ],
+        "mouth": [
+          1540,
+          316
+        ],
+        "chin": [
+          1540,
+          379
+        ],
+        "forehead": [
+          1540,
+          130
+        ]
+      },
+      "originalSkinMedian": [
+        207,
+        147,
+        111
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\elder-woman-turnaround.png",
+      "sourcePhotoSha256": "d9fade8ac3fb8656d761f8adb6c8f0b79a65b81bab3b6de30b5b5c056a180d0d",
+      "method": "Original CC0 UV base + masked landmark-aligned frontal photo tone/creases/lips; profile cheek tone; independent eyes and brows retained",
+      "limitations": "Conservative face mask deliberately omits photograph glasses, brows, hair and eyeballs; not a calibrated photogrammetric identity reconstruction",
+      "modelFaceLandmarkPositions": {
+        "left_eye": [
+          -0.28188544511795044,
+          5.737563133239746,
+          1.525331974029541
+        ],
+        "right_eye": [
+          0.30145978927612305,
+          5.735512733459473,
+          1.5203465223312378
+        ],
+        "nose": [
+          0.008813723921775818,
+          5.278579235076904,
+          1.626446008682251
+        ],
+        "lip": [
+          0.020100001245737076,
+          5.10230016708374,
+          1.5808000564575195
+        ],
+        "chin": [
+          0.005827491171658039,
+          4.72166633605957,
+          1.4528154134750366
+        ],
+        "forehead": [
+          0.008546171709895134,
+          6.290222644805908,
+          1.5055415630340576
+        ],
+        "left_lip": [
+          -0.198640376329422,
+          5.084689617156982,
+          1.532116174697876
+        ],
+        "right_lip": [
+          0.20288269221782684,
+          5.084407806396484,
+          1.531580924987793
+        ]
+      }
+    },
+    {
+      "id": "elder-woman-outfit",
+      "preset": "elder-woman",
+      "material": "cc0:elder-shirt",
+      "color": "/assets/models/reference-materials-v5/elder-woman-outfit-color.webp",
+      "normal": "/assets/models/reference-materials-v5/elder-woman-outfit-normal.webp",
+      "colorBytes": 15932,
+      "normalBytes": 139034,
+      "colorSha256": "377d73107b993082a4ecdfb3467887d91a2fb7bb9d59201838644e8fcc9407aa",
+      "normalSha256": "bbc2c9aa058aa513ecd33b568c8cfd63d7199db3f269c239e954aa48b966c6a2",
+      "colorSize": [
+        1024,
+        1024
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\elder-woman-turnaround.png",
+      "swatchRectangle": [
+        115,
+        217,
+        171,
+        283
+      ],
+      "referenceSwatchMedian": [
+        135,
+        137,
+        125
+      ],
+      "topColor": [
+        133.7,
+        141.55,
+        125.65
+      ],
+      "bottomColor": [
+        47,
+        48,
+        48
+      ],
+      "uvCoveredTexels": 646352,
+      "topConnectedComponents": 1,
+      "method": "Original offline woven/knit/twill patterns with reference photo fibre high-pass; actual MHCLO UV/world garment partition; no old red stripe diffuse",
+      "fabric": "knit"
+    },
+    {
+      "id": "elder-man-skin",
+      "preset": "elder-man",
+      "material": "skin",
+      "color": "/assets/models/reference-materials-v5/elder-man-skin-color.webp",
+      "normal": "/assets/models/reference-materials-v5/elder-man-skin-normal.webp",
+      "colorBytes": 446786,
+      "normalBytes": 258474,
+      "colorSha256": "496b80c6acea384b2dd41108781e258abec5459b6559bfc3f58b47dc8a82fdc7",
+      "normalSha256": "f023ef1cfeaf8002e6d1b87f4d3f247da320f729d3eda28eecc4cc7af537e9d5",
+      "colorSize": [
+        2048,
+        2048
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "referenceSkinMedian": [
+        180.75,
+        133.4499969482422,
+        111.1500015258789
+      ],
+      "projectedTexels": 108737,
+      "uvCoveredTexels": 2615778,
+      "sourceSkin": "source/elder-man-skin-original.png",
+      "sourceSkinSha256": "8b3232676c5b271b4f44ead68845155d93f15de641b6819561781e16701a6c59",
+      "referenceLandmarks": {
+        "eyes": [
+          1509,
+          1601,
+          177
+        ],
+        "nose": [
+          1555,
+          240
+        ],
+        "mouth": [
+          1556,
+          283
+        ],
+        "chin": [
+          1557,
+          351
+        ],
+        "forehead": [
+          1555,
+          104
+        ]
+      },
+      "originalSkinMedian": [
+        194,
+        119,
+        82
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\elder-man-turnaround.png",
+      "sourcePhotoSha256": "d41e08f6a2ab59b2d4e9bcc8ff3867221c1b7e2c50f6ffa0c0387ed2fc3b27db",
+      "method": "Original CC0 UV base + masked landmark-aligned frontal photo tone/creases/lips; profile cheek tone; independent eyes and brows retained",
+      "limitations": "Conservative face mask deliberately omits photograph glasses, brows, hair and eyeballs; not a calibrated photogrammetric identity reconstruction",
+      "modelFaceLandmarkPositions": {
+        "left_eye": [
+          -0.2896939516067505,
+          6.665922164916992,
+          1.252164602279663
+        ],
+        "right_eye": [
+          0.30984097719192505,
+          6.66251277923584,
+          1.2481013536453247
+        ],
+        "nose": [
+          0.008188636973500252,
+          6.141770362854004,
+          1.3492562770843506
+        ],
+        "lip": [
+          0.02810000069439411,
+          5.8993000984191895,
+          1.263800024986267
+        ],
+        "chin": [
+          0.007315848022699356,
+          5.570540428161621,
+          1.091098666191101
+        ],
+        "forehead": [
+          0.009335046634078026,
+          7.284646034240723,
+          1.2445757389068604
+        ],
+        "left_lip": [
+          -0.21240471303462982,
+          5.911913871765137,
+          1.230644941329956
+        ],
+        "right_lip": [
+          0.21671466529369354,
+          5.911266803741455,
+          1.2300150394439697
+        ]
+      }
+    },
+    {
+      "id": "elder-man-outfit",
+      "preset": "elder-man",
+      "material": "cc0:male_casualsuit03",
+      "color": "/assets/models/reference-materials-v5/elder-man-outfit-color.webp",
+      "normal": "/assets/models/reference-materials-v5/elder-man-outfit-normal.webp",
+      "colorBytes": 80936,
+      "normalBytes": 133342,
+      "colorSha256": "ce9a4adaa9ed5a5eee16efef928d9b7ac60afae9614cdfbb2a66e2c45c55b77e",
+      "normalSha256": "f4456bb7cac41291c2f7efcb36e60349109b51fcf04a26a9a756f50dbbafb246",
+      "colorSize": [
+        1024,
+        1024
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\elder-man-turnaround.png",
+      "swatchRectangle": [
+        132,
+        187,
+        188,
+        247
+      ],
+      "referenceSwatchMedian": [
+        183,
+        180,
+        180
+      ],
+      "topColor": [
+        181.7,
+        179.35,
+        174.15
+      ],
+      "bottomColor": [
+        43,
+        50,
+        61
+      ],
+      "uvCoveredTexels": 646352,
+      "topConnectedComponents": 1,
+      "method": "Original offline woven/knit/twill patterns with reference photo fibre high-pass; actual MHCLO UV/world garment partition; no old red stripe diffuse",
+      "fabric": "check"
+    },
+    {
+      "id": "young-woman-skin",
+      "preset": "young-woman",
+      "material": "skin",
+      "color": "/assets/models/reference-materials-v5/young-woman-skin-color.webp",
+      "normal": "/assets/models/reference-materials-v5/young-woman-skin-normal.webp",
+      "colorBytes": 280644,
+      "normalBytes": 121882,
+      "colorSha256": "27c3123a9dc48cfd6131b9267f5bd014ef8676dccdf066262f7594216ec1ae32",
+      "normalSha256": "3cb49c62f600126c8b631077094a21b68722ca52c4a3a9eff31a3678b7211c5b",
+      "colorSize": [
+        2048,
+        2048
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "referenceSkinMedian": [
+        202.3000030517578,
+        167.4499969482422,
+        147.75
+      ],
+      "projectedTexels": 161365,
+      "uvCoveredTexels": 2615778,
+      "sourceSkin": "source/young-woman-skin-original.png",
+      "sourceSkinSha256": "1d82f782b7d2da732229633bd2d14754d873fff53cdb1d088977bcf67ae19dde",
+      "referenceLandmarks": {
+        "eyes": [
+          1292,
+          1388,
+          212
+        ],
+        "nose": [
+          1341,
+          275
+        ],
+        "mouth": [
+          1341,
+          319
+        ],
+        "chin": [
+          1340,
+          386
+        ],
+        "forehead": [
+          1340,
+          135
+        ]
+      },
+      "originalSkinMedian": [
+        220,
+        170,
+        139
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\young-woman-turnaround.png",
+      "sourcePhotoSha256": "108df2a87fa32ab8794f694c90618fa69426e6a8d1fa54549949271d50907a23",
+      "method": "Original CC0 UV base + masked landmark-aligned frontal photo tone/creases/lips; profile cheek tone; independent eyes and brows retained",
+      "limitations": "Conservative face mask deliberately omits photograph glasses, brows, hair and eyeballs; not a calibrated photogrammetric identity reconstruction",
+      "modelFaceLandmarkPositions": {
+        "left_eye": [
+          -0.2910372018814087,
+          5.8246660232543945,
+          1.2357237339019775
+        ],
+        "right_eye": [
+          0.31255030632019043,
+          5.82529354095459,
+          1.2315012216567993
+        ],
+        "nose": [
+          0.008188636973500252,
+          5.365285873413086,
+          1.356284260749817
+        ],
+        "lip": [
+          0.020100001245737076,
+          5.163300037384033,
+          1.303800106048584
+        ],
+        "chin": [
+          0.0060564689338207245,
+          4.815786838531494,
+          1.1696771383285522
+        ],
+        "forehead": [
+          0.009005827829241753,
+          6.3729448318481445,
+          1.2102324962615967
+        ],
+        "left_lip": [
+          -0.20270957052707672,
+          5.167758941650391,
+          1.252811312675476
+        ],
+        "right_lip": [
+          0.20771466195583344,
+          5.1684346199035645,
+          1.2516075372695923
+        ]
+      }
+    },
+    {
+      "id": "young-woman-outfit",
+      "preset": "young-woman",
+      "material": "cc0:female_elegantsuit01",
+      "color": "/assets/models/reference-materials-v5/young-woman-outfit-color.webp",
+      "normal": "/assets/models/reference-materials-v5/young-woman-outfit-normal.webp",
+      "colorBytes": 15674,
+      "normalBytes": 111008,
+      "colorSha256": "aac0d17262f5ba6743f44984b4cc12d1a8031c1ebe1d6e5ee13f38a03efc28b9",
+      "normalSha256": "49ae420e73d9f814dde8a8722a31942494c47572652ea7f7dba4dcc88d7588cd",
+      "colorSize": [
+        1024,
+        1024
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\young-woman-turnaround.png",
+      "swatchRectangle": [
+        72,
+        224,
+        122,
+        278
+      ],
+      "referenceSwatchMedian": [
+        156,
+        106,
+        102
+      ],
+      "topColor": [
+        163.8,
+        110.55,
+        106.55
+      ],
+      "bottomColor": [
+        43,
+        49,
+        59
+      ],
+      "uvCoveredTexels": 535262,
+      "topConnectedComponents": 1,
+      "method": "Original offline woven/knit/twill patterns with reference photo fibre high-pass; actual MHCLO UV/world garment partition; no old red stripe diffuse",
+      "fabric": "knit"
+    },
+    {
+      "id": "young-man-skin",
+      "preset": "young-man",
+      "material": "skin",
+      "color": "/assets/models/reference-materials-v5/young-man-skin-color.webp",
+      "normal": "/assets/models/reference-materials-v5/young-man-skin-normal.webp",
+      "colorBytes": 296826,
+      "normalBytes": 173730,
+      "colorSha256": "6cbce2e3a7b25b6275401bc938a624a7f1881c909348391da10b4544ffa2298b",
+      "normalSha256": "e412cda8f00cb947345fd02ce57d778c03ab0c53bca9d89eae38af3dd2e26d28",
+      "colorSize": [
+        2048,
+        2048
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "referenceSkinMedian": [
+        210.8000030517578,
+        165.14999389648438,
+        140.8300018310547
+      ],
+      "projectedTexels": 169231,
+      "uvCoveredTexels": 2615778,
+      "sourceSkin": "source/young-man-skin-original.png",
+      "sourceSkinSha256": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5",
+      "referenceLandmarks": {
+        "eyes": [
+          1470,
+          1560,
+          199
+        ],
+        "nose": [
+          1516,
+          256
+        ],
+        "mouth": [
+          1517,
+          302
+        ],
+        "chin": [
+          1515,
+          369
+        ],
+        "forehead": [
+          1518,
+          134
+        ]
+      },
+      "originalSkinMedian": [
+        207,
+        160,
+        133
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\young-man-turnaround.png",
+      "sourcePhotoSha256": "44c3e1626587928d615986c539db8ef8e27ca3ed4d9ed838e2ae557332161fdb",
+      "method": "Original CC0 UV base + masked landmark-aligned frontal photo tone/creases/lips; profile cheek tone; independent eyes and brows retained",
+      "limitations": "Conservative face mask deliberately omits photograph glasses, brows, hair and eyeballs; not a calibrated photogrammetric identity reconstruction",
+      "modelFaceLandmarkPositions": {
+        "left_eye": [
+          -0.31249016523361206,
+          7.043118953704834,
+          1.3390462398529053
+        ],
+        "right_eye": [
+          0.33327826857566833,
+          7.043429374694824,
+          1.332911729812622
+        ],
+        "nose": [
+          0.008188636973500252,
+          6.537962913513184,
+          1.459710955619812
+        ],
+        "lip": [
+          0.02710000053048134,
+          6.284300327301025,
+          1.4168000221252441
+        ],
+        "chin": [
+          0.007430337369441986,
+          5.883298873901367,
+          1.2649109363555908
+        ],
+        "forehead": [
+          0.009335046634078026,
+          7.660581111907959,
+          1.2953801155090332
+        ],
+        "left_lip": [
+          -0.20864036679267883,
+          6.287149429321289,
+          1.3614211082458496
+        ],
+        "right_lip": [
+          0.21285614371299744,
+          6.286266803741455,
+          1.3614659309387207
+        ]
+      }
+    },
+    {
+      "id": "young-man-outfit",
+      "preset": "young-man",
+      "material": "cc0:male_casualsuit01",
+      "color": "/assets/models/reference-materials-v5/young-man-outfit-color.webp",
+      "normal": "/assets/models/reference-materials-v5/young-man-outfit-normal.webp",
+      "colorBytes": 43534,
+      "normalBytes": 67836,
+      "colorSha256": "bdc3e9f1cdc9699f6b3205be8370f451085e340449db04756bcf88e5bf192e95",
+      "normalSha256": "d6d6e560dbd019302a62a111c8ca16e331a04e6877980ad73d9f2977c572657b",
+      "colorSize": [
+        1024,
+        1024
+      ],
+      "normalSize": [
+        1024,
+        1024
+      ],
+      "sourcePhoto": "G:\\memorybox codex\\docs\\character-references\\v5\\young-man-turnaround.png",
+      "swatchRectangle": [
+        103,
+        230,
+        157,
+        290
+      ],
+      "referenceSwatchMedian": [
+        53,
+        63,
+        86
+      ],
+      "topColor": [
+        53,
+        70.8,
+        97.7
+      ],
+      "bottomColor": [
+        49,
+        66,
+        82
+      ],
+      "uvCoveredTexels": 375003,
+      "topConnectedComponents": 1,
+      "method": "Original offline woven/knit/twill patterns with reference photo fibre high-pass; actual MHCLO UV/world garment partition; no old red stripe diffuse",
+      "fabric": "twill"
+    }
+  ]
+}

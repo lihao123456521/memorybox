@@ -1,0 +1,256 @@
+{
+  "status": "pass",
+  "totalBytes": 2910508,
+  "maps": 16,
+  "uvCoverage": "all skin >2.6M texels; all garment >375K texels",
+  "checks": [
+    "16 nonempty decodable WebP maps",
+    "declared sizes and SHA256 match actual bytes",
+    "normal blue mean >235",
+    "all UV masks cover expected source mesh area",
+    "total runtime maps <5MB",
+    "independent eye and brow paths unchanged in Characters.tsx"
+  ],
+  "assets": [
+    {
+      "id": "elder-woman-skin",
+      "kind": "color",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 480450,
+      "rgbMean": [
+        197.417,
+        143.477,
+        110.868
+      ],
+      "std": 41.234
+    },
+    {
+      "id": "elder-woman-skin",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 244420,
+      "rgbMean": [
+        127.259,
+        127.093,
+        248.051
+      ],
+      "std": 58.492
+    },
+    {
+      "id": "elder-woman-outfit",
+      "kind": "color",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 15932,
+      "rgbMean": [
+        105.532,
+        111.917,
+        100.38
+      ],
+      "std": 40.591
+    },
+    {
+      "id": "elder-woman-outfit",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 139034,
+      "rgbMean": [
+        127.418,
+        127.117,
+        253.257
+      ],
+      "std": 59.576
+    },
+    {
+      "id": "elder-man-skin",
+      "kind": "color",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 446786,
+      "rgbMean": [
+        184.378,
+        126.245,
+        94.691
+      ],
+      "std": 47.046
+    },
+    {
+      "id": "elder-man-skin",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 258474,
+      "rgbMean": [
+        127.254,
+        127.107,
+        248.921
+      ],
+      "std": 58.644
+    },
+    {
+      "id": "elder-man-outfit",
+      "kind": "color",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 80936,
+      "rgbMean": [
+        134.807,
+        136.393,
+        134.808
+      ],
+      "std": 58.431
+    },
+    {
+      "id": "elder-man-outfit",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 133342,
+      "rgbMean": [
+        127.425,
+        127.093,
+        253.407
+      ],
+      "std": 59.775
+    },
+    {
+      "id": "young-woman-skin",
+      "kind": "color",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 280644,
+      "rgbMean": [
+        203.35,
+        158.24,
+        128.412
+      ],
+      "std": 36.36
+    },
+    {
+      "id": "young-woman-skin",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 121882,
+      "rgbMean": [
+        127.425,
+        127.143,
+        252.049
+      ],
+      "std": 59.332
+    },
+    {
+      "id": "young-woman-outfit",
+      "kind": "color",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 15674,
+      "rgbMean": [
+        137.948,
+        96.931,
+        96.221
+      ],
+      "std": 40.883
+    },
+    {
+      "id": "young-woman-outfit",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 111008,
+      "rgbMean": [
+        127.495,
+        127.112,
+        253.618
+      ],
+      "std": 59.693
+    },
+    {
+      "id": "young-man-skin",
+      "kind": "color",
+      "size": [
+        2048,
+        2048
+      ],
+      "bytes": 296826,
+      "rgbMean": [
+        198.333,
+        155.054,
+        129.328
+      ],
+      "std": 36.827
+    },
+    {
+      "id": "young-man-skin",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 173730,
+      "rgbMean": [
+        127.283,
+        127.131,
+        251.634
+      ],
+      "std": 59.21
+    },
+    {
+      "id": "young-man-outfit",
+      "kind": "color",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 43534,
+      "rgbMean": [
+        54.567,
+        74.13,
+        98.675
+      ],
+      "std": 19.542
+    },
+    {
+      "id": "young-man-outfit",
+      "kind": "normal",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 67836,
+      "rgbMean": [
+        127.662,
+        127.063,
+        254.17
+      ],
+      "std": 59.87
+    }
+  ]
+}

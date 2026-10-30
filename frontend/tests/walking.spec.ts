@@ -137,7 +137,7 @@ test('overview and close-up can return to the same walking position', async ({ p
   await page.getByRole('button', { name: '房间总览', exact: true }).click();
   await expect(canvas(page)).toHaveAttribute('data-navigation-mode', 'overview');
   await screenshot(page, 'walk-05-overview');
-  await page.getByRole('button', { name: '室内漫游', exact: true }).click();
+  await page.getByRole('button', { name: '第一人称', exact: true }).click();
   await expect(canvas(page)).toHaveAttribute('data-navigation-mode', 'walk');
   expect(floorDistance(before, await playerPosition(page))).toBeLessThan(.08);
   await expect(canvas(page)).toHaveAttribute('data-camera-look', lookBefore!);
@@ -145,7 +145,7 @@ test('overview and close-up can return to the same walking position', async ({ p
   await page.getByTestId('anchor-doll').click();
   await expect(page.locator('.anchor-story')).toBeVisible();
   await page.getByRole('button', { name: '继续探索', exact: true }).click();
-  await page.getByRole('button', { name: '室内漫游', exact: true }).click();
+  await page.getByRole('button', { name: '第一人称', exact: true }).click();
   expect(floorDistance(before, await playerPosition(page))).toBeLessThan(.08);
 });
 
@@ -207,7 +207,7 @@ test('portrait direction controls move without keyboard and letter input does no
     await page.getByTestId('anchor-' + id).click();
     await page.getByRole('button', { name: '继续探索', exact: true }).click();
   }
-  await page.getByRole('button', { name: '室内漫游', exact: true }).click();
+  await page.getByRole('button', { name: '第一人称', exact: true }).click();
   await page.getByRole('button', { name: '走到那扇门前', exact: true }).click();
   await page.getByRole('button', { name: /多留一个下午/ }).click();
   await page.getByRole('button', { name: '写一封信', exact: true }).click();

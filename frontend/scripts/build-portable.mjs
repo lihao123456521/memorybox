@@ -43,6 +43,12 @@ try {
     if(!url.startsWith('/assets/models/materials/'))throw Error('Character material escaped the runtime asset directory.');
     const file=url.slice('/assets/'.length);if(!files.includes(file))files.push(file);
   }
+  const referenceMaterials=JSON.parse(await readFile(resolve(assetRoot,'models','reference-materials-v5.json'),'utf8'));
+  if(!Array.isArray(referenceMaterials.assets)||referenceMaterials.assets.length<8)throw Error('Reference-guided character materials are incomplete.');
+  for(const entry of referenceMaterials.assets)for(const url of [entry.color,entry.normal].filter(Boolean)){
+    if(!url.startsWith('/assets/models/reference-materials-v5/'))throw Error('Reference material escaped its runtime directory.');
+    const file=url.slice('/assets/'.length);if(!files.includes(file))files.push(file);
+  }
   const assets={};const inventory=[];const glbs=[];
   for(const file of files){
     const path=resolve(assetRoot,file);assertInside(path,assetRoot);
@@ -71,7 +77,8 @@ try {
   const unsafeCssUrls=[...css.matchAll(/url\(\s*['"]?([^)'"\s]+)/g)].map(m=>m[1]).filter(u=>!u.startsWith('data:')&&!u.startsWith('#')&&!decodeURIComponent(u).startsWith('#'));
   if(unsafeCssUrls.length)throw Error(`CSS requires external resources: ${unsafeCssUrls.join(', ')}`);
   const builtAt=new Date().toISOString();
-  const metadata={version:'0.3.0',assetCount:inventory.length,builtAt,mode:'single-html-local-demo'};
+  const version=JSON.parse(await readFile(resolve(frontend,'package.json'),'utf8')).version;
+  const metadata={version,assetCount:inventory.length,builtAt,mode:'single-html-local-demo'};
   const prelude=`window.__MEMORYBOX_PORTABLE__=${JSON.stringify(metadata)};window.__MEMORYBOX_ASSETS__=${JSON.stringify(assets)};`;
   let html=await readFile(resolve(frontend,'index.html'),'utf8');
   // Carry the original runtime dependency notices with the standalone file too.

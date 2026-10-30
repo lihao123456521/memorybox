@@ -1,0 +1,151 @@
+{
+  "scope": "character geometry and procedural rig; application/release validation recorded separately",
+  "revision": "reference-v5-low-wave",
+  "capturedAt": "2026-10-30T03:58:37.206Z",
+  "modelBuiltAt": "2026-10-30T03:54:18.365Z",
+  "totalGlbBytes": 20022580,
+  "models": [
+    {
+      "filename": "young-man.glb",
+      "bytes": 2639316,
+      "meshes": 10,
+      "triangles": 88271,
+      "height": 1.7994806533679366,
+      "width": 0.5539064109325409,
+      "depth": 0.5245304852724075,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/male_casualsuit01/male_casualsuit01",
+      "hair": "hair/short04/short04",
+      "sha256": "e3868f90d4e1c1c932d1bf730031629f22340d6dcde46efd6efe5b8be6254bc9"
+    },
+    {
+      "filename": "young-man-seated.glb",
+      "bytes": 2639308,
+      "meshes": 10,
+      "triangles": 88271,
+      "height": 1.3876329399645329,
+      "width": 0.5539064109325409,
+      "depth": 0.734269455075264,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/male_casualsuit01/male_casualsuit01",
+      "hair": "hair/short04/short04",
+      "sha256": "8a607bc139e77772c95f7ae31a7051a55624de24814782afc7701e5ea6d287b6"
+    },
+    {
+      "filename": "elder-man.glb",
+      "bytes": 2320712,
+      "meshes": 12,
+      "triangles": 78048,
+      "height": 1.7435913095250726,
+      "width": 0.5257939696311951,
+      "depth": 0.4751078188419342,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/male_casualsuit03/male_casualsuit03",
+      "hair": "hair/short02/short02",
+      "sha256": "0f35ed61985ba1ff9fb1d0fe6d415fa7df7723b51b967bbd5a5be0e27273d9c5"
+    },
+    {
+      "filename": "elder-man-seated.glb",
+      "bytes": 2320728,
+      "meshes": 12,
+      "triangles": 78048,
+      "height": 1.3601034283638,
+      "width": 0.5257939696311951,
+      "depth": 0.6858503520488739,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/male_casualsuit03/male_casualsuit03",
+      "hair": "hair/short02/short02",
+      "sha256": "bb6162af93f779dcd9aab4436dadec7b844e63450590f22e8961d8ed97db63aa"
+    },
+    {
+      "filename": "young-woman.glb",
+      "bytes": 2572284,
+      "meshes": 11,
+      "triangles": 84745,
+      "height": 1.6658843398327008,
+      "width": 0.4583453983068466,
+      "depth": 0.4381755590438843,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/female_elegantsuit01/female_elegantsuit01",
+      "hair": "hair/ponytail01/ponytail01",
+      "sha256": "2f1aaa95c5cb9db88f49af672f76d1a0cd43d22f8548bb311d98a09d4ac3ccf8"
+    },
+    {
+      "filename": "young-woman-seated.glb",
+      "bytes": 2585576,
+      "meshes": 12,
+      "triangles": 86064,
+      "height": 1.2979550245800056,
+      "width": 0.5069654583930969,
+      "depth": 0.7146206721663475,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/female_elegantsuit01/female_elegantsuit01",
+      "hair": "hair/ponytail01/ponytail01",
+      "sha256": "d214cb68e70f1609f90e4ca09e53d01e093fba0036a5975d77749a11615a1688"
+    },
+    {
+      "filename": "elder-woman.glb",
+      "bytes": 2472328,
+      "meshes": 15,
+      "triangles": 80614,
+      "height": 1.6477486258372664,
+      "width": 0.47602616250514984,
+      "depth": 0.49610181152820587,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/male_casualsuit03/male_casualsuit03",
+      "hair": "hair/braid01/braid01",
+      "sha256": "6b071eefe59c3c90484d7b04fe8a6153b4b069f490fc00933f46cf12c16c9f84"
+    },
+    {
+      "filename": "elder-woman-seated.glb",
+      "bytes": 2472328,
+      "meshes": 15,
+      "triangles": 80614,
+      "height": 1.2669682847335935,
+      "width": 0.47602616250514984,
+      "depth": 0.6729542165994644,
+      "sourceBodyVertices": 13380,
+      "sourceBodyTriangles": 26756,
+      "fullyClothed": true,
+      "uvSeamsPreserved": true,
+      "garment": "clothes/male_casualsuit03/male_casualsuit03",
+      "hair": "hair/braid01/braid01",
+      "sha256": "8e14ae15b2d4b0a5df6e411596ba61ea4d4f909757024849410f42d31be64f3e"
+    }
+  ],
+  "implementation": [
+    {
+      "file": "frontend/public/assets/models/build-characters.mjs",
+      "sha256": "9408b0f90fe756957e9aa61ca25903855104d4dd9f3b32c55cdb575d9e98ab60"
+    },
+    {
+      "file": "frontend/src/scenes/HumanRig.ts",
+      "sha256": "e42b0e656a541919d8f8892c39013b821626163a4e9ae263605f2b84ec735500"
+    },
+    {
+      "file": "frontend/src/scenes/HumanJoints.ts",
+      "sha256": "cfc9624ec3d4837dce307b78090203e6e2d744f9a1ae6253ab28675f6e8eba39"
+    }
+  ]
+}

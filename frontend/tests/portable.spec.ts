@@ -3,8 +3,8 @@ import {copyFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
-test('a copied index.html alone runs offline with real GLB characters, walking and the full saved-letter journey',async({page})=>{
-  test.setTimeout(180_000);
+test('a copied index.html alone runs offline with real GLB characters, walking and the full saved-letter journey',async({page},testInfo)=>{
+  test.setTimeout(300_000);
   const directory=resolve('..','artifacts',process.env.MEMORYBOX_PORTABLE_EVIDENCE||'offline-only');
   await mkdir(directory,{recursive:true});
   const html=resolve(directory,'index.html');
@@ -36,8 +36,14 @@ test('a copied index.html alone runs offline with real GLB characters, walking a
     await page.getByRole('button',{name:'切换人物',exact:true}).click();
     await page.getByRole('button',{name:new RegExp(person.label)}).click();
     await page.getByRole('button',{name:'让这位陪伴我',exact:true}).click();
-    await expect(canvas).toHaveAttribute('data-loaded-characters',new RegExp(person.id));
+    await expect(canvas).toHaveAttribute('data-loaded-characters',new RegExp(person.id),{timeout:60_000});
+    await expect(canvas).toHaveAttribute('data-companion-ready','true',{timeout:60_000});
   }
+  await page.getByRole('button',{name:'第三人称',exact:true}).click();
+  await expect(canvas).toHaveAttribute('data-player-avatar-visible','true');
+  await expect(canvas).toHaveAttribute('data-loaded-characters',/young-man/,{timeout:60_000});
+  const beforeThird=(await position())!.split(',').map(Number);await page.keyboard.down('w');
+  try{await expect.poll(async()=>Number((await position())!.split(',')[2]),{timeout:30_000}).toBeLessThan(beforeThird[2]-.25);}finally{await page.keyboard.up('w');}
   await page.getByRole('button',{name:'房间总览',exact:true}).click();
   for(const id of ['tv','doll','photo']){
     await page.getByTestId(`anchor-${id}`).click();
@@ -68,6 +74,7 @@ test('a copied index.html alone runs offline with real GLB characters, walking a
   await expect(page.locator('.collection-entry')).toHaveCount(0);
   expect(httpRequests).toEqual([]);expect(otherFiles).toEqual([]);expect(errors).toEqual([]);
   expect(await page.evaluate(()=>window.__MEMORYBOX_PORTABLE__?.assetCount)).toBeGreaterThanOrEqual(23);
+  await testInfo.attach('tested-portable-build',{body:JSON.stringify(await page.evaluate(()=>window.__MEMORYBOX_PORTABLE__),null,2),contentType:'application/json'});
 });
 
 for(const world of [{id:'station',label:'那年，我们选择远方',objects:['候车时刻表','旧皮箱','那张车票']},{id:'classroom',label:'青春里没说出口的话',objects:['毕业留言','折过的纸条','毕业纪念册']}]){

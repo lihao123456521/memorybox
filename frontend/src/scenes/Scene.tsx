@@ -10,6 +10,7 @@ import Station,{STATION_LAYOUT} from './Station';
 import Classroom,{CLASSROOM_LAYOUT} from './Classroom';
 import WalkController from './WalkController';
 import type {WorldLayout} from './navigation';
+import NarrativeClock from './NarrativeClock';
 
 const HOME_LAYOUT:WorldLayout={id:'old-home',anchors:ANCHOR_POSITIONS,colliders:WALK_COLLIDERS,zones:SCENE_ZONES,start:[0,1.64,2.5],overview:[13,12,16],target:[-1.2,.3,-1.8]};
 export function layoutFor(id:TemplateId='old-home'){return id==='station'?STATION_LAYOUT:id==='classroom'?CLASSROOM_LAYOUT:HOME_LAYOUT;}
@@ -34,7 +35,6 @@ function Diagnostics({props,layout,onProjection}:{props:SceneProps;layout:WorldL
   useFrame(({clock})=>{
     if(clock.elapsedTime-elapsed.current<.25)return;elapsed.current=clock.elapsedTime;
     let meshes=0,triangles=0;scene.traverse(o=>{if(o instanceof THREE.Mesh){meshes++;triangles+=((o.geometry.index?.count??o.geometry.attributes.position?.count??0)/3)*(o instanceof THREE.InstancedMesh?o.count:1);}});
-    if(!readySent.current&&meshes>100){readySent.current=true;props.onWorldReady?.();}
     const shadowVersion=`${props.branch}:${props.companion}:${meshes}`;
     if(previousShadow.current!==shadowVersion){previousShadow.current=shadowVersion;gl.shadowMap.needsUpdate=true;}
     const rect=gl.domElement.getBoundingClientRect(),projected:Record<string,{x:number;y:number;visible:boolean}>={},markers:Marker[]=[];
@@ -52,29 +52,35 @@ function Diagnostics({props,layout,onProjection}:{props:SceneProps;layout:WorldL
       markers.push({id:id as AnchorId,x:(screen.x+1)*size.width/2,y:(1-screen.y)*size.height/2,visible});
     }
     const loadedCharacters:string[]=[];scene.traverse(o=>{if(o.name.startsWith('glb-character-'))loadedCharacters.push(o.name.slice(14));});
-    const canvas=gl.domElement;canvas.dataset.loadedCharacters=loadedCharacters.join(',');canvas.dataset.world='memory';canvas.dataset.sceneTemplate=props.templateId||'old-home';canvas.dataset.anchorScreen=JSON.stringify(projected);canvas.dataset.meshCount=String(meshes);canvas.dataset.triangles=String(Math.round(triangles));canvas.dataset.sceneRevision='crafted-worlds-v3';canvas.dataset.companion=props.companion||'elder-woman';
-    onProjection(markers);
+    const companion=scene.getObjectByName('memory-companion');let companionReady=false;
+    companion?.traverse(o=>{if(o.name===`glb-character-${props.companion||'elder-woman'}`&&o.userData.characterReady===true)companionReady=true;});
+    if(!readySent.current&&meshes>100&&companionReady){readySent.current=true;props.onWorldReady?.();}
+    const canvas=gl.domElement;canvas.dataset.loadedCharacters=loadedCharacters.join(',');canvas.dataset.world='memory';canvas.dataset.sceneTemplate=props.templateId||'old-home';canvas.dataset.anchorScreen=JSON.stringify(projected);canvas.dataset.meshCount=String(meshes);canvas.dataset.triangles=String(Math.round(triangles));canvas.dataset.sceneRevision='living-memories-v4';canvas.dataset.companion=props.companion||'elder-woman';canvas.dataset.companionReady=String(companionReady);
+    if(props.phase==='exploration')onProjection(markers);
   });
   return null;
 }
 
 function ImmersiveWorld(props:SceneProps&{onProjection:(markers:Marker[])=>void}){
   const dragging=useRef({active:false,ended:0}),layout=layoutFor(props.templateId);
+  const cinematic=props.phase==='real-branch'||props.phase==='imagined-branch';
+  const worldProps={...props,viewMode:cinematic?'walk' as const:props.viewMode};
   useEffect(()=>{props.onReady?.();},[]);
   const onDragging=(active:boolean)=>{if(dragging.current.active&&!active)dragging.current.ended=performance.now();dragging.current.active=active;};
   const onAnchor:SceneProps['onAnchor']=id=>{if(dragging.current.active||performance.now()-dragging.current.ended<180)return;props.onAnchor(id);};
   return <>
     <color attach="background" args={['#bfcbd0']}/><fog attach="fog" args={['#bfcbd0',40,100]}/>
     <IndoorLighting branch={props.branch} templateId={props.templateId}/>
-    {props.templateId==='station'?<Station {...props} onAnchor={onAnchor}/>:props.templateId==='classroom'?<Classroom {...props} onAnchor={onAnchor}/>:<Room phase={props.phase} branch={props.branch} visited={props.visited} selected={props.selected} hint={props.hint} viewMode={props.viewMode||'walk'} companion={props.companion||'elder-woman'} realDeparture={props.realDeparture} onAnchor={onAnchor}/>}
-    <WalkController {...props} layout={layout} colliders={layout.colliders} anchorPositions={layout.anchors} onDragging={onDragging}/>
+    <NarrativeClock {...props}/>
+    {props.templateId==='station'?<Station {...worldProps} onAnchor={onAnchor}/>:props.templateId==='classroom'?<Classroom {...worldProps} onAnchor={onAnchor}/>:<Room phase={props.phase} branch={props.branch} visited={props.visited} selected={props.selected} hint={props.hint} viewMode={worldProps.viewMode||'walk'} companion={props.companion||'elder-woman'} realDeparture={props.realDeparture} storyClock={props.storyClock} storyTime={props.storyTime} storyPlaying={props.storyPlaying} reducedMotion={props.reducedMotion} onAnchor={onAnchor}/>}
+    <WalkController {...worldProps} layout={layout} colliders={layout.colliders} anchorPositions={layout.anchors} onDragging={onDragging}/>
     <Diagnostics props={props} layout={layout} onProjection={props.onProjection}/>
   </>;
 }
 
 export default function Scene(props:SceneProps){
   const [markers,setMarkers]=useState<Marker[]>([]),[crossed,setCrossed]=useState(false);
-  useEffect(()=>{if(props.phase!=='transition-in'){setCrossed(false);return;}if(props.reducedMotion)return;const timer=setTimeout(()=>setCrossed(true),1650);return()=>clearTimeout(timer);},[props.phase,props.reducedMotion]);
+  useEffect(()=>{if(props.phase!=='transition-in'){setCrossed(false);return;}if(props.reducedMotion)return;const timer=setTimeout(()=>setCrossed(true),2600);return()=>clearTimeout(timer);},[props.phase,props.reducedMotion]);
   if(props.world==='present'||(props.phase==='transition-in'&&!props.reducedMotion&&!crossed))return <PresentScene {...props}/>;
   const labels=getAnchorLabels(props.templateId);
   return <div className="immersive-canvas-root" style={{position:'relative',height:'100%',width:'100%'}}>

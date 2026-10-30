@@ -1,0 +1,322 @@
+{
+  "version": "0.4.0",
+  "assetCount": 62,
+  "builtAt": "2026-10-30T04:09:57.769Z",
+  "mode": "single-html-local-demo",
+  "output": "index.html",
+  "bytes": 53276297,
+  "sha256": "885c3b10012a13f901d21c0f0fe43c373b916021981d0a45f81c414d6b97d686",
+  "licensesSha256": "49152a1bb89c6c96c5b0ad857524e500124c0557b67fc03d1bed28df55b74571",
+  "assets": [
+    {
+      "path": "/assets/models/young-man.glb",
+      "bytes": 2639316,
+      "sha256": "e3868f90d4e1c1c932d1bf730031629f22340d6dcde46efd6efe5b8be6254bc9"
+    },
+    {
+      "path": "/assets/models/young-man-seated.glb",
+      "bytes": 2639308,
+      "sha256": "8a607bc139e77772c95f7ae31a7051a55624de24814782afc7701e5ea6d287b6"
+    },
+    {
+      "path": "/assets/models/elder-man.glb",
+      "bytes": 2320712,
+      "sha256": "0f35ed61985ba1ff9fb1d0fe6d415fa7df7723b51b967bbd5a5be0e27273d9c5"
+    },
+    {
+      "path": "/assets/models/elder-man-seated.glb",
+      "bytes": 2320728,
+      "sha256": "bb6162af93f779dcd9aab4436dadec7b844e63450590f22e8961d8ed97db63aa"
+    },
+    {
+      "path": "/assets/models/young-woman.glb",
+      "bytes": 2572284,
+      "sha256": "2f1aaa95c5cb9db88f49af672f76d1a0cd43d22f8548bb311d98a09d4ac3ccf8"
+    },
+    {
+      "path": "/assets/models/young-woman-seated.glb",
+      "bytes": 2585576,
+      "sha256": "d214cb68e70f1609f90e4ca09e53d01e093fba0036a5975d77749a11615a1688"
+    },
+    {
+      "path": "/assets/models/elder-woman.glb",
+      "bytes": 2472328,
+      "sha256": "6b071eefe59c3c90484d7b04fe8a6153b4b069f490fc00933f46cf12c16c9f84"
+    },
+    {
+      "path": "/assets/models/elder-woman-seated.glb",
+      "bytes": 2472328,
+      "sha256": "8e14ae15b2d4b0a5df6e411596ba61ea4d4f909757024849410f42d31be64f3e"
+    },
+    {
+      "path": "/assets/textures/wood_floor_diff_1k.jpg",
+      "bytes": 734493,
+      "sha256": "2a1c07687b6dbb214c4b9213739c6d92d425f1f0fc8ab3ac157f105d78240789"
+    },
+    {
+      "path": "/assets/textures/wood_floor_nor_gl_1k.jpg",
+      "bytes": 423303,
+      "sha256": "452247f0d0d1b7fc7f8324ff3b6ed60bcc6de1405f4284eeb8d9bce90d4939c2"
+    },
+    {
+      "path": "/assets/textures/wood_floor_rough_1k.jpg",
+      "bytes": 527754,
+      "sha256": "061f1e1293251b2d28c76e3fac1ea9452b0e8648bb8f9b3728e09db386166e5c"
+    },
+    {
+      "path": "/assets/textures/painted_plaster_wall_diff_1k.jpg",
+      "bytes": 686726,
+      "sha256": "440310f05af089f2c93353167573403cbc3f805948203237b5d26431eeb9e19c"
+    },
+    {
+      "path": "/assets/textures/painted_plaster_wall_nor_gl_1k.jpg",
+      "bytes": 900461,
+      "sha256": "8eb01647d126eb5341e2c325821ad48c8ca11349dbef53447c95422c5d91cc9d"
+    },
+    {
+      "path": "/assets/textures/painted_plaster_wall_rough_1k.jpg",
+      "bytes": 354762,
+      "sha256": "e0564c297b22ab1cf4ef02a82157b84ce3b92eb4fd49d9c64b7256a8b300af82"
+    },
+    {
+      "path": "/assets/textures/fabric_pattern_07_col_1_1k.jpg",
+      "bytes": 788593,
+      "sha256": "aeb7a1487b77aec55e39de662def4d371f5c7c617f62d1f291d7f9932ffebdc9"
+    },
+    {
+      "path": "/assets/textures/fabric_pattern_07_col_2_1k.jpg",
+      "bytes": 887747,
+      "sha256": "cded7066e78b8060e4fe4fe382f854739dc8d6f42da6ec99edc0a4ef811b5093"
+    },
+    {
+      "path": "/assets/textures/fabric_pattern_07_nor_gl_1k.jpg",
+      "bytes": 828071,
+      "sha256": "f6955bbdead9f023f2357f6f8808ed49627d10882cd2a3cb6b5a5ace155abc45"
+    },
+    {
+      "path": "/assets/textures/fabric_pattern_07_rough_1k.jpg",
+      "bytes": 488744,
+      "sha256": "3d90ac40b5c32a15649cc8525b7eeed133ea46b63a0e3eae5e34911d5c967e3a"
+    },
+    {
+      "path": "/assets/images/family-photo.png",
+      "bytes": 2863929,
+      "sha256": "1aabaf632143954948adac697e54e2401f21e8358e25217aeb1e58b7ce449228"
+    },
+    {
+      "path": "/assets/environments/lebombo_1k.hdr",
+      "bytes": 1476953,
+      "sha256": "a02c9615adeba91a753c3e4737c3ce7a719273df822eeaa85d24982bd43c9ecb"
+    },
+    {
+      "path": "/assets/props/television_02-1k.glb",
+      "bytes": 1238988,
+      "sha256": "3a9fbae7ccc5f33e17c54c8d3e93ffc001379a5d44621ee81b6fa699d7fa1b23"
+    },
+    {
+      "path": "/assets/props/chinese_armchair-1k.glb",
+      "bytes": 1702316,
+      "sha256": "27ba0fc0b9f934597b399ca1a01c91ab8cd3dfcb951d7b4c2bfe90a70a348699"
+    },
+    {
+      "path": "/assets/models/materials/male_casualsuit01-color.webp",
+      "bytes": 57804,
+      "sha256": "04081d44b436bf768994fb5c715b334bf691bf4f85b9c4327ca1be5eec50513c"
+    },
+    {
+      "path": "/assets/models/materials/male_casualsuit01-normal.webp",
+      "bytes": 99774,
+      "sha256": "491625ae412827eae20aaffd30fb0e036b953d5281115518829ad06422ab6873"
+    },
+    {
+      "path": "/assets/models/materials/male_casualsuit03-color.webp",
+      "bytes": 130618,
+      "sha256": "709ab2d78b11422461024f3a50e08269cb0a9feb5ad520a070e2a6ed6b564009"
+    },
+    {
+      "path": "/assets/models/materials/male_casualsuit03-normal.webp",
+      "bytes": 155938,
+      "sha256": "4be224d291f7a42cbade6d0f25ac38a369ba2349f263e97fa1c209ec1aa9b8a5"
+    },
+    {
+      "path": "/assets/models/materials/female_elegantsuit01-color.webp",
+      "bytes": 72182,
+      "sha256": "f933fcaa007269e9d9ec1323d5b14f0fcb7e525b906b04fd557c6397e38ef248"
+    },
+    {
+      "path": "/assets/models/materials/female_elegantsuit01-normal.webp",
+      "bytes": 67422,
+      "sha256": "2592506565b2770e10713abe75370c254e67d564219bde1a3877a34a37bc8599"
+    },
+    {
+      "path": "/assets/models/materials/shoes04-color.webp",
+      "bytes": 84988,
+      "sha256": "d452c841ddaa5f34b5cdd43433235374dd6c7f7a00e06c92206c1835eae7b9f4"
+    },
+    {
+      "path": "/assets/models/materials/shoes04-normal.webp",
+      "bytes": 178114,
+      "sha256": "7c54251767d6acad90604fa764cfa7197715e1808dfe1a55baccfdb28e5a6b7e"
+    },
+    {
+      "path": "/assets/models/materials/short04-color.webp",
+      "bytes": 196288,
+      "sha256": "a2596a7b4b5f1cb4a3fe98f76dbb7666d19ce55e25a74d99c2a80754c3f2af9a"
+    },
+    {
+      "path": "/assets/models/materials/short04-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/short02-color.webp",
+      "bytes": 90092,
+      "sha256": "b0d362bede546d844d657070d23e2e3abdc51fc6bbc37408b86fb655b2f89747"
+    },
+    {
+      "path": "/assets/models/materials/short02-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/ponytail01-color.webp",
+      "bytes": 275758,
+      "sha256": "20904ce035603c33089b9bedd72444e414c810d1ec3389b390775cc120bea6f9"
+    },
+    {
+      "path": "/assets/models/materials/ponytail01-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/braid01-color.webp",
+      "bytes": 25206,
+      "sha256": "784bcc8ea20321f7d0ba6dfcb101283c8735638221699399e332f0e383348a99"
+    },
+    {
+      "path": "/assets/models/materials/braid01-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/brown-color.webp",
+      "bytes": 32372,
+      "sha256": "171e963ea19e2ed93ab3a04640884c56d30d7f27700dbaec1978e69c4319263c"
+    },
+    {
+      "path": "/assets/models/materials/brown-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/eyebrow001-color.webp",
+      "bytes": 32260,
+      "sha256": "a55ae813883fdf4ac154bab95c61ab00c786f5c8b84ad88a5f12c80fb9e55d5e"
+    },
+    {
+      "path": "/assets/models/materials/eyebrow001-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/eyelashes01-color.webp",
+      "bytes": 25614,
+      "sha256": "673837ca20ff8c5f0a808753fa4349c3022f3aa2327c690203e76b75264483be"
+    },
+    {
+      "path": "/assets/models/materials/eyelashes01-normal.webp",
+      "bytes": 68,
+      "sha256": "e840304da10843a9d318437fd05dcf5939f04818573026b56147df63ee33137b"
+    },
+    {
+      "path": "/assets/models/materials/elder-shirt-color.webp",
+      "bytes": 119856,
+      "sha256": "cb02ecd740065791ce047a05163d5e81c9b54d03e95101fcbaf21b71644d150a"
+    },
+    {
+      "path": "/assets/models/materials/elder-shirt-normal.webp",
+      "bytes": 155938,
+      "sha256": "4be224d291f7a42cbade6d0f25ac38a369ba2349f263e97fa1c209ec1aa9b8a5"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-woman-skin-color.webp",
+      "bytes": 480450,
+      "sha256": "a76f8d9bd4a41a4e922eebe45061f3ff39d6c622e747eeadc8c7e1812031673f"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-woman-skin-normal.webp",
+      "bytes": 244420,
+      "sha256": "a69e991ee7e89ca2fd8c1fea0a42f4b0a188975b844fff671639b085157f534a"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-woman-outfit-color.webp",
+      "bytes": 15932,
+      "sha256": "377d73107b993082a4ecdfb3467887d91a2fb7bb9d59201838644e8fcc9407aa"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-woman-outfit-normal.webp",
+      "bytes": 139034,
+      "sha256": "bbc2c9aa058aa513ecd33b568c8cfd63d7199db3f269c239e954aa48b966c6a2"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-man-skin-color.webp",
+      "bytes": 446786,
+      "sha256": "496b80c6acea384b2dd41108781e258abec5459b6559bfc3f58b47dc8a82fdc7"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-man-skin-normal.webp",
+      "bytes": 258474,
+      "sha256": "f023ef1cfeaf8002e6d1b87f4d3f247da320f729d3eda28eecc4cc7af537e9d5"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-man-outfit-color.webp",
+      "bytes": 80936,
+      "sha256": "ce9a4adaa9ed5a5eee16efef928d9b7ac60afae9614cdfbb2a66e2c45c55b77e"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/elder-man-outfit-normal.webp",
+      "bytes": 133342,
+      "sha256": "f4456bb7cac41291c2f7efcb36e60349109b51fcf04a26a9a756f50dbbafb246"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-woman-skin-color.webp",
+      "bytes": 280644,
+      "sha256": "27c3123a9dc48cfd6131b9267f5bd014ef8676dccdf066262f7594216ec1ae32"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-woman-skin-normal.webp",
+      "bytes": 121882,
+      "sha256": "3cb49c62f600126c8b631077094a21b68722ca52c4a3a9eff31a3678b7211c5b"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-woman-outfit-color.webp",
+      "bytes": 15674,
+      "sha256": "aac0d17262f5ba6743f44984b4cc12d1a8031c1ebe1d6e5ee13f38a03efc28b9"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-woman-outfit-normal.webp",
+      "bytes": 111008,
+      "sha256": "49ae420e73d9f814dde8a8722a31942494c47572652ea7f7dba4dcc88d7588cd"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-man-skin-color.webp",
+      "bytes": 296826,
+      "sha256": "6cbce2e3a7b25b6275401bc938a624a7f1881c909348391da10b4544ffa2298b"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-man-skin-normal.webp",
+      "bytes": 173730,
+      "sha256": "e412cda8f00cb947345fd02ce57d778c03ab0c53bca9d89eae38af3dd2e26d28"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-man-outfit-color.webp",
+      "bytes": 43534,
+      "sha256": "bdc3e9f1cdc9699f6b3205be8370f451085e340449db04756bcf88e5bf192e95"
+    },
+    {
+      "path": "/assets/models/reference-materials-v5/young-man-outfit-normal.webp",
+      "bytes": 67836,
+      "sha256": "d6d6e560dbd019302a62a111c8ca16e331a04e6877980ad73d9f2977c572657b"
+    }
+  ]
+}

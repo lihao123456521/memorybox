@@ -1,22 +1,23 @@
 import { Component, Suspense, lazy, useEffect, useReducer, useRef, useState } from 'react';
 import type { ErrorInfo, FormEvent, ReactNode } from 'react';
-import { ArrowLeft, ArrowRight, BookOpen, Box, Check, ChevronRight, Flower2, Home, Leaf, LoaderCircle, Mail, Maximize2, MousePointer2, RotateCcw, Send, Sparkles, TrainFront, Trash2, Volume2, VolumeX, X, Users, Footprints, LayoutGrid, ChevronUp, ChevronDown, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Box, Check, ChevronRight, Flower2, Home, Leaf, LoaderCircle, Mail, Maximize2, MousePointer2, RotateCcw, Send, Sparkles, TrainFront, Trash2, Volume2, VolumeX, X, Users, Eye, PersonStanding, Settings2, LayoutGrid, ChevronUp, ChevronDown, ChevronLeft } from 'lucide-react';
 import type { AnchorId, CollectionEntry, Draft, Phase, CharacterPreset, NavigationMode, RoomZone } from './types';
 import { getAnchorLabels, getAnchorSubtitles, composeLocal, defaultLetter, exampleDraft, templates } from './data';
 import { loadState, reducer } from './store';
 import * as api from './api';
 import { chime, setSound } from './audio';
 import WorldMap from './WorldMap';
+import StoryPlayback from './StoryPlayback';
 
 const portable=location.protocol==='file:';
 const Scene = lazy(()=>import('./scenes/Scene'));
 const journeyPhases:Phase[]=['transition-in','exploration','decision','real-branch','imagined-branch','letter','transition-out'];
 const anchors:AnchorId[]=['tv','doll','photo'];
 const companions:{id:CharacterPreset;label:string;description:string;initial:string}[]=[
-  {id:'young-man',label:'青年男性',description:'约 25 岁 · 夹克与牛仔裤',initial:'青'},
-  {id:'elder-man',label:'长者男性',description:'约 68 岁 · 细框眼镜与衬衣',initial:'长'},
-  {id:'young-woman',label:'青年女性',description:'约 25 岁 · 衬衣与裙装',initial:'青'},
-  {id:'elder-woman',label:'长者女性',description:'约 68 岁 · 家常衣着',initial:'长'},
+  {id:'young-man',label:'青年男性',description:'约 25 岁 · 翻领衬衣与牛仔裤',initial:'青'},
+  {id:'elder-man',label:'长者男性',description:'约 68 岁 · 灰发、衬衣与细框眼镜',initial:'长'},
+  {id:'young-woman',label:'青年女性',description:'约 25 岁 · 衬衫、裙装与马尾',initial:'青'},
+  {id:'elder-woman',label:'长者女性',description:'约 68 岁 · 银发、眼镜与日常便装',initial:'长'},
 ];
 const zoneLabels:Record<RoomZone,string>={living:'客厅',kitchen:'厨房',balcony:'阳台',bedroom:'卧室',study:'书房',concourse:'候车大厅',platform:'站台',carriage:'车厢',classroom:'教室',corridor:'走廊'};
 
@@ -44,12 +45,17 @@ function App(){
   const [sceneReady,setSceneReady]=useState(false);
   const [memoryReady,setMemoryReady]=useState(false),[passageRevealing,setPassageRevealing]=useState(false);
   const passageStart=useRef(0);
-  const [viewMode,setViewMode]=useState<NavigationMode>(()=>{try{return localStorage.getItem('memorybox-view-mode')==='overview'?'overview':'walk';}catch{return 'walk';}});
+  const [viewMode,setViewMode]=useState<NavigationMode>(()=>{try{return ['overview','third-person'].includes(localStorage.getItem('memorybox-view-mode')||'')?localStorage.getItem('memorybox-view-mode') as NavigationMode:'walk';}catch{return 'walk';}});
   const [companion,setCompanion]=useState<CharacterPreset>(()=>{try{const saved=localStorage.getItem('memorybox-companion');return companions.some(c=>c.id===saved)?saved as CharacterPreset:'elder-woman';}catch{return 'elder-woman';}});
   const [characterPicker,setCharacterPicker]=useState(false);
+  const [characterTarget,setCharacterTarget]=useState<'companion'|'self'>('companion');
+  const [playerAvatar,setPlayerAvatar]=useState<CharacterPreset>(()=>{try{const id=localStorage.getItem('memorybox-player-avatar');return companions.some(c=>c.id===id)?id as CharacterPreset:'young-man';}catch{return 'young-man';}});
   const [zone,setZone]=useState<RoomZone>('living');
   const [moveIntent,setMoveIntent]=useState({forward:0,right:0});
   const [storageWarning,setStorageWarning]=useState(false);
+  const [settingsOpen,setSettingsOpen]=useState(false);
+  const storyClock=useRef({time:0,playing:true,revision:0});
+  const storyEvent=useRef('');
   const memoryWorld=journeyPhases.includes(e.phase);
   const activeTemplate=templates.find(t=>t.id===e.draft.templateId)!;
 
@@ -73,20 +79,27 @@ function App(){
       return()=>clearTimeout(timer);
     }
     let finish:ReturnType<typeof setTimeout>|undefined;
-    const begin=setTimeout(()=>{setPassageRevealing(true);finish=setTimeout(()=>dispatch({type:'phase',phase:'exploration'}),2000);},Math.max(0,2200-(performance.now()-passageStart.current)));
+    const begin=setTimeout(()=>{setPassageRevealing(true);finish=setTimeout(()=>dispatch({type:'phase',phase:'exploration'}),2400);},Math.max(0,3200-(performance.now()-passageStart.current)));
     return()=>{clearTimeout(begin);if(finish)clearTimeout(finish);};
   },[e.phase,reducedMotion,memoryReady]);
   useEffect(()=>{setSelected(null);},[e.phase]);
   useEffect(()=>{try{localStorage.setItem('memorybox-companion',companion);}catch{/* Keep working when storage is unavailable. */}},[companion]);
+  useEffect(()=>{try{localStorage.setItem('memorybox-player-avatar',playerAvatar);}catch{/* The selected avatar still works in this session. */}},[playerAvatar]);
   useEffect(()=>{try{localStorage.setItem('memorybox-view-mode',viewMode);}catch{/* The current view remains usable without persistent preferences. */}},[viewMode]);
   useEffect(()=>{if(e.phase!=='exploration'){setCharacterPicker(false);setMoveIntent({forward:0,right:0});}},[e.phase]);
+  useEffect(()=>{
+    const branch=e.phase==='real-branch'||e.phase==='imagined-branch';
+    const key=branch?`${e.draft.templateId}:${e.branch}`:e.phase==='exploration'?'exploration':'';
+    if(branch||(key&&key!==storyEvent.current))storyClock.current={time:0,playing:true,revision:storyClock.current.revision+1};
+    storyEvent.current=key;
+  },[e.phase,e.branch,e.draft.templateId]);
   useEffect(()=>{
     const release=()=>setMoveIntent({forward:0,right:0});window.addEventListener('pointerup',release);window.addEventListener('blur',release);
     return()=>{window.removeEventListener('pointerup',release);window.removeEventListener('blur',release);};
   },[]);
 
   const go=(phase:Phase)=>{chime();dispatch({type:'phase',phase});};
-  const visit=(id:AnchorId)=>{if(e.phase!=='exploration')return;dispatch({type:'visit',id});setSelected(id);chime();};
+  const visit=(id:AnchorId)=>{if(e.phase!=='exploration')return;storyClock.current={time:0,playing:true,revision:storyClock.current.revision+1};dispatch({type:'visit',id});setSelected(id);chime();};
   const toggleSound=()=>{try{setSound(!sound);setSoundState(!sound);}catch{setNotice('浏览器暂时无法播放声音，可以继续安静地体验。');}};
   const openCollection=()=>{if(!['landing','memory-room','return-room','collection'].includes(e.phase))dispatch({type:'exit'});go('collection');};
 
@@ -139,14 +152,23 @@ function App(){
   return <main className={`app phase-${e.phase} ${memoryWorld?'in-memory':''} ${reducedMotion?'reduced-motion':''} ${largeText?'large-type':''} ${memoryWorld?`mode-${viewMode}`:''}`} data-phase={e.phase} data-template={e.draft.templateId}>
     <div className="scene-layer" aria-label={memoryWorld?'可以行走探索的三维记忆房间':'可以拖动旋转的三维现实桌面'}>
       <SceneBoundary><Suspense fallback={<div className="scene-loader"><Box size={32}/><span>把阳光放进房间…</span></div>}>
-        <Scene templateId={e.draft.templateId} world={memoryWorld?'memory':'present'} phase={e.phase} visited={e.visited} selected={selected} branch={e.branch} realDeparture={e.draft.actualChoice===exampleDraft(e.draft.templateId).actualChoice} collected={state.collection.length>0} hint={hint} resetKey={resetKey} reducedMotion={reducedMotion} viewMode={viewMode} companion={companion} characterPreview={characterPicker} navigationPaused={characterPicker||busy||isPanel} moveIntent={moveIntent} onZoneChange={setZone} onAnchor={visit} onBox={()=>{if(e.phase==='landing')go('memory-room');else if(['memory-room','return-room'].includes(e.phase))openCollection();}} onReady={()=>setSceneReady(true)} onWorldReady={()=>setMemoryReady(true)}/>
+        <Scene templateId={e.draft.templateId} world={memoryWorld?'memory':'present'} phase={e.phase} visited={e.visited} selected={selected} branch={e.branch} storyClock={storyClock} realDeparture={e.draft.actualChoice===exampleDraft(e.draft.templateId).actualChoice} collected={state.collection.length>0} hint={hint} resetKey={resetKey} reducedMotion={reducedMotion} viewMode={viewMode} companion={companion} playerAvatar={playerAvatar} previewPlayer={characterPicker&&characterTarget==='self'} characterPreview={characterPicker} navigationPaused={characterPicker||busy||isPanel} moveIntent={moveIntent} onZoneChange={setZone} onAnchor={visit} onBox={()=>{if(e.phase==='landing')go('memory-room');else if(['memory-room','return-room'].includes(e.phase))openCollection();}} onReady={()=>setSceneReady(true)} onWorldReady={()=>setMemoryReady(true)}/>
       </Suspense></SceneBoundary>
     </div>
     <div className="paper-grain" aria-hidden="true"/>
     <header className="header">
       <button className="brand" onClick={()=>{dispatch({type:'exit'});}} aria-label="MemoryBox 返回现实房间"><span className="brand-icon"><Box size={23} strokeWidth={1.2}/></span><span>MemoryBox<span className="brand-cn">记忆盒子</span></span></button>
       <div className="header-divider"/><span className="header-tagline">让回忆有一个可以回去的地方</span>
-      <nav aria-label="主导航"><button className="nav-link" aria-label="我的收藏" onClick={openCollection}><BookOpen size={16}/><span>我的收藏</span><span className="count">{String(state.collection.length).padStart(2,'0')}</span></button><span className="nav-divider"/><button className={largeText?'icon-button text-size-toggle active':'icon-button text-size-toggle'} onClick={()=>setLargeText(!largeText)} aria-label={largeText?'恢复标准字号':'放大文字'} title="大字模式">Aa</button><button className={`icon-button ${sound?'active':''}`} onClick={toggleSound} aria-label={sound?'关闭声音':'开启声音'} title={sound?'关闭声音':'开启声音'}>{sound?<Volume2 size={18}/>:<VolumeX size={18}/>}</button><button className="icon-button motion-toggle" aria-label={reducedMotion?'开启动画':'减少动态效果'} onClick={()=>setReducedMotion(!reducedMotion)} title={reducedMotion?'开启动画':'减少动态效果'}><Leaf size={17}/></button>{memoryWorld||isPanel?<button className="exit-button" aria-label="返回现实" onClick={()=>dispatch({type:'exit'})}><X size={16}/><span>返回现实</span></button>:null}</nav>
+      <nav aria-label="主导航" className={settingsOpen?'settings-open':''}>
+        <button className="nav-link header-function" aria-label="我的收藏" onClick={openCollection}><BookOpen size={19}/><span><strong>我的收藏</strong><small>珍藏的时光</small></span><span className="count">{String(state.collection.length).padStart(2,'0')}</span></button>
+        <button className="header-function settings-toggle" aria-label="显示设置" aria-expanded={settingsOpen} onClick={()=>setSettingsOpen(!settingsOpen)}><Settings2 size={19}/><span><strong>显示设置</strong><small>字号 · 声音 · 动效</small></span></button>
+        <div className="display-preferences">
+          <button className={`header-function text-size-toggle ${largeText?'active':''}`} onClick={()=>setLargeText(!largeText)} aria-label={largeText?'恢复标准字号':'放大文字'}><span className="type-icon">Aa</span><span><strong>{largeText?'标准字号':'放大文字'}</strong><small>展示可读性</small></span></button>
+          <button className={`header-function ${sound?'active':''}`} onClick={toggleSound} aria-label={sound?'关闭声音':'开启声音'}>{sound?<Volume2 size={19}/>:<VolumeX size={19}/>}<span><strong>{sound?'关闭声音':'开启声音'}</strong><small>交互音效</small></span></button>
+          <button className={`header-function motion-toggle ${reducedMotion?'active':''}`} aria-label={reducedMotion?'开启动画':'减少动态效果'} onClick={()=>setReducedMotion(!reducedMotion)}><Leaf size={19}/><span><strong>{reducedMotion?'开启动画':'减少动态'}</strong><small>镜头与转场</small></span></button>
+        </div>
+        {memoryWorld||isPanel?<button className="exit-button header-function" aria-label="返回现实" onClick={()=>dispatch({type:'exit'})}><X size={18}/><span><strong>返回现实</strong><small>保留这次旅程</small></span></button>:null}
+      </nav>
     </header>
 
     {e.phase==='landing'&&<>
@@ -184,31 +206,32 @@ function App(){
     {e.phase==='exploration'&&<>
       <div className="journey-title fade-in"><span className="eyebrow">CHAPTER 01 / {e.draft.year} · 记忆片段</span><h2>{e.draft.place}</h2><p>有些日子，当时觉得再普通不过。</p><span className="scene-location-note">{e.draft.templateId==='old-home'?'客厅 · 厨房 · 阳台 · 卧室 · 书房':e.draft.templateId==='station'?'候车大厅 · 站台 · 可进入车厢':'教室 · 阳光走廊'}</span></div>
       <div className="scene-tools"><button className="tool-button" onClick={()=>{setSelected(null);setResetKey(k=>k+1);}} aria-label="重置视角"><Maximize2 size={16}/><span>重置视角</span></button><button className={`tool-button ${hint?'active':''}`} aria-label={hint ? "收起提示" : "寻找线索"} onClick={()=>setHint(!hint)}><Sparkles size={16}/><span>{hint?'收起提示':'寻找线索'}</span></button></div>
-      {selected?<section className="anchor-story fade-in" aria-live="polite"><div className="anchor-story-top"><span className="overline">{String(anchors.indexOf(selected)+1).padStart(2,'0')} / 记忆碎片</span><button className="icon-button" aria-label="关闭物品故事" onClick={()=>setSelected(null)}><X size={17}/></button></div><h2>{anchorSubtitles[selected]}</h2><p>{e.story?.anchors.find(a=>a.id===selected)?.narration}</p><button className="text-button" onClick={()=>setSelected(null)}>继续探索 <ArrowRight size={16}/></button></section>:<div className="explore-instruction"><MousePointer2 size={15}/><span>{viewMode==="walk"?"WASD / 方向键移动 · 拖动环顾 · 轻触旧物":"拖动旋转 · 滚轮缩放 · 轻触发光的旧物"}</span></div>}
+      {selected?<section className="anchor-story fade-in" aria-live="polite"><div className="anchor-story-top"><span className="overline">{String(anchors.indexOf(selected)+1).padStart(2,'0')} / 记忆碎片</span><button className="icon-button" aria-label="关闭物品故事" onClick={()=>setSelected(null)}><X size={17}/></button></div><h2>{anchorSubtitles[selected]}</h2><p>{e.story?.anchors.find(a=>a.id===selected)?.narration}</p>{selected==='tv'&&e.draft.templateId==='old-home'&&<StoryPlayback compact clock={storyClock} template={e.draft.templateId} branch={null} departure={false}/>}<button className="text-button" onClick={()=>setSelected(null)}>继续探索 <ArrowRight size={16}/></button></section>:<div className="explore-instruction"><MousePointer2 size={15}/><span>{viewMode!=="overview"?"WASD / 方向键移动 · 拖动环顾 · 轻触旧物":"拖动旋转 · 滚轮缩放 · 轻触发光的旧物"}</span></div>}
       <div className="exploration-footer"><div className="progress-copy"><span className="overline">PIECES OF A DAY</span><span>记忆碎片 <strong>{e.visited.length}<small> / 3</small></strong></span></div><div className="fragment-list">{anchors.map((a,i)=><button key={a} aria-label={`回看${anchorLabels[a]}`} className={`fragment ${e.visited.includes(a)?'found':''}`} onClick={()=>{if(e.visited.includes(a))visit(a);else setHint(true);}}><span>{e.visited.includes(a)?<Check size={14}/>:String(i+1).padStart(2,'0')}</span>{anchorLabels[a]}</button>)}</div><button className="primary decision-unlock" disabled={e.visited.length<3} onClick={()=>{setSelected(null);go('decision');}}>{e.visited.length<3?'找到三件旧物，回忆就会展开':'走到那扇门前'}<ArrowRight size={16}/></button></div>
     </>}
 
     {e.phase==='exploration'&&<>
       <div className="navigation-toolbar" aria-label="空间与人物设置">
-        <button className={viewMode==='walk'?'current':''} onClick={()=>{setSelected(null);setViewMode('walk');}} aria-pressed={viewMode==='walk'}><Footprints size={15}/>室内漫游</button>
-        <button className={viewMode==='overview'?'current':''} onClick={()=>{setSelected(null);setViewMode('overview');}} aria-pressed={viewMode==='overview'}><LayoutGrid size={15}/>房间总览</button>
-        <button onClick={()=>{setSelected(null);setCharacterPicker(true);}}><Users size={15}/>切换人物</button>
+        <button className={viewMode==='walk'?'current function-tile':'function-tile'} aria-label="第一人称" onClick={()=>{setSelected(null);setViewMode('walk');}} aria-pressed={viewMode==='walk'}><Eye size={20}/><span><strong>第一人称</strong><small>走进当年的自己</small></span></button>
+        <button className={viewMode==='third-person'?'current function-tile':'function-tile'} aria-label="第三人称" onClick={()=>{setSelected(null);setViewMode('third-person');}} aria-pressed={viewMode==='third-person'}><PersonStanding size={20}/><span><strong>第三人称</strong><small>跟随角色行走</small></span></button>
+        <button className={viewMode==='overview'?'current function-tile':'function-tile'} aria-label="房间总览" onClick={()=>{setSelected(null);setViewMode('overview');}} aria-pressed={viewMode==='overview'}><LayoutGrid size={20}/><span><strong>房间总览</strong><small>查看全部空间</small></span></button>
+        <button className="function-tile" aria-label="切换人物" onClick={()=>{setSelected(null);setCharacterTarget('companion');setCharacterPicker(true);}}><Users size={20}/><span><strong>切换人物</strong><small>四类陪伴角色</small></span></button>
       </div>
       <div className="zone-indicator" aria-live="polite"><span className="mini-dot"/>正在{zoneLabels[zone]}<span>{zone==='living'?'熟悉的旧物，留在原来的位置':zone==='kitchen'?'门后，是生活曾经发出的声音':'走到窗边，让风吹进这段回忆'}</span></div>
-      {viewMode==='walk'&&!selected&&!characterPicker&&<div className="walk-controls" aria-label="触屏移动控制"><span>移动</span><div className="walk-dpad">{[{name:'向前移动',forward:1,right:0,icon:<ChevronUp size={20}/>,cls:'north'},{name:'向左移动',forward:0,right:-1,icon:<ChevronLeft size={20}/>,cls:'west'},{name:'向后移动',forward:-1,right:0,icon:<ChevronDown size={20}/>,cls:'south'},{name:'向右移动',forward:0,right:1,icon:<ChevronRight size={20}/>,cls:'east'}].map(dir=><button key={dir.cls} className={dir.cls} aria-label={dir.name} onPointerDown={event=>{event.preventDefault();event.currentTarget.setPointerCapture(event.pointerId);setMoveIntent({forward:dir.forward,right:dir.right});}} onPointerUp={()=>setMoveIntent({forward:0,right:0})} onPointerCancel={()=>setMoveIntent({forward:0,right:0})} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setMoveIntent({forward:dir.forward,right:dir.right});}}} onKeyUp={()=>setMoveIntent({forward:0,right:0})}>{dir.icon}</button>)}</div><small>WASD / 方向键</small></div>}
+      {viewMode!=='overview'&&!selected&&!characterPicker&&<div className="walk-controls" aria-label="触屏移动控制"><span>移动</span><div className="walk-dpad">{[{name:'向前移动',forward:1,right:0,icon:<ChevronUp size={20}/>,cls:'north'},{name:'向左移动',forward:0,right:-1,icon:<ChevronLeft size={20}/>,cls:'west'},{name:'向后移动',forward:-1,right:0,icon:<ChevronDown size={20}/>,cls:'south'},{name:'向右移动',forward:0,right:1,icon:<ChevronRight size={20}/>,cls:'east'}].map(dir=><button key={dir.cls} className={dir.cls} aria-label={dir.name} onPointerDown={event=>{event.preventDefault();event.currentTarget.setPointerCapture(event.pointerId);setMoveIntent({forward:dir.forward,right:dir.right});}} onPointerUp={()=>setMoveIntent({forward:0,right:0})} onPointerCancel={()=>setMoveIntent({forward:0,right:0})} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setMoveIntent({forward:dir.forward,right:dir.right});}}} onKeyUp={()=>setMoveIntent({forward:0,right:0})}>{dir.icon}</button>)}</div><small>WASD / 方向键</small></div>}
       {!selected&&!characterPicker&&<div className="room-minimap" aria-label={`空间平面示意，目前在${zoneLabels[zone]}`}><WorldMap templateId={e.draft.templateId} zone={zone}/><span>经过门口，走进另一处空间</span></div>}
-      {characterPicker&&<div className="character-scrim"><section className="character-picker" role="dialog" aria-modal="true" aria-label="选择陪伴角色"><div className="character-picker-heading"><div><span className="overline">FACES IN A MEMORY</span><h2>让熟悉的身影，陪你坐一会儿。</h2></div><button className="icon-button" onClick={()=>setCharacterPicker(false)} aria-label="关闭人物设置"><X size={18}/></button></div><p>选择场景中的外观。记忆里的人是谁，仍以你的讲述为准。</p><div className="character-grid">{companions.map(person=><button key={person.id} className={`character-choice ${companion===person.id?'selected':''}`} onClick={()=>setCompanion(person.id)} aria-pressed={companion===person.id}><span className={`character-silhouette ${person.id}`}><Users size={28} strokeWidth={1}/><span>{person.initial}</span></span><strong>{person.label}</strong><small>{person.description}</small><span className="character-check">{companion===person.id?<Check size={15}/>:null}</span></button>)}</div><div className="character-picker-footer"><span>四种独立人物 · 自然比例与衣着</span><button className="primary" onClick={()=>setCharacterPicker(false)}>让这位陪伴我 <ArrowRight size={16}/></button></div></section></div>}
+      {characterPicker&&<div className="character-scrim"><section className="character-picker" role="dialog" aria-modal="true" aria-label={characterTarget==='self'?'选择自己的形象':'选择陪伴角色'}><div className="character-picker-heading"><div><span className="overline">FACES IN A MEMORY</span><h2>{characterTarget==='self'?'给那时的自己，一个身影。':'让熟悉的身影，陪你走一会儿。'}</h2></div><button className="icon-button" onClick={()=>setCharacterPicker(false)} aria-label="关闭人物设置"><X size={18}/></button></div><p>选择场景中的外观。记忆里的人是谁，仍以你的讲述为准。</p><div className="character-role-tabs"><button aria-pressed={characterTarget==='companion'} onClick={()=>setCharacterTarget('companion')}>陪伴角色</button><button aria-pressed={characterTarget==='self'} onClick={()=>{setCharacterTarget('self');setViewMode('third-person');}}>我的形象 · 第三人称</button></div><div className="character-grid">{companions.map(person=><button key={person.id} className={`character-choice ${(characterTarget==='self'?playerAvatar:companion)===person.id?'selected':''}`} onClick={()=>characterTarget==='self'?setPlayerAvatar(person.id):setCompanion(person.id)} aria-pressed={(characterTarget==='self'?playerAvatar:companion)===person.id}><span className={`character-silhouette ${person.id}`}><Users size={28} strokeWidth={1}/><span>{person.initial}</span></span><strong>{person.label}</strong><small>{person.description}</small><span className="character-check">{(characterTarget==='self'?playerAvatar:companion)===person.id?<Check size={15}/>:null}</span></button>)}</div><div className="character-picker-footer"><span>{characterTarget==='self'?'第三人称中的自己':'场景中的陪伴角色'} · 自然身形 · 行走与挥手</span><button className="primary" onClick={()=>setCharacterPicker(false)}>{characterTarget==='self'?'使用这个形象':'让这位陪伴我'} <ArrowRight size={16}/></button></div></section></div>}
     </>}
 
     {(e.phase==='real-branch'||e.phase==='imagined-branch')&&e.story&&<>
       <div className={`branch-label ${e.branch==='imagined'?'imagined':''}`}>{e.branch==='imagined'?<Sparkles size={15}/>:<Check size={15}/>}<span>{e.branch==='imagined'?'AI 想象 · 并非真实历史':'你确认的真实记忆'}</span></div>
-      <section className="branch-story fade-in"><span className="eyebrow">{e.branch==='real'?'THE WAY IT WAS':'ANOTHER LITTLE POSSIBILITY'}</span><h2>{e.branch==='real'?'让那一天，保持你记得的样子。':e.draft.templateId==='station'?'出发之前，再认真告别一次。':e.draft.templateId==='classroom'?'让那句谢谢，终于被听见。':'你决定，把告别放慢一点。'}</h2>{e.story.decision[e.branch||'real'].script.map((line,i)=><p key={i}>{line}</p>)}<div className="branch-story-actions"><button className="text-button" onClick={()=>go('decision')}><RotateCcw size={15}/> 重新选择</button><button className="primary" onClick={startLetter}>写一封信 <ArrowRight size={16}/></button></div></section>
-      <div className="branch-scene-caption">{e.branch==='imagined'?(e.draft.templateId==='station'?'列车仍将出发，而告别可以不那么匆忙。':e.draft.templateId==='classroom'?'纸条终于递出，阳光还停留在那张课桌上。':'灯亮了。桌边多了一杯茶，那个下午被轻轻延长。'):'你确认的那一刻，被轻轻保留。'}</div>
+      <section className="branch-story fade-in"><span className="eyebrow">{e.branch==='real'?'THE WAY IT WAS':'ANOTHER LITTLE POSSIBILITY'}</span><h2>{e.branch==='real'?'让那一天，保持你记得的样子。':e.draft.templateId==='station'?'出发之前，再认真告别一次。':e.draft.templateId==='classroom'?'让那句谢谢，终于被听见。':'你决定，把告别放慢一点。'}</h2><StoryPlayback clock={storyClock} template={e.draft.templateId} branch={e.branch} departure={e.draft.actualChoice===exampleDraft(e.draft.templateId).actualChoice} lines={e.story.decision[e.branch||'real'].script}/><div className="branch-story-actions"><button className="text-button" onClick={()=>go('decision')}><RotateCcw size={15}/> 重新选择</button><button className="primary" onClick={startLetter}>写一封信 <ArrowRight size={16}/></button></div></section>
+      <div className="branch-scene-caption">{e.branch==='imagined'?(e.draft.templateId==='station'?'列车仍将出发，而告别可以不那么匆忙。':e.draft.templateId==='classroom'?'纸条还在桌上，而那句谢谢终于说出了口。':'灯亮了。桌边多了一杯茶，那个下午被轻轻延长。'):'你确认的那一刻，被轻轻保留。'}</div>
     </>}
 
     {e.phase==='return-room'&&<section className="return-copy fade-in"><div className="eyebrow">WELCOME BACK / 回到此刻</div><h1>回忆无法重来，<br/>但爱可以被<br/><span className="handwritten">重新看见。</span></h1><p>你回到了同一张桌子前。<br/>盒子里，多了一只布娃娃、一张回忆卡，<br/>还有你刚刚写下的那封信。</p><button className="primary" onClick={openCollection}>打开我的收藏 <BookOpen size={17}/></button><button className="text-button" onClick={()=>dispatch({type:'restart'})}>再走进一段回忆 <ArrowRight size={16}/></button></section>}
 
-    {(e.phase==='transition-in'||e.phase==='transition-out')&&<div className={`transition-veil ${e.phase} ${passageRevealing?'revealing':''}`}><div><span className="transition-flower"><Flower2 size={38} strokeWidth={.7}/></span><p>{e.phase==='transition-in'?'把现在轻轻放下。':'把珍惜的，带回现在。'}</p><span>{e.phase==='transition-in'?`${e.draft.year} · ${e.draft.place}`:'同一张桌子，同一束光。'}</span><button onClick={()=>go(e.phase==='transition-in'?'exploration':'return-room')}>跳过动画 <ChevronRight size={14}/></button></div></div>}
+    {(e.phase==='transition-in'||e.phase==='transition-out')&&<div className={`transition-veil ${e.phase} ${passageRevealing?'revealing':''}`}><div><span className="transition-flower"><Flower2 size={38} strokeWidth={.7}/></span><p>{e.phase==='transition-in'?'把现在轻轻放下。':'把珍惜的，带回现在。'}</p><span>{e.phase==='transition-in'?`${e.draft.year} · ${e.draft.place}`:'同一张桌子，同一束光。'}</span><button disabled={e.phase==='transition-in'&&!memoryReady} onClick={()=>{if(e.phase==='transition-in'&&!memoryReady)return;go(e.phase==='transition-in'?'exploration':'return-room');}}>{e.phase==='transition-in'&&!memoryReady?'正在展开回忆':'跳过动画'} <ChevronRight size={14}/></button></div></div>}
 
     <footer className="status-bar"><span className={`connection ${backend}`}><span/>{backend==='online'?'本机服务已连接 · 模板体验':backend==='offline'?'离线演示模式 · 仅此浏览器保存':'正在连接本机服务…'}</span><span className="status-right">{memoryWorld?'现实 → 回忆 → 现实':'A STORY TO KEEP, A PLACE TO RETURN.'}</span>{!sceneReady&&<span className="loading-indicator"><LoaderCircle size={12} className="spin"/> 正在布置房间</span>}</footer>
     {(notice||storageWarning)&&<div className="toast" role="status"><span>{storageWarning?'浏览器存储空间不可用，请保持此页面打开，并连接本机后端保存。':notice}</span><button className="icon-button" onClick={()=>{setNotice('');setStorageWarning(false);}} aria-label="关闭提示"><X size={15}/></button></div>}

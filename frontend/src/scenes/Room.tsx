@@ -1,11 +1,11 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import type { ThreeEvent } from '@react-three/fiber';
 import { RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
-import type { AnchorId, Branch, CharacterPreset, NavigationMode, Phase } from '../types';
+import type { AnchorId, Branch, CharacterPreset, NavigationMode, Phase, StoryClockRef } from '../types';
 import type { Collider } from './navigation';
-import { Character } from './Characters';
+import {companionFootprint,StoryCompanion} from './StoryActions';
 import { useRoomMaterials } from './materials';
 import type { RoomMaterials } from './materials';
 import {Bedroom,Study,SofaFine,BooksFine,Doorway,TableLamp,PaperStack,CeilingRose,Curve} from './interior/Details';
@@ -61,10 +61,11 @@ export const WALK_COLLIDERS:Collider[]=[
   // Study: desk, bookcase and chair; right-side door corridor remains open.
   {xMin:-7.12,xMax:-4.88,zMin:-6.82,zMax:-5.96},
   {xMin:-8.95,xMax:-7.08,zMin:-6.99,zMax:-6.55},
-  {xMin:-6.27,xMax:-5.72,zMin:-5.66,zMax:-5.12}
+  {xMin:-6.27,xMax:-5.72,zMin:-5.66,zMax:-5.12},
+  companionFootprint('old-home')
 ];
 
-export interface RoomProps {phase:Phase;branch:Branch|null;visited:AnchorId[];selected:AnchorId|null;hint:boolean;viewMode:NavigationMode;companion:CharacterPreset;realDeparture?:boolean;onAnchor:(id:AnchorId)=>void}
+export interface RoomProps {phase:Phase;branch:Branch|null;visited:AnchorId[];selected:AnchorId|null;hint:boolean;viewMode:NavigationMode;companion:CharacterPreset;realDeparture?:boolean;storyClock?:StoryClockRef;storyTime?:number;storyPlaying?:boolean;reducedMotion?:boolean;onAnchor:(id:AnchorId)=>void}
 
 function Box({p=[0,0,0],s=[1,1,1],m,c,r=0,rotation=[0,0,0],name}:{p?:V3;s?:V3;m?:THREE.Material;c?:string;r?:number;rotation?:V3;name?:string}) {
   const surface=m?<primitive object={m} attach="material"/>:<meshStandardMaterial color={c||'#d9d4c9'} roughness={.75}/>;
@@ -196,7 +197,7 @@ function LivingFurniture({m,photo,props}:{m:RoomMaterials;photo:THREE.Texture;pr
     <Sofa m={m}/>
     <Anchor id="doll" p={ANCHOR_POSITIONS.doll} interactive={interactive} visited={props.visited.includes('doll')} hint={props.hint} selected={props.selected==='doll'} onAnchor={props.onAnchor} viewMode={props.viewMode}><group position={[0,-.28,0]}><Doll m={m}/></group></Anchor>
     <group position={[3.5,0,-2.15]} rotation={[0,-Math.PI/2,0]}><Box p={[0,.38,0]} s={[1.7,.68,.67]} m={m.darkWood} r={.015}/><Box p={[0,.76,0]} s={[1.81,.085,.74]} m={m.wood} r={.015}/>{[-.5,.5].map(x=><group key={x}><Box p={[x,.43,.344]} s={[.62,.45,.025]} m={m.wood}/><Box p={[x,.47,.365]} s={[.16,.018,.025]} m={m.metal}/></group>)}<Box p={[0,.07,0]} s={[1.56,.14,.5]} m={m.black}/><Box p={[0,.14,.366]} s={[.54,.09,.025]} c="#38413b"/></group>
-    <Anchor id="tv" p={ANCHOR_POSITIONS.tv} interactive={interactive} visited={props.visited.includes('tv')} hint={props.hint} selected={props.selected==='tv'} onAnchor={props.onAnchor} viewMode={props.viewMode}><ScannedTelevision/></Anchor>
+    <Anchor id="tv" p={ANCHOR_POSITIONS.tv} interactive={interactive} visited={props.visited.includes('tv')} hint={props.hint} selected={props.selected==='tv'} onAnchor={props.onAnchor} viewMode={props.viewMode}><ScannedTelevision props={props} powered={props.selected==='tv'||props.visited.includes('tv')}/></Anchor>
     <group position={[.25,0,-3.04]}><Box p={[0,.53,0]} s={[1.6,.96,.61]} m={m.wood} r={.012}/><Box p={[0,1.04,0]} s={[1.69,.07,.68]} m={m.darkWood}/>{[-.38,.38].map(x=><group key={x}><Box p={[x,.61,.317]} s={[.72,.63,.035]} m={m.wood}/><Cyl p={[x,.66,.35]} radius={.022} depth={.02} m={m.metal} rotation={[Math.PI/2,0,0]}/></group>)}<BookRow p={[-.64,1.08,.0]} count={4} m={m}/></group>
     <Anchor id="photo" p={ANCHOR_POSITIONS.photo} interactive={interactive} visited={props.visited.includes('photo')} hint={props.hint} selected={props.selected==='photo'} onAnchor={props.onAnchor} viewMode={props.viewMode}><Frame m={m} texture={photo}/></Anchor>
     <group position={[0,0,-.25]}><Box p={[0,.44,0]} s={[1.8,.07,1.1]} m={m.wood} r={.025}/>{[-.75,.75].flatMap(x=>[-.4,.4].map(z=><Box key={`${x}${z}`} p={[x,.22,z]} s={[.055,.43,.055]} m={m.darkWood}/>))}<Box p={[0,.16,0]} s={[1.55,.04,.85]} m={m.wood}/><Cup p={[-.43,.485,-.12]} m={m}/>{props.branch==='imagined'&&<Cup p={[.4,.485,.15]} blue m={m}/>}<Cyl p={[.12,.49,-.15]} radius={.16} depth={.02} m={m.ceramic}/>{[0,1,2].map(i=><Ellipsoid key={i} p={[.04+i*.065,.55,-.14+(i%2)*.07]} s={[.047,.047,.04]} c="#c7a25b"/>)}<Box p={[-.45,.487,.27]} s={[.42,.01,.27]} c="#e7e0cb" rotation={[0,.14,0]}/><Box p={[.1,.2,.22]} s={[.28,.04,.16]} c="#898c7d"/></group>
@@ -265,12 +266,10 @@ export default function Room(props:RoomProps) {
     let meshes=0,total=0,visible=0;roomRoot.current.traverse(object=>{if(object instanceof THREE.Mesh){meshes++;const geometry=object.geometry;const n=((geometry.index?.count||geometry.attributes.position?.count||0)/3)*(object instanceof THREE.InstancedMesh?object.count:1);total+=n;if(object.visible&&frustum.intersectsObject(object))visible+=n;}});
     gl.domElement.dataset.homeMeshCount=String(meshes);gl.domElement.dataset.homeTriangles=String(Math.round(total));gl.domElement.dataset.homeVisibleTriangles=String(Math.round(visible));
   });
-  const departure=props.branch==='real'&&props.realDeparture;
-  const characterPosition:V3=departure?[-1.47,0,-3.94]:props.branch==='imagined'?[-1.5,0,-.38]:[-2.35,0,-1.6];
   return <group ref={roomRoot} name="memory-home-standard-scale">
-    <Shell m={m} walk={props.viewMode==='walk'}/><LivingFurniture m={m} photo={photo} props={props}/><Kitchen m={m} branch={props.branch}/><Balcony m={m}/><Bedroom m={m}/><Study m={m}/><Street m={m}/>
+    <Shell m={m} walk={props.viewMode!=='overview'}/><LivingFurniture m={m} photo={photo} props={props}/><Kitchen m={m} branch={props.branch}/><Balcony m={m}/><Bedroom m={m}/><Study m={m}/><Street m={m}/>
     <CeilingRose p={[-7.0,2.86,-1.0]} m={m}/><CeilingRose p={[-6.1,2.86,-4.7]} m={m}/>
-    <Suspense fallback={null}><Character preset={props.companion} position={characterPosition} rotation={departure?Math.PI:props.branch==='imagined'?Math.PI/2:.5} pose="standing"/></Suspense>
+    <StoryCompanion template="old-home" preset={props.companion} props={props}/>
     {props.branch==='imagined'&&<pointLight position={[-.4,1.7,-.3]} intensity={1.0} color="#ffe3b0" distance={4}/>}
   </group>;
 }

@@ -1,8 +1,10 @@
-import {Suspense,useMemo} from 'react';
+import {useMemo,useRef} from 'react';
+import {useFrame,useThree} from '@react-three/fiber';
 import * as THREE from 'three';
 import type {SceneProps} from '../types';
 import type {WorldLayout} from './navigation';
-import {Character} from './Characters';
+import {companionFootprint,readStoryTime,StoryCompanion,trainAction} from './StoryActions';
+import type {StoryTiming} from './StoryActions';
 import {AnchorObject,Bench,Part,Rod,Sign,Suitcase,Wheel,useArchitectureMaterials} from './Architecture';
 import type {ArchitectureMaterials} from './Architecture';
 
@@ -25,6 +27,7 @@ export const STATION_LAYOUT:WorldLayout={
     ...COACH_BAYS.flatMap(z=>[{xMin:5.37,xMax:5.83,zMin:z-.345,zMax:z+.345},{xMin:7.97,xMax:8.43,zMin:z-.345,zMax:z+.345}]),
     {xMin:-5,xMax:5.2,zMin:-22.12,zMax:-21.92},
     ...[-17,-11,-5,1,7].flatMap(z=>[{xMin:-4.12,xMax:-3.78,zMin:z-.18,zMax:z+.18},{xMin:3.78,xMax:4.12,zMin:z-.18,zMax:z+.18}]),
+    companionFootprint('station'),
   ]
 };
 
@@ -72,9 +75,50 @@ function LuggageRacks({m}:{m:ArchitectureMaterials}){
   </group>)}</>;
 }
 
-function Train({m,overview}:{m:ArchitectureMaterials;overview:boolean}){
+function MovingWheel({p,m,story}:{p:[number,number,number];m:ArchitectureMaterials;story:StoryTiming}){
+  const spin=useRef<THREE.Group>(null);
+  useFrame(()=>{if(spin.current)spin.current.rotation.x=trainAction(story,readStoryTime(story)).offset/.43;});
+  return <group ref={spin} position={p} name="train-rotating-wheel"><Wheel p={[0,0,0]} material={m.iron}/>
+    <Part p={[-.135,.27,0]} s={[.023,.085,.035]} color="#b7a474" radius={.005}/>
+    {[0,1,2,3,4,5].map(i=><mesh key={i} position={[-.14,Math.cos(i*Math.PI/3)*.22,Math.sin(i*Math.PI/3)*.22]} rotation={[0,0,Math.PI/2]} material={m.silver}><cylinderGeometry args={[.018,.018,.018,6]}/></mesh>)}
+  </group>;
+}
+
+function Locomotive({m,story}:{m:ArchitectureMaterials;story:StoryTiming}){
+  return <group name="coupled-green-locomotive">
+    <Part p={[6.9,-.14,-22.85]} s={[3.25,.34,12.7]} material={m.iron} radius={.08}/>
+    <Part p={[6.9,1.48,-22.85]} s={[3.3,2.9,12.5]} material={m.green} radius={.18}/>
+    <Part p={[6.9,3.02,-22.85]} s={[3.32,.18,12.1]} material={m.silver} radius={.08}/>
+    <Part p={[6.9,2.23,-29.13]} s={[2.65,.88,.045]} material={m.glass} radius={.035}/>
+    <Part p={[6.9,2.25,-29.17]} s={[.085,.91,.045]} material={m.silver}/>
+    <Part p={[6.9,1.1,-29.18]} s={[3.02,.12,.06]} color="#c9ba8e"/>
+    <Part p={[6.9,-.04,-29.5]} s={[2.9,.42,.58]} material={m.iron} radius={.06}/>
+    <Rod a={[6.9,-.09,-16.05]} b={[6.9,-.09,-16.7]} r={.12} material={m.iron}/>
+    {[-28.0,-19].map(z=><group key={z}><Part p={[6.9,-.48,z]} s={[2.95,.25,2.15]} material={m.iron}/>{[-.72,.72].flatMap(o=>[5.45,8.35].map(x=><MovingWheel key={x+':'+o} p={[x,-.63,z+o]} m={m} story={story}/>))}</group>)}
+    {[5.23,8.57].map(x=><group key={x}>
+      <Part p={[x,2.19,-27.8]} s={[.035,.91,1.56]} material={m.glass} radius={.02}/>
+      <Part p={[x,1.08,-23]} s={[.045,.1,11.8]} color="#c9ba8e"/>
+      {[-25.2,-23,-20.8,-18.6].map(z=><group key={z}><Part p={[x,2.02,z]} s={[.055,1.03,1.5]} material={m.iron} radius={.025}/>{Array.from({length:8},(_,i)=><Part key={i} p={[x+(x<6?-.02:.02),1.6+i*.12,z]} s={[.045,.035,1.38]} material={m.silver}/>)}</group>)}
+    </group>)}
+    {[-.82,.82].map(dx=><group key={dx}><mesh position={[6.9+dx,1.55,-29.18]} rotation={[Math.PI/2,0,0]} material={m.iron}><cylinderGeometry args={[.19,.19,.05,24]}/></mesh><mesh position={[6.9+dx,1.55,-29.22]} rotation={[0,Math.PI,0]}><circleGeometry args={[.145,24]}/><meshStandardMaterial color="#f3e3b6" emissive="#ebd4a5" emissiveIntensity={.6}/></mesh></group>)}
+  </group>;
+}
+
+function DepartureSignal({m,story}:{m:ArchitectureMaterials;story:StoryTiming}){
+  const red=useRef<THREE.MeshStandardMaterial>(null),green=useRef<THREE.MeshStandardMaterial>(null);
+  useFrame(()=>{const ready=trainAction(story,readStoryTime(story)).signal;if(red.current){red.current.emissiveIntensity=ready?.05:1.4;red.current.color.set(ready?'#482d26':'#ca6550');}if(green.current){green.current.emissiveIntensity=ready?1.6:.02;green.current.color.set(ready?'#a7d79c':'#253d30');}});
+  return <group name="working-departure-signal" position={[4.65,0,-7.5]}>
+    <Rod a={[0,0,0]} b={[0,2.7,0]} r={.045} material={m.steel}/><Part p={[0,2.8,0]} s={[.3,.74,.14]} material={m.iron} radius={.06}/>
+    {[{y:2.98,ref:red,color:'#ca6550'},{y:2.65,ref:green,color:'#253d30'}].map(({y,ref,color})=><mesh key={y} position={[-.078,y,.077]} rotation={[0,-.45,0]}><circleGeometry args={[.104,24]}/><meshStandardMaterial ref={ref} color={color} emissive={y>2.8?'#bf533a':'#78ac65'} emissiveIntensity={y>2.8?1.4:.02}/></mesh>)}
+  </group>;
+}
+
+function Train({m,overview,story}:{m:ArchitectureMaterials;overview:boolean;story:StoryTiming}){
+  const root=useRef<THREE.Group>(null),door=useRef<THREE.Group>(null),{gl}=useThree();
+  useFrame(()=>{const action=trainAction(story,readStoryTime(story));if(root.current)root.current.position.z=action.offset;if(door.current)door.current.position.z=-1.55*action.door;gl.domElement.dataset.trainOffset=action.offset.toFixed(3);gl.domElement.dataset.trainWheelAngle=(action.offset/.43).toFixed(3);gl.domElement.dataset.trainSignal=action.signal?'proceed':'stop';gl.domElement.dataset.trainDoor=action.door.toFixed(3);gl.domElement.dataset.trainBeat=action.beat;});
   const windowZ=[-14,-11,-8,-5,-2,2.9,5.9,8.9];
-  return <group name="detailed-passenger-coach">
+  return <group ref={root} name="detailed-passenger-coach">
+    <Locomotive m={m} story={story}/>
     <Part p={[6.9,-.09,-3]} s={[3.4,.18,26]} material={m.iron} radius={.08}/>
     {!overview&&<Part p={[6.9,3.03,-3]} s={[3.46,.65,26]} material={m.silver} radius={.28}/>}
     <Part p={[8.56,.57,-3]} s={[.1,1.1,26]} material={m.green}/>
@@ -103,13 +147,13 @@ function Train({m,overview}:{m:ArchitectureMaterials;overview:boolean}){
     </group>)}
     {[-15.95,9.95].map(z=><group key={z}><Part p={[6.9,1.47,z]} s={[3.35,2.96,.12]} material={m.green} radius={.18}/><Part p={[6.9,1.45,z+.08]} s={[.8,2.35,.06]} material={m.iron}/><Part p={[6.9,1.93,z+.12]} s={[.58,.71,.04]} material={m.glass}/></group>)}
     {/* A real opening with a level bridge leads into the furnished coach. */}
-    <Part p={[5.11,1.27,1.28]} s={[.1,2.52,.88]} material={m.green} radius={.06}/><Part p={[5.045,1.87,1.28]} s={[.018,.85,.57]} material={m.glass}/>
+    <group ref={door} name="train-sliding-door"><Part p={[5.11,1.27,1.55]} s={[.1,2.52,1.48]} material={m.green} radius={.06}/><Part p={[5.045,1.87,1.55]} s={[.018,.85,1.15]} material={m.glass}/></group>
     <Part p={[5.08,.012,0]} s={[.55,.04,1.5]} material={m.silver}/><Part p={[5.24,2.68,0]} s={[.2,.16,1.7]} color="#cfbea1"/>
     {[-.81,.81].map(z=><group key={z}><Part p={[5.25,1.31,z]} s={[.2,2.65,.09]} material={m.silver}/><Rod a={[5.08,.53,z]} b={[5.08,1.65,z]} r={.018} material={m.silver}/></group>)}
     <Sign text="3 号车厢" small="A SEAT TOWARDS TOMORROW" p={[5.14,2.36,0]} s={[1.32,.22,.02]} rotation={[0,-Math.PI/2,0]} background="#294d42"/>
     {[-11,5].map(z=><group key={z}>
       <Part p={[6.9,-.49,z]} s={[2.9,.26,2.3]} material={m.iron}/>
-      {[-.75,.75].map(o=><group key={o}><Rod a={[5.5,-.63,z+o]} b={[8.3,-.63,z+o]} r={.09} material={m.iron}/>{[5.45,8.35].map(x=><Wheel key={x} p={[x,-.63,z+o]} material={m.iron}/>)}</group>)}
+      {[-.75,.75].map(o=><group key={o}><Rod a={[5.5,-.63,z+o]} b={[8.3,-.63,z+o]} r={.09} material={m.iron}/>{[5.45,8.35].map(x=><MovingWheel key={x} p={[x,-.63,z+o]} m={m} story={story}/>)}</group>)}
       {[-.75,.75].map(o=><Part key={o} p={[5.35,-.42,z+o]} s={[.24,.16,.6]} material={m.silver}/>)}
     </group>)}
     {COACH_BAYS.map(z=><group key={z}>
@@ -151,9 +195,9 @@ export default function Station(props:SceneProps){
     <Part p={[0,-.17,-5]} s={[10.5,.32,34]} radius={.025} material={m.floor}/>
     <Part p={[5.015,.012,-5]} s={[.28,.025,34]} color="#c2a456" radius={.003}/>
     {Array.from({length:34},(_,i)=><Part key={i} p={[4.58,.022,-21.5+i]} s={[.33,.025,.92]} color="#b2a15f" radius={.002}/>)}
-    <Part p={[7,-1.15,-5]} s={[5,.14,45]} color="#6e7369"/>
-    {Array.from({length:56},(_,i)=><Part key={i} p={[6.9,-1.05,-28+i*.77]} s={[3.8,.14,.21]} color="#695e4d" radius={.01}/>)}
-    {[5.46,8.34].map(x=><Part key={x} p={[x,-.94,-6]} s={[.085,.19,45]} material={m.silver} radius={.015}/>)}
+    <Part p={[7,-1.15,-28]} s={[5,.14,105]} color="#6e7369"/>
+    {Array.from({length:90},(_,i)=><Part key={i} p={[6.9,-1.05,-72+i]} s={[3.8,.14,.21]} color="#695e4d" radius={.01}/>)}
+    {[5.46,8.34].map(x=><Part key={x} p={[x,-.94,-28]} s={[.085,.19,105]} material={m.silver} radius={.015}/>)}
     <Canopy m={m} overview={overview}/>
     <PlatformEnd m={m}/>
     <group name="full-scale-interior-shell">
@@ -162,7 +206,7 @@ export default function Station(props:SceneProps){
       <Part p={[-3,1.15,1.98]} s={[4,.12,.17]} material={m.steel}/><Part p={[3,1.15,1.98]} s={[4,.12,.17]} material={m.steel}/>
       {[-4,-3,-2,2,3,4].map(x=><Rod key={x} a={[x,0,1.98]} b={[x,1.15,1.98]} r={.018} material={m.steel}/>)}
     </group>
-    <Train m={m} overview={overview}/>
+    <Train m={m} overview={overview} story={props}/><DepartureSignal m={m} story={props}/>
     {[-3.8,3.8].map(x=><Bench key={x} p={[x,0,5.3]} rotation={x>0?-Math.PI/2:Math.PI/2} m={m}/>)}
     {[-14,-8].map(z=><Bench key={z} p={[-3.6,0,z]} rotation={Math.PI/2} m={m}/>)}
     <Sign text="青 山 站" small="QINGSHAN · EVERY JOURNEY BEGINS WITH A GOODBYE" p={[0,3.18,11.86]} s={[5.3,1,.06]}/>
@@ -176,7 +220,7 @@ export default function Station(props:SceneProps){
     <AnchorObject id="tv" onAnchor={id=>explore&&props.onAnchor(id)}><Sign text="开往远方 · 16:20" small="K 2008    BOARDING    1 站台" p={[-2.65,2.3,2.35]} s={[3.4,.82,.09]} background="#252f2f" color="#e4bc6c"/></AnchorObject>
     <AnchorObject id="doll" onAnchor={id=>explore&&props.onAnchor(id)}><Suitcase p={[2.5,0,-.9]} rotation={-.2} m={m}/></AnchorObject>
     <group position={[-4.67,0,7]} rotation={[0,Math.PI/2,0]}><Part p={[0,1.26,0]} s={[1.7,2.52,.15]} material={m.steel}/><Part p={[0,1.64,.09]} s={[1.42,1.23,.025]} material={m.glass}/><Part p={[0,.98,.22]} s={[1.58,.08,.44]} material={m.wood}/><Sign text="售票 / 问询" small="TICKETS & INFORMATION" p={[0,2.31,.1]} s={[1.51,.3,.03]}/><AnchorObject id="photo" onAnchor={id=>explore&&props.onAnchor(id)}><Sign text="青山 → 远方" small="一张被认真保存的车票 · 2008" p={[0,1.37,.15]} s={[1.04,.42,.02]} background="#d8c7a5" color="#4e5346"/></AnchorObject></group>
-    <Suspense fallback={null}><Character preset={props.companion||'elder-woman'} position={[-2.35,0,-1.6]} rotation={props.branch==='real'&&props.realDeparture?Math.PI:.5}/></Suspense>
+    <StoryCompanion template="station" preset={props.companion||'elder-woman'} props={props}/>
     {props.branch==='imagined'&&<><Suitcase p={[-1.35,0,-2]} m={m}/><pointLight position={[-1,2,0]} color="#ffe1a6" intensity={2} distance={7}/></>}
     {/* Beyond the canopy: layered geometric buildings, telegraph poles and terrain. */}
     <Part p={[18,-1.3,-10]} s={[18,.2,65]} color="#7d8b6c"/>
