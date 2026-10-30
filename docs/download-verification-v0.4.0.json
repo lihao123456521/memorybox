@@ -1,0 +1,38 @@
+{
+  "version": "0.4.0",
+  "codeCommit": "7ac3a9cb616398249c3a75715bb5fbfcdf914bec",
+  "sourceDownload": {
+    "url": "https://codeload.github.com/lihao123456521/memorybox/zip/refs/heads/main",
+    "checkedAt": "2026-10-30T12:18:32.0104001+08:00",
+    "authentication": "none",
+    "htmlBytes": 53276297,
+    "htmlSha256": "885c3b10012a13f901d21c0f0fe43c373b916021981d0a45f81c414d6b97d686"
+  },
+  "releaseDownload": {
+    "zipSha256": "34646e99d421c27f9631a7bbd2c9ccbdb7562f2924cb28b24bc398efe064ecaf",
+    "authentication": "none",
+    "checksumAttachmentMatches": true,
+    "checkedAt": "2026-10-30T12:19:34.3998122+08:00",
+    "htmlSha256": "885c3b10012a13f901d21c0f0fe43c373b916021981d0a45f81c414d6b97d686"
+  },
+  "browserVerification": {
+    "browser": "Microsoft Edge with SwiftShader",
+    "input": "anonymous source ZIP root index.html copied alone to a fresh directory",
+    "httpBlocked": true,
+    "passed": 1,
+    "failed": 0,
+    "durationMs": 154451.799,
+    "checks": [
+      "all four companion models",
+      "first and third person walking",
+      "three objects and imagined branch",
+      "exact saved letter",
+      "refresh reads saved letter",
+      "delete persists",
+      "no HTTP or other file dependencies",
+      "no JavaScript page errors"
+    ]
+  },
+  "ci": "https://github.com/lihao123456521/memorybox/actions/runs/41002070143",
+  "note": "Release HTML has the same bytes; it is not counted as a second independent browser run."
+}

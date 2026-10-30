@@ -7,7 +7,7 @@
 | 范围 | 实际结果与证据 |
 |---|---|
 | 类型与普通构建 | `npm run build` 通过，包含 TypeScript；保留 Vite 大于 500KB 分块提示 |
-| 单文件构建 | `npm run build:portable` 通过：62 项内嵌资源，53,276,297 字节（50.8 MiB）。GLB 完整性、外部资源/解码器、CSS外链与全部内联脚本语法检查通过。公开清单见 [portable-build-v0.4.0.json](portable-build-v0.4.0.json) |
+| 单文件构建 | `npm run build:portable` 通过：62 项内嵌资源，53,276,297 字节（50.8 MiB）。GLB 完整性、外部资源/解码器、CSS外链与全部内联脚本语法检查通过；最终HTML再逐一解码62资源核对字节/哈希及许可原文，全部一致。公开清单见 [portable-build-v0.4.0.json](portable-build-v0.4.0.json) |
 | 许可证 | 根 THIRD_PARTY_LICENSES.txt 与 HTML 内嵌文本一致，构建记录含许可 SHA-256；继承既有实际依赖许可来源说明 |
 | 后端 | backend 中运行 `.venv/Scripts/python.exe -m pytest -q`，19 项通过；保留 Starlette/httpx 弃用提示 |
 | 动作与通路数值 | `node scripts/check-story-actions-v4.mjs` 通过：2,880 个动作采样、10 个可达目标，检查连续路径、确认事实边界、列车先信号后位移、探索期停站、实体课桌上的纸条 |
@@ -36,7 +36,12 @@
 
 ## 公开交付
 
-公开仓库：[lihao123456521/memorybox](https://github.com/lihao123456521/memorybox)。本地代码、最终单文件和离线包已完成上述验证；本轮 GitHub 发布、匿名源码/附件下载与CI结果将在实际完成后追加。
+公开仓库：[lihao123456521/memorybox](https://github.com/lihao123456521/memorybox)。v0.4代码提交 `7ac3a9cb616398249c3a75715bb5fbfcdf914bec` 已推送 PUBLIC main；[v0.4.0离线发布](https://github.com/lihao123456521/memorybox/releases/tag/v0.4.0) 非draft，两份附件均为uploaded。
+
+- 不带认证头下载源码ZIP，唯一根HTML与本机SHA-256一致。用这份下载HTML在独立目录、阻断HTTP的Edge中重新执行完整旅程：**1项通过，2.6分钟**，报告 `artifacts/playwright-v4-github-download-results.json`。包含第一/第三人称行走、四人物、三旧物、想象路线、精确信件、刷新和删除；无HTTP/其他本地文件请求、无页面错误。
+- 离线ZIP及SHA256SUMS也已匿名下载，ZIP、解压HTML和校验附件均与本机字节一致。相同字节的release HTML未再计为一次独立浏览器运行。原始摘要见 [匿名下载记录](download-verification-v0.4.0.json)。
+- [本轮代码CI](https://github.com/lihao123456521/memorybox/actions/runs/41002070143)成功：Ubuntu、Node24、Python3.12，类型/普通构建/单文件构建、两项CPU脚本与19项后端。
+- 首次发布传短提交号被GitHub 422拒绝；改用已推送完整SHA后发布成功。单文件超过GitHub建议的50MB，实际53.3MB低于100MiB硬限，推送成功并匿名取得完整字节；保持普通Git文件以使Download ZIP直接包含可用HTML。
 
 公开运行图位于 `docs/screenshots/`，本机详细报告、原始失败/修复图在被忽略的 `artifacts/`，不随公开仓库分发。
 
